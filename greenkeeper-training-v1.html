@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenkeeper Super in Training — Josh Butler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #FDF8F0 0%, #FFFEF9 100%);
+            color: #2D3436;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Georgia, serif;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #006B54 0%, #00483A 100%);
+            color: #FDF8F0;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 107, 84, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #FFD700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+
+        .header-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-small {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #E96A97;
+            padding-bottom: 0;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00483A;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-family: Georgia, serif;
+        }
+
+        .nav-tab:hover {
+            color: #006B54;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #FFD700;
+            border-bottom-color: #FFD700;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            color: #00483A;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 1rem;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .credential-card {
+            background: white;
+            border-left: 5px solid #006B54;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .credential-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 107, 84, 0.15);
+        }
+
+        .credential-card.urgent {
+            border-left-color: #E96A97;
+        }
+
+        .credential-card h3 {
+            color: #00483A;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .credential-card .label {
+            font-size: 0.85rem;
+            color: #2D3436;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #006B54, #00B887);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-fill.urgent {
+            background: linear-gradient(90deg, #E96A97, #F0A8C6);
+        }
+
+        .credential-card .date {
+            font-size: 0.9rem;
+            color: #00483A;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .credential-card .countdown {
+            color: #E96A97;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status.complete {
+            background: #E8F5E9;
+            color: #006B54;
+        }
+
+        .status.in-progress {
+            background: #FFF3E0;
+            color: #C2B280;
+        }
+
+        .status.upcoming {
+            background: #FCE4EC;
+            color: #E96A97;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #006B54;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #006B54;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #2D3436;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Study Modules */
+        .study-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .study-module {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .study-module h4 {
+            color: #006B54;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .sample-questions {
+            background: #F5F5F5;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .sample-question {
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            background: white;
+            border-left: 3px solid #FFD700;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .sample-question strong {
+            color: #00483A;
+        }
+
+        /* Product Cards */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, #006B54, #00483A);
+            color: white;
+            padding: 1rem;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-type {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-body {
+            padding: 1.5rem;
+        }
+
+        .product-field {
+            margin-bottom: 1rem;
+        }
+
+        .product-label {
+            font-weight: 600;
+            color: #00483A;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .product-value {
+            color: #2D3436;
+            line-height: 1.5;
+        }
+
+        /* Seeding Reference */
+        .seeding-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .seeding-scenario {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #006B54;
+        }
+
+        .seeding-scenario h4 {
+            color: #00483A;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .seeding-info {
+            background: #F9F9F9;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .seeding-info p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #2D3436;
+        }
+
+        .seeding-info strong {
+            color: #006B54;
+        }
+
+        /* Logs */
+        .log-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .log-entry {
+            border-left: 4px solid #FFD700;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: #F9F9F9;
+            border-radius: 4px;
+        }
+
+        .log-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .log-entry-date {
+            font-size: 0.85rem;
+            color: #00483A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .log-entry-content {
+            color: #2D3436;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .log-entry-mentor {
+            color: #006B54;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #00483A;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #006B54;
+            box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #006B54, #00483A);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 107, 84, 0.3);
+        }
+
+        /* Intro text */
+        .intro-text {
+            color: #2D3436;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Lists */
+        ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            color: #2D3436;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* SVG icons */
+        svg {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                padding: 0.8rem 1rem;
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+
+            .nav-tab.active {
+                border-left-color: #FFD700;
+                border-bottom: none;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .study-modules {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .seeding-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Greenkeeper Super in Training</h1>
+            <p>Josh Butler — Assistant Superintendent in Training, Haggin Oaks Golf Complex</p>
+            <div class="header-meta">
+                <div>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 5v14c0 1.1.9 2 2 2h4v2h6v-2h4c1.1 0 2-.9 2-2V5h-2v14H5V5H3z"/>
+                    </svg>
+                    Army Veteran | JD Field Service | Turf Professional
+                </div>
+                <div>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                    </svg>
+                    OSU Certificate: April 19 | QAL Exam: May 2026
+                </div>
+                <div>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.92 7.02C17.45 4.18 14.97 2 12 2c-2.97 0-5.45 2.18-5.92 5.02C3.97 7.53 2 9.96 2 12.5c0 3.31 2.69 6 6 6h12c3.31 0 6-2.69 6-6 0-2.54-1.97-4.97-4.08-5.48z"/>
+                    </svg>
+                    Crew Rating: 8.8 Avg
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-tab" data-tab="study">Study</button>
+            <button class="nav-tab" data-tab="products">Products</button>
+            <button class="nav-tab" data-tab="seeding">Seeding</button>
+            <button class="nav-tab" data-tab="logs">Logs</button>
+            <button class="nav-tab" data-tab="mentorship">Mentorship</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="content-section active">
+            <h2 class="section-title">Credential Dashboard</h2>
+            <div class="dashboard">
+                <div class="credential-card urgent">
+                    <h3>OSU Certificate</h3>
+                    <div class="label">Primary Goal</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill urgent" style="width: 95%"></div>
+                    </div>
+                    <div>95% Complete</div>
+                    <div class="date">Deadline: April 19, 2026</div>
+                    <div class="countdown" id="osuCountdown"></div>
+                    <span class="status complete">On Track</span>
+                </div>
+
+                <div class="credential-card">
+                    <h3>California QAL Exam</h3>
+                    <div class="label">Study Phase</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                    <div>40% Study Complete</div>
+                    <div class="date">Scheduled: May 2026</div>
+                    <div class="countdown" id="qalCountdown"></div>
+                    <span class="status in-progress">Preparing</span>
+                </div>
+
+                <div class="credential-card">
+                    <h3>GCSAA Membership</h3>
+                    <div class="label">Professional</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div>Active</div>
+                    <div class="date">Valid Status</div>
+                    <span class="status complete">Active</span>
+                </div>
+
+                <div class="credential-card">
+                    <h3>PAT Test</h3>
+                    <div class="label">Skill Certification</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div>Scheduled</div>
+                    <div class="date">May 19, 2026 — Arcade Creek</div>
+                    <div class="countdown" id="patCountdown"></div>
+                    <span class="status upcoming">Upcoming</span>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 3rem;">Quick Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">8.8</div>
+                    <div class="stat-label">Crew Rating Average</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Detail Score</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">9</div>
+                    <div class="stat-label">Equipment Score</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Reliability Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Tab -->
+        <div id="study" class="content-section">
+            <h2 class="section-title">QAL Study Materials</h2>
+            <p class="intro-text">California Department of Pesticide Regulation exam preparation. Study each module, review sample questions, and track your progress.</p>
+            <div class="study-modules" id="studyModulesContainer"></div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="products" class="content-section">
+            <h2 class="section-title">Product Reference Library</h2>
+            <p class="intro-text">Every product in the Haggin Oaks spray program with usage, timing, and monitoring guidance.</p>
+            <div class="product-grid" id="productGridContainer"></div>
+        </div>
+
+        <!-- Seeding Tab -->
+        <div id="seeding" class="content-section">
+            <h2 class="section-title">Seeding Reference</h2>
+            <div class="seeding-grid" id="seedingGridContainer"></div>
+
+            <div class="log-container" style="margin-top: 2rem;">
+                <h3 style="color: #00483A; margin-bottom: 1rem;">Seed Varieties</h3>
+                <div class="seeding-info">
+                    <p><strong>Double Down Ryegrass Blend</strong> — Germination: 5-7 days</p>
+                    <p>Premium ryegrass blend for quick establishment and color</p>
+                    <p style="margin-top: 1rem;"><strong>Turbo RZ Tall Fescue</strong> — Germination: 7-14 days</p>
+                    <p>Deep-rooted fescue for stress tolerance and durability</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Tab -->
+        <div id="logs" class="content-section">
+            <h2 class="section-title">Field Learning Log</h2>
+
+            <div class="input-section">
+                <h3 style="color: #00483A; margin-bottom: 1.5rem;">Add New Entry</h3>
+                <div class="input-group">
+                    <label>Date</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="input-group">
+                    <label>What You Learned</label>
+                    <textarea id="logEntry" placeholder="Describe the learning moment, technique, or insight..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Mentor/Source</label>
+                    <input type="text" id="logMentor" placeholder="Who taught you this?">
+                </div>
+                <button class="btn btn-primary" onclick="addFieldLog()">Add Entry</button>
+            </div>
+
+            <div class="log-container">
+                <h3 style="color: #00483A; margin-bottom: 1.5rem;">Recent Learning</h3>
+                <div id="fieldLogsContainer"></div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 3rem;">Green Speed Log</h2>
+            <div class="log-container">
+                <p style="margin-bottom: 1.5rem; color: #2D3436;">Current stimp readings and targets:</p>
+                <div class="stats-grid" id="stimpContainer"></div>
+                <p style="margin-top: 1.5rem; color: #2D3436; font-size: 0.9rem;">Mac: Championship greens at 13.0 stimp | Arc: Challenge greens at 12.0 stimp</p>
+            </div>
+        </div>
+
+        <!-- Mentorship Tab -->
+        <div id="mentorship" class="content-section">
+            <h2 class="section-title">Mentorship Notes</h2>
+            <p class="intro-text">Lessons from Rick White and Paul Toussaint — wisdom that guides daily operations.</p>
+            <div class="log-container">
+                <div id="mentorshipNotesContainer"></div>
+            </div>
+
+            <div class="input-section" style="margin-top: 2rem;">
+                <h3 style="color: #00483A; margin-bottom: 1.5rem;">Your Observations</h3>
+                <p style="color: #2D3436; margin-bottom: 1rem; font-size: 0.95rem;">Record insights from your mentors and your own observations in the field. These principles shape professional excellence.</p>
+                <div class="seeding-info">
+                    <strong>Key Principles:</strong>
+                    <ul>
+                        <li>Visibility precedes management</li>
+                        <li>Environmental conditions dictate timing</li>
+                        <li>Tournament calendar is the master schedule</li>
+                        <li>Continuous learning drives improvement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const studyModules = [
+            { name: 'Laws & Regulations', progress: 85, sample: ['What is the difference between a QAL and PAL?', 'Describe California DPR licensing requirements', 'What is the maximum penalty for misuse of pesticides?'] },
+            { name: 'Label Reading & Interpretation', progress: 90, sample: ['How do you read PPE requirements on a pesticide label?', 'What does REI (Re-entry Interval) mean?', 'Interpret a typical fungicide label'] },
+            { name: 'Safety & PPE', progress: 95, sample: ['What PPE is required for Category II products?', 'Describe decontamination procedures', 'What are the rules for handling spills?'] },
+            { name: 'Application Methods', progress: 80, sample: ['Compare broadcast vs. spot spraying', 'When should you use drift reduction agents?', 'How do weather conditions affect applications?'] },
+            { name: 'Pest Identification', progress: 75, sample: ['Identify dollar spot from leaf spot', 'What are signs of grub damage?', 'Describe chinch bug infestations'] },
+            { name: 'Environmental Protection', progress: 88, sample: ['How do you protect water sources?', 'What is proper chemical storage?', 'Describe drift prevention methods'] },
+            { name: 'REI/PHI Requirements', progress: 92, sample: ['What is a PHI (Pre-Harvest Interval)?', 'How long is typical REI for turf products?', 'Can employees work during REI?'] }
+        ];
+
+        const products = [
+            { name: 'Instrata', type: 'Fungicide', what: 'Anthracnose and Snow Mold control', why: 'Systemic protection in cool season grasses', when: 'Fall and spring applications', watch: 'Watch for timing of application relative to disease pressure' },
+            { name: 'Daconil Weatherstik', type: 'Fungicide', what: 'Broad spectrum fungicide', why: 'Multi-purpose disease control', when: 'Preventative, every 7-14 days', watch: 'Monitor for spray burn in heat' },
+            { name: 'Banner Maxx II', type: 'Fungicide', what: 'Systemic disease control', why: 'Deep systemic action for preventative programs', when: 'Preventative schedule', watch: 'Avoid tank mixing with oils' },
+            { name: 'Secure Action', type: 'Fungicide', what: 'Modern fungicide', why: 'Broad spectrum coverage', when: 'As needed based on pressure', watch: 'Follow label timing strictly' },
+            { name: 'Navicon Intrinsic', type: 'Fungicide', what: 'Systemic fungicide', why: 'Deep plant penetration', when: 'Preventative applications', watch: 'Excellent in wet conditions' },
+            { name: 'Xemplar', type: 'Fungicide', what: 'Specialized control agent', why: 'Specific disease targeting', when: 'Per disease pressure', watch: 'Check compatibility' },
+            { name: 'Border', type: 'Adjuvant', what: 'Spreader/Sticker', why: 'Improves coverage and adheres sprays', when: 'With every spray application', watch: 'Improves spray quality significantly' },
+            { name: 'Coron', type: 'Fertility', what: 'Slow-release nitrogen', why: 'Steady feeding for turf quality', when: 'Regular feeding schedule', watch: 'Prevents excessive growth' },
+            { name: '18-3-6 Liquid', type: 'Fertility', what: 'Liquid fertilizer', why: 'Quick green up and color', when: 'Growth season applications', watch: 'Can burn in heat if concentrated' },
+            { name: 'Iron', type: 'Micronutrient', what: 'Iron supplementation', why: 'Deepens color and stress tolerance', when: 'When color needs boost', watch: 'Avoid staining on tees' },
+            { name: 'Primo Maxx', type: 'PGR', what: 'Plant growth regulator', why: 'Controls growth, reduces mowing', when: 'Seasonal applications', watch: 'Excellent in spring/summer' },
+            { name: 'Proxy', type: 'PGR', what: 'Growth regulator', why: 'Slows growth rate', when: 'High growth periods', watch: 'Improves turf density' },
+            { name: 'Scimitar', type: 'Insecticide', what: 'Insect control', why: 'Targets multiple insect pests', when: 'When pressure develops', watch: 'Watch for beneficial insects' },
+            { name: 'Pedigree', type: 'Insecticide', what: 'Specialized insecticide', why: 'Specific pest targeting', when: 'Pressure-based application', watch: 'Excellent efficacy' },
+            { name: 'Tricure', type: 'Adjuvant', what: 'Wetting agent', why: 'Improves water penetration', when: 'With fungicide programs', watch: 'Enhances fungicide activity' },
+            { name: 'Ranger Pro', type: 'Herbicide', what: 'Glyphosate herbicide', why: 'Non-selective weed control', when: 'As needed for problem weeds', watch: 'Apply when weeds are actively growing' },
+            { name: 'Specticle', type: 'Herbicide', what: 'Pre-emergent herbicide', why: 'Prevents weed germination', when: 'Spring application window', watch: 'Timing critical for effectiveness' }
+        ];
+
+        const seedingScenarios = [
+            { number: 1, name: 'Divot Mix', rate: '3-5 lbs per divot', prep: '1/8" sand topdressing', notes: 'Double Down Ryegrass Blend' },
+            { number: 2, name: 'Small Bare Spot', rate: '5-7 lbs (100-500 sqft)', prep: 'Loosen soil, rake', notes: 'Double Down Rye, 5-7 day germination' },
+            { number: 3, name: 'Medium Bare Spot', rate: '6-8 lbs (500-2000 sqft)', prep: 'Scarify area, topdress', notes: 'Double Down + Turbo RZ blend' },
+            { number: 4, name: 'Large Bare Spot', rate: '7-9 lbs (2000-5000 sqft)', prep: 'Full preparation, overseeding', notes: 'Monitor for moisture' },
+            { number: 5, name: 'Tee Box Repair', rate: '8-10 lbs per renovation', prep: 'Core aeration, topdressing', notes: 'Dense seeding for traffic' },
+            { number: 6, name: 'Overseeding Thin Fairway', rate: '3-4 lbs per 1000 sqft', prep: 'Light verticutting', notes: 'Double Down Rye at lower rate' },
+            { number: 7, name: 'Overseeding Thin Rough', rate: '4-5 lbs per 1000 sqft', prep: 'Roughen surface', notes: 'More aggressive rough seeding' },
+            { number: 8, name: 'Full Tee Renovation', rate: '10-12 lbs per area', prep: 'Strip and prepare', notes: 'Heavy seeding for establishment' },
+            { number: 9, name: 'Full Rough Renovation', rate: '6-8 lbs per 1000 sqft', prep: 'Scalping and prep', notes: 'Ensure good soil contact' },
+            { number: 10, name: 'Dormant Overseeding', rate: '8-10 lbs (rye only)', prep: 'Light aeration', notes: 'Late fall application, no fescue' }
+        ];
+
+        const mentorshipNotes = [
+            { mentor: 'Rick White', note: 'Always walk the course before the crew arrives. You can\'t manage what you haven\'t seen.' },
+            { mentor: 'Paul Toussaint', note: 'Check wind before any spray application. If it\'s above 8 mph, we wait. No exceptions.' },
+            { mentor: 'Rick White', note: 'The tournament calendar drives everything. Work backwards from each event.' }
+        ];
+
+        let fieldLogs = [
+            { date: '2026-04-08', entry: 'Learned proper satellite adjustment technique from Paul on Arc hole 14 — 3/4 turn counterclockwise on Toro 730 nozzle to reduce radius', mentor: 'Paul Toussaint' },
+            { date: '2026-04-07', entry: 'Rick showed how to read dollar spot pressure after dew pattern — circular patches 1-3 inches, straw-colored, most visible before mowing', mentor: 'Rick White' }
+        ];
+
+        const stimp = [
+            { hole: 'Mac', value: 13.0, target: 13.5 },
+            { hole: 'Arc', value: 12.0, target: 12.5 }
+        ];
+
+        // Initialize today's date
+        const today = new Date('2026-04-09');
+        const todayFormatted = today.toISOString().split('T')[0];
+        document.getElementById('logDate').value = todayFormatted;
+
+        // Calculate days remaining
+        function calculateDaysRemaining(deadline) {
+            const end = new Date(deadline);
+            const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+            return diff;
+        }
+
+        // Update countdowns
+        function updateCountdowns() {
+            document.getElementById('osuCountdown').textContent = calculateDaysRemaining('2026-04-19') + ' DAYS REMAINING';
+            document.getElementById('qalCountdown').textContent = calculateDaysRemaining('2026-05-31') + ' DAYS';
+            document.getElementById('patCountdown').textContent = calculateDaysRemaining('2026-05-19') + ' DAYS';
+        }
+
+        // Render study modules
+        function renderStudyModules() {
+            const container = document.getElementById('studyModulesContainer');
+            container.innerHTML = studyModules.map((module, idx) => `
+                <div class="study-module">
+                    <h4>${module.name}</h4>
+                    <div class="label">${module.progress}% Complete</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${module.progress}%"></div>
+                    </div>
+                    <div class="sample-questions">
+                        <strong style="color: #00483A;">Sample Questions:</strong>
+                        ${module.sample.map((q, i) => `<div class="sample-question">Q${i+1}. ${q}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('productGridContainer');
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-type">${product.type}</div>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-field">
+                            <div class="product-label">What It Does</div>
+                            <div class="product-value">${product.what}</div>
+                        </div>
+                        <div class="product-field">
+                            <div class="product-label">Why It's Used</div>
+                            <div class="product-value">${product.why}</div>
+                        </div>
+                        <div class="product-field">
+                            <div class="product-label">When To Apply</div>
+                            <div class="product-value">${product.when}</div>
+                        </div>
+                        <div class="product-field">
+                            <div class="product-label">What To Watch For</div>
+                            <div class="product-value">${product.watch}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render seeding scenarios
+        function renderSeeding() {
+            const container = document.getElementById('seedingGridContainer');
+            container.innerHTML = seedingScenarios.map(scenario => `
+                <div class="seeding-scenario">
+                    <h4>${scenario.number}. ${scenario.name}</h4>
+                    <div class="seeding-info">
+                        <p><strong>Seeding Rate:</strong> ${scenario.rate}</p>
+                        <p><strong>Preparation:</strong> ${scenario.prep}</p>
+                        <p><strong>Notes:</strong> ${scenario.notes}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render mentorship notes
+        function renderMentorshipNotes() {
+            const container = document.getElementById('mentorshipNotesContainer');
+            container.innerHTML = mentorshipNotes.map(note => `
+                <div class="log-entry">
+                    <div class="log-entry-mentor">— ${note.mentor}</div>
+                    <div class="log-entry-content" style="font-style: italic; color: #00483A;">"${note.note}"</div>
+                </div>
+            `).join('');
+        }
+
+        // Render field logs
+        function renderFieldLogs() {
+            const container = document.getElementById('fieldLogsContainer');
+            if (fieldLogs.length === 0) {
+                container.innerHTML = '<p style="color: #2D3436;">No entries yet. Add your first learning moment above.</p>';
+            } else {
+                container.innerHTML = fieldLogs.map(log => `
+                    <div class="log-entry">
+                        <div class="log-entry-date">${log.date}</div>
+                        <div class="log-entry-content">${log.entry}</div>
+                        <div class="log-entry-mentor">— ${log.mentor}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Render stimp data
+        function renderStimps() {
+            const container = document.getElementById('stimpContainer');
+            container.innerHTML = stimp.map(green => `
+                <div class="stat-box">
+                    <div style="color: #006B54; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">${green.hole}</div>
+                    <div class="stat-value">${green.value.toFixed(1)}</div>
+                    <div class="stat-label">Target: ${green.target.toFixed(1)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Add field log entry
+        function addFieldLog() {
+            const date = document.getElementById('logDate').value;
+            const entry = document.getElementById('logEntry').value;
+            const mentor = document.getElementById('logMentor').value;
+
+            if (entry.trim()) {
+                fieldLogs.unshift({ date, entry, mentor });
+                document.getElementById('logEntry').value = '';
+                document.getElementById('logMentor').value = '';
+                renderFieldLogs();
+            }
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Remove active from all tabs
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Show selected section
+                document.getElementById(tabName).classList.add('active');
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize on load
+        updateCountdowns();
+        renderStudyModules();
+        renderProducts();
+        renderSeeding();
+        renderMentorshipNotes();
+        renderFieldLogs();
+        renderStimps();
+    </script>
+</body>
+</html>

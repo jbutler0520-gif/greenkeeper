@@ -1,0 +1,10 @@
+# Cruft
+__test__.txt
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Old drafts — keep local, don't publish
+greenkeeper-super-v1-demo.html
+greenkeeper-super-v1.jsx

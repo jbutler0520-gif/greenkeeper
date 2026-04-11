@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenkeeper Director - Haggin Oaks Golf Complex</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Typography - no external font imports needed */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background-color: #FDF8F0;
+            color: #2D3436;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-weight: 700;
+            color: #00483A;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #006B54 0%, #00483A 100%);
+            color: #FFFEF9;
+            padding: 24px 40px;
+            box-shadow: 0 4px 12px rgba(0, 75, 58, 0.15);
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #FFD700;
+        }
+
+        .facility-name {
+            border-left: 2px solid #FFD700;
+            padding-left: 20px;
+        }
+
+        .facility-name h2 {
+            font-size: 18px;
+            color: #FFFEF9;
+            margin-bottom: 4px;
+        }
+
+        .facility-name p {
+            font-size: 12px;
+            color: #FFE680;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .date-time {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 40px 60px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #C2B280;
+            overflow-x: auto;
+            padding-bottom: 0;
+        }
+
+        .tab-button {
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #636E72;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: #006B54;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #FFD700;
+            color: #006B54;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: #FFFEF9;
+            border: 1px solid #E8DCC8;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 75, 58, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 107, 84, 0.12);
+            border-color: #FFD700;
+        }
+
+        .card-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #636E72;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #006B54;
+            margin-bottom: 8px;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        .card-detail {
+            font-size: 13px;
+            color: #636E72;
+        }
+
+        .health-score-good {
+            color: #4A7C59;
+        }
+
+        .health-score-warning {
+            color: #E96A97;
+        }
+
+        /* Course Status Cards */
+        .course-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .course-card {
+            background: #FFFEF9;
+            border: 2px solid #E8DCC8;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 75, 58, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .course-card:hover {
+            border-color: #FFD700;
+            box-shadow: 0 4px 16px rgba(0, 107, 84, 0.12);
+        }
+
+        .course-card-header {
+            background: linear-gradient(135deg, #006B54 0%, #004a3a 100%);
+            color: #FFFEF9;
+            padding: 20px 24px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .course-card-header h3 {
+            color: #FFFEF9;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .course-year {
+            font-size: 12px;
+            opacity: 0.85;
+            color: #FFE680;
+        }
+
+        .course-card-body {
+            padding: 24px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E8DCC8;
+            font-size: 13px;
+        }
+
+        .status-row:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            color: #636E72;
+            font-weight: 500;
+        }
+
+        .status-value {
+            color: #00483A;
+            font-weight: 600;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-panel {
+            background: #FFFEF9;
+            border: 1px solid #E8DCC8;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0, 75, 58, 0.08);
+        }
+
+        .chart-panel h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #00483A;
+        }
+
+        .chart-subtitle {
+            font-size: 12px;
+            color: #636E72;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table thead {
+            background: #F5F0E6;
+            border-top: 2px solid #C2B280;
+            border-bottom: 2px solid #C2B280;
+        }
+
+        .data-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #00483A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #E8DCC8;
+            color: #2D3436;
+        }
+
+        .data-table tbody tr:hover {
+            background: #FBF8F2;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-warning {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .badge-alert {
+            background: #FCE4EC;
+            color: #880E4F;
+        }
+
+        .badge-pending {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        /* Alerts Section */
+        .alerts-section {
+            background: #FFFEF9;
+            border: 1px solid #E8DCC8;
+            border-radius: 8px;
+            padding: 28px;
+            margin-bottom: 40px;
+        }
+
+        .alert-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #E96A97;
+            background: #FDF8F0;
+            border-radius: 4px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .alert-item.warning {
+            border-left-color: #FFD700;
+        }
+
+        .alert-item.info {
+            border-left-color: #4A7C59;
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            font-size: 20px;
+            color: #E96A97;
+        }
+
+        .alert-item.warning .alert-icon {
+            color: #FFD700;
+        }
+
+        .alert-item.info .alert-icon {
+            color: #4A7C59;
+        }
+
+        .alert-content h4 {
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #00483A;
+        }
+
+        .alert-content p {
+            font-size: 12px;
+            color: #636E72;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #006B54;
+            color: #FFFEF9;
+        }
+
+        .btn-primary:hover {
+            background: #00483A;
+            box-shadow: 0 4px 12px rgba(0, 75, 58, 0.2);
+        }
+
+        .btn-secondary {
+            background: #C2B280;
+            color: #FFFEF9;
+        }
+
+        .btn-secondary:hover {
+            background: #B39F68;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px 40px;
+            color: #636E72;
+            font-size: 12px;
+            border-top: 1px solid #E8DCC8;
+            background: #FFFEF9;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Crew Grid */
+        .crew-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .crew-member-card {
+            background: #FFFEF9;
+            border: 1px solid #E8DCC8;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .crew-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00483A;
+            margin-bottom: 8px;
+        }
+
+        .crew-role {
+            font-size: 12px;
+            color: #636E72;
+            margin-bottom: 12px;
+        }
+
+        .crew-certs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .cert-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Export Section */
+        .export-section {
+            background: linear-gradient(135deg, #F5F0E6 0%, #FFFEF9 100%);
+            border: 1px solid #E8DCC8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .export-section p {
+            font-size: 12px;
+            color: #636E72;
+            margin-bottom: 12px;
+        }
+
+        /* Health Score Ring */
+        .health-ring {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#4A7C59 0deg, #4A7C59 288deg, #E8DCC8 288deg);
+            position: relative;
+            margin: 0 auto 16px;
+        }
+
+        .health-ring-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #FFFEF9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .health-ring-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #006B54;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        .health-ring-label {
+            font-size: 10px;
+            color: #636E72;
+            text-transform: uppercase;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00483A;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #FFD700;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        /* License Status */
+        .license-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #E8DCC8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .license-row:last-child {
+            border-bottom: none;
+        }
+
+        .license-info h4 {
+            font-size: 13px;
+            color: #00483A;
+            margin-bottom: 4px;
+        }
+
+        .license-number {
+            font-size: 11px;
+            color: #636E72;
+        }
+
+        /* Tournament Calendar */
+        .tournament-row {
+            padding: 14px 0;
+            border-bottom: 1px solid #E8DCC8;
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 100px;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .tournament-row:last-child {
+            border-bottom: none;
+        }
+
+        .tournament-date {
+            font-weight: 600;
+            color: #00483A;
+            font-size: 12px;
+        }
+
+        .tournament-event {
+            font-weight: 600;
+            color: #2D3436;
+        }
+
+        .tournament-detail {
+            font-size: 12px;
+            color: #636E72;
+            margin-top: 4px;
+        }
+
+        .tournament-course {
+            text-align: center;
+            font-size: 12px;
+            color: #636E72;
+        }
+
+        .tournament-players {
+            text-align: right;
+            font-weight: 600;
+            color: #006B54;
+        }
+
+        /* Compliance Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            padding-left: 40px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #006B54;
+            border: 3px solid #FFFEF9;
+            box-shadow: 0 0 0 3px #006B54;
+        }
+
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 17px;
+            top: 12px;
+            width: 1px;
+            height: calc(100% - 12px);
+            background: #C2B280;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            font-size: 12px;
+            color: #00483A;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: #2D3436;
+            margin-top: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-right {
+                text-align: left;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tournament-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // App State
+        const appState = {
+            activeTab: 'dashboard',
+            currentDate: new Date()
+        };
+
+        // Data
+        const healthScoreTrends = [
+            { month: 'Jan', mackenzie: 78, arcadeCreek: 75 },
+            { month: 'Feb', mackenzie: 82, arcadeCreek: 79 },
+            { month: 'Mar', mackenzie: 75, arcadeCreek: 81 },
+            { month: 'Apr', mackenzie: 72, arcadeCreek: 80 }
+        ];
+
+        const budgetData = [
+            { month: 'Jan', products: 4200, equipment: 3100, labor: 18500 },
+            { month: 'Feb', products: 3800, equipment: 2900, labor: 17200 },
+            { month: 'Mar', products: 5200, equipment: 4100, labor: 19000 },
+            { month: 'Apr', products: 4800, equipment: 3500, labor: 18200 }
+        ];
+
+        const crewMembers = [
+            { name: 'Paul Toussaint', role: 'Lead Applicator', license: '144743', certifications: ['QAL', 'GCSAA'] },
+            { name: 'Rick White', role: 'Applicator', license: '156821', certifications: ['QAL', 'IPM'] },
+            { name: 'Josh Butler', role: 'Applicator (Pending)', license: 'QAL Pending May 2026', certifications: ['IPM'] },
+            { name: 'Marcus Johnson', role: 'Turf Technician', certifications: ['Equipment'] },
+            { name: 'David Chen', role: 'Irrigation Specialist', certifications: ['Irrigation'] },
+            { name: 'Sarah Mitchell', role: 'Crew Lead - Mac', certifications: ['Safety', 'Equipment'] }
+        ];
+
+        const tournaments = [
+            { date: 'Apr 2-5', event: 'AJGA', course: 'MacKenzie', players: 150, notes: 'CLOSED Apr 3-4' },
+            { date: 'Apr 10', event: 'PGA Hope', course: 'Arc B9', players: 36, notes: '' },
+            { date: 'Apr 12', event: 'Notah Begay + NCGA', course: 'Mac + Arc F9', players: 88, notes: '' },
+            { date: 'Apr 17', event: 'Rio Americano', course: 'MacKenzie', players: 144, notes: '' },
+            { date: 'Apr 18-19', event: 'JTNC', course: 'Both', players: 150, notes: '' },
+            { date: 'Apr 20', event: 'Camaraderie', course: 'MacKenzie', players: 80, notes: '' },
+            { date: 'Apr 22', event: 'NCGA', course: 'MacKenzie', players: 84, notes: '' },
+            { date: 'Apr 25', event: 'SABGC', course: 'MacKenzie', players: 144, notes: '' },
+            { date: 'Apr 26', event: 'US Kids', course: 'Arcade Creek', players: 200, notes: '' },
+            { date: 'May 8', event: 'SMUD', course: 'Both', players: 288, notes: '' },
+            { date: 'May 19', event: 'PAT', course: 'Arcade Creek', players: 72, notes: '' },
+            { date: 'May 23', event: 'JGANC Spring', course: 'Both', players: 336, notes: '' },
+            { date: 'May 29', event: 'Remember A Vet', course: 'MacKenzie', players: 144, notes: '' },
+            { date: 'Aug 8', event: 'HAGGIN OAKS CLASSIC', course: 'Both', players: 250, notes: 'PRIMARY EVENT' },
+            { date: 'Sep 21-22', event: 'AERIFICATION', course: 'Arcade Creek', players: 0, notes: 'Closed' },
+            { date: 'Oct 5-6', event: 'AERIFICATION', course: 'MacKenzie', players: 0, notes: 'Closed' }
+        ];
+
+        const complianceLogs = [
+            { date: 'Mar 28, 2026', course: 'MacKenzie', product: 'Fungicide - Azoxystrobin', applicator: 'Paul Toussaint', status: 'Complete' },
+            { date: 'Mar 15, 2026', course: 'Arcade Creek', product: 'Herbicide - Selective', applicator: 'Rick White', status: 'Complete' },
+            { date: 'Mar 5, 2026', course: 'MacKenzie', product: 'Insecticide - Acelepryn', applicator: 'Paul Toussaint', status: 'Complete' },
+            { date: 'Feb 20, 2026', course: 'MacKenzie', product: 'Growth Regulator', applicator: 'Rick White', status: 'Complete' },
+            { date: 'Feb 10, 2026', course: 'Arcade Creek', product: 'Fungicide - Propiconazole', applicator: 'Paul Toussaint', status: 'Complete' },
+            { date: 'Jan 25, 2026', course: 'MacKenzie', product: 'Tree Well Treatment', applicator: 'Josh Butler', status: 'Complete' },
+            { date: 'Jan 15, 2026', course: 'MacKenzie', product: 'Fertilizer - Fall Program', applicator: 'Rick White', status: 'Complete' },
+            { date: 'Jan 5, 2026', course: 'Arcade Creek', product: 'Dormancy Oil', applicator: 'Paul Toussaint', status: 'Complete' }
+        ];
+
+        // SVG Chart Functions
+        function createLineChart(data, dataKey1, dataKey2, name1, name2) {
+            const width = 550;
+            const height = 300;
+            const padding = { top: 20, right: 40, bottom: 40, left: 40 };
+            const plotWidth = width - padding.left - padding.right;
+            const plotHeight = height - padding.top - padding.bottom;
+
+            let maxValue = 0;
+            data.forEach(d => {
+                if (d[dataKey1] > maxValue) maxValue = d[dataKey1];
+                if (d[dataKey2] > maxValue) maxValue = d[dataKey2];
+            });
+            maxValue = Math.ceil(maxValue / 10) * 10;
+
+            const xStep = plotWidth / (data.length - 1);
+            const yScale = plotHeight / maxValue;
+
+            let points1 = '';
+            let points2 = '';
+            data.forEach((d, i) => {
+                const x = padding.left + i * xStep;
+                const y1 = padding.top + plotHeight - (d[dataKey1] * yScale);
+                const y2 = padding.top + plotHeight - (d[dataKey2] * yScale);
+                points1 += `${x},${y1} `;
+                points2 += `${x},${y2} `;
+            });
+
+            let svg = `<svg viewBox="0 0 ${width} ${height}" style="max-width: 100%;">`;
+
+            // Grid lines
+            svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${padding.top + plotHeight}" stroke="#C2B280" stroke-width="2"/>`;
+            svg += `<line x1="${padding.left}" y1="${padding.top + plotHeight}" x2="${width - padding.right}" y2="${padding.top + plotHeight}" stroke="#C2B280" stroke-width="2"/>`;
+
+            // Y-axis labels
+            for (let i = 0; i <= 4; i++) {
+                const y = padding.top + (plotHeight / 4) * i;
+                const value = maxValue - (maxValue / 4) * i;
+                svg += `<text x="${padding.left - 10}" y="${y + 4}" text-anchor="end" font-size="12" fill="#636E72">${Math.round(value)}</text>`;
+                if (i > 0) {
+                    svg += `<line x1="${padding.left - 5}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#E8DCC8" stroke-width="1" stroke-dasharray="3 3"/>`;
+                }
+            }
+
+            // X-axis labels
+            data.forEach((d, i) => {
+                const x = padding.left + i * xStep;
+                svg += `<text x="${x}" y="${padding.top + plotHeight + 25}" text-anchor="middle" font-size="12" fill="#636E72">${d.month}</text>`;
+            });
+
+            // Lines
+            svg += `<polyline points="${points1}" fill="none" stroke="#006B54" stroke-width="2"/>`;
+            svg += `<polyline points="${points2}" fill="none" stroke="#FFD700" stroke-width="2"/>`;
+
+            // Dots
+            data.forEach((d, i) => {
+                const x = padding.left + i * xStep;
+                const y1 = padding.top + plotHeight - (d[dataKey1] * yScale);
+                const y2 = padding.top + plotHeight - (d[dataKey2] * yScale);
+                svg += `<circle cx="${x}" cy="${y1}" r="4" fill="#006B54"/>`;
+                svg += `<circle cx="${x}" cy="${y2}" r="4" fill="#FFD700"/>`;
+            });
+
+            // Legend
+            svg += `<rect x="${padding.left}" y="10" width="200" height="40" fill="white" stroke="#E8DCC8" rx="4"/>`;
+            svg += `<line x1="${padding.left + 10}" y1="28" x2="${padding.left + 30}" y2="28" stroke="#006B54" stroke-width="2"/>`;
+            svg += `<text x="${padding.left + 40}" y="32" font-size="12" fill="#2D3436">${name1}</text>`;
+            svg += `<line x1="${padding.left + 110}" y1="28" x2="${padding.left + 130}" y2="28" stroke="#FFD700" stroke-width="2"/>`;
+            svg += `<text x="${padding.left + 140}" y="32" font-size="12" fill="#2D3436">${name2}</text>`;
+
+            svg += '</svg>';
+            return svg;
+        }
+
+        function createBarChart(data) {
+            const width = 550;
+            const height = 350;
+            const padding = { top: 40, right: 40, bottom: 60, left: 60 };
+            const plotWidth = width - padding.left - padding.right;
+            const plotHeight = height - padding.top - padding.bottom;
+
+            let maxValue = 0;
+            data.forEach(d => {
+                if (d.products > maxValue) maxValue = d.products;
+                if (d.equipment > maxValue) maxValue = d.equipment;
+                if (d.labor > maxValue) maxValue = d.labor;
+            });
+            maxValue = Math.ceil(maxValue / 5000) * 5000;
+
+            const groupWidth = plotWidth / data.length;
+            const barWidth = (groupWidth * 0.7) / 3;
+            const yScale = plotHeight / maxValue;
+
+            let svg = `<svg viewBox="0 0 ${width} ${height}" style="max-width: 100%;">`;
+
+            // Axes
+            svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${padding.top + plotHeight}" stroke="#C2B280" stroke-width="2"/>`;
+            svg += `<line x1="${padding.left}" y1="${padding.top + plotHeight}" x2="${width - padding.right}" y2="${padding.top + plotHeight}" stroke="#C2B280" stroke-width="2"/>`;
+
+            // Y-axis labels
+            for (let i = 0; i <= 4; i++) {
+                const y = padding.top + (plotHeight / 4) * i;
+                const value = maxValue - (maxValue / 4) * i;
+                svg += `<text x="${padding.left - 10}" y="${y + 4}" text-anchor="end" font-size="12" fill="#636E72">$${Math.round(value / 1000)}k</text>`;
+                if (i > 0) {
+                    svg += `<line x1="${padding.left - 5}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#E8DCC8" stroke-width="1" stroke-dasharray="3 3"/>`;
+                }
+            }
+
+            // Bars
+            data.forEach((d, i) => {
+                const groupX = padding.left + (i + 0.5) * groupWidth;
+                const centerOffset = barWidth * 1.5;
+
+                // Products
+                const h1 = d.products * yScale;
+                svg += `<rect x="${groupX - centerOffset}" y="${padding.top + plotHeight - h1}" width="${barWidth}" height="${h1}" fill="#006B54"/>`;
+
+                // Equipment
+                const h2 = d.equipment * yScale;
+                svg += `<rect x="${groupX - centerOffset + barWidth}" y="${padding.top + plotHeight - h2}" width="${barWidth}" height="${h2}" fill="#FFD700"/>`;
+
+                // Labor
+                const h3 = d.labor * yScale;
+                svg += `<rect x="${groupX - centerOffset + barWidth * 2}" y="${padding.top + plotHeight - h3}" width="${barWidth}" height="${h3}" fill="#4A7C59"/>`;
+
+                // X-axis label
+                svg += `<text x="${groupX}" y="${padding.top + plotHeight + 25}" text-anchor="middle" font-size="12" fill="#636E72">${d.month}</text>`;
+            });
+
+            // Legend
+            svg += `<rect x="${padding.left}" y="10" width="280" height="20" fill="white" stroke="#E8DCC8" rx="4"/>`;
+            svg += `<rect x="${padding.left + 10}" y="15" width="12" height="12" fill="#006B54"/>`;
+            svg += `<text x="${padding.left + 28}" y="24" font-size="11" fill="#2D3436">Products</text>`;
+            svg += `<rect x="${padding.left + 110}" y="15" width="12" height="12" fill="#FFD700"/>`;
+            svg += `<text x="${padding.left + 128}" y="24" font-size="11" fill="#2D3436">Equipment</text>`;
+            svg += `<rect x="${padding.left + 210}" y="15" width="12" height="12" fill="#4A7C59"/>`;
+            svg += `<text x="${padding.left + 228}" y="24" font-size="11" fill="#2D3436">Labor</text>`;
+
+            svg += '</svg>';
+            return svg;
+        }
+
+        // Render Functions
+        function renderHeader() {
+            const now = new Date();
+            const dateStr = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            return `
+                <header class="header">
+                    <div class="header-content">
+                        <div class="header-left">
+                            <div class="logo">GREENKEEPER</div>
+                            <div class="facility-name">
+                                <h2>Haggin Oaks Golf Complex</h2>
+                                <p>Morton Golf LLC · Sacramento, CA</p>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <div class="date-time">${dateStr}</div>
+                            <div style="font-size: 12px;">Director Edition</div>
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function renderTabs() {
+            const tabs = ['Dashboard', 'Compliance', 'Tournaments', 'Budget', 'Crew', 'Alerts'];
+            let html = '<div class="tabs">';
+            tabs.forEach(tab => {
+                const tabKey = tab.toLowerCase();
+                const activeClass = appState.activeTab === tabKey ? 'active' : '';
+                html += `<button class="tab-button ${activeClass}" onclick="switchTab('${tabKey}')">${tab}</button>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderDashboard() {
+            return `
+                <div class="tab-content active">
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <div class="card-label">Facility Health Score</div>
+                            <div class="health-ring">
+                                <div class="health-ring-inner">
+                                    <div class="health-ring-value">72</div>
+                                    <div class="health-ring-label">/ 100</div>
+                                </div>
+                            </div>
+                            <div class="card-detail" style="text-align: center;">Both courses • Needs attention</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-label">Active Crew</div>
+                            <div class="card-value">19</div>
+                            <div class="card-detail">2 Licensed • 1 Pending QAL</div>
+                            <div style="margin-top: 12px; font-size: 12px; color: #636E72;">Avg Rating: 4.3/5.0 across departments</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-label">Next Major Event</div>
+                            <div class="card-value" style="font-size: 24px; line-height: 1.2;">AJGA</div>
+                            <div class="card-detail">Apr 2-5 • 150 players</div>
+                            <div style="margin-top: 8px;">
+                                <span class="badge badge-alert">CLOSED APR 3-4</span>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-label">Compliance Status</div>
+                            <div class="card-value" style="color: #4A7C59;">96%</div>
+                            <div class="card-detail">8 of 8 logs filed</div>
+                            <div style="margin-top: 8px;">
+                                <span class="badge badge-success">ON TRACK</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-cards-grid">
+                        <div class="course-card">
+                            <div class="course-card-header">
+                                <h3>MacKenzie Course</h3>
+                                <div class="course-year">Est. 1932 | Alister MacKenzie</div>
+                            </div>
+                            <div class="course-card-body">
+                                <div class="status-row">
+                                    <span class="status-label">Health Score</span>
+                                    <span class="status-value health-score-warning">68/100</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Greens Condition</span>
+                                    <span class="status-value">Good</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Bentgrass Greens Stimp</span>
+                                    <span class="status-value health-score-warning">13.0"</span>
+                                </div>
+                                <div style="font-size: 11px; color: #E96A97; margin-top: 12px;">⚠ Above target (10.5-11.5)</div>
+                                <div class="status-row" style="margin-top: 12px;">
+                                    <span class="status-label">Active Crew</span>
+                                    <span class="status-value">11</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Next Tournament</span>
+                                    <span class="status-value">AJGA (Apr 2-5)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-card-header">
+                                <h3>Arcade Creek Course</h3>
+                                <div class="course-year">Est. 1952</div>
+                            </div>
+                            <div class="course-card-body">
+                                <div class="status-row">
+                                    <span class="status-label">Health Score</span>
+                                    <span class="status-value health-score-warning">76/100</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Greens Condition</span>
+                                    <span class="status-value">Excellent</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Greens Stimp</span>
+                                    <span class="status-value health-score-warning">12.0"</span>
+                                </div>
+                                <div style="font-size: 11px; color: #E96A97; margin-top: 12px;">⚠ Above target (9.5-10.5)</div>
+                                <div class="status-row" style="margin-top: 12px;">
+                                    <span class="status-label">Active Crew</span>
+                                    <span class="status-value">8</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Irrigation Status</span>
+                                    <span class="status-value health-score-warning">⚠ Incomplete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-grid">
+                        <div class="chart-panel">
+                            <h3>Course Health Trends</h3>
+                            <p class="chart-subtitle">Last 4 months - comparison by course</p>
+                            <div class="chart-container">
+                                ${createLineChart(healthScoreTrends, 'mackenzie', 'arcadeCreek', 'MacKenzie', 'Arcade Creek')}
+                            </div>
+                        </div>
+                        <div class="chart-panel">
+                            <h3>Monthly Spending Trend</h3>
+                            <p class="chart-subtitle">Products, Equipment & Labor</p>
+                            <div class="chart-container">
+                                ${createBarChart(budgetData)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="export-section">
+                        <p>Generate reports and export data for stakeholders</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary">📥 Export Dashboard</button>
+                            <button class="btn btn-secondary">📥 Export Compliance Report</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCompliance() {
+            let timelineHtml = '<div class="timeline">';
+            complianceLogs.forEach(log => {
+                timelineHtml += `
+                    <div class="timeline-item">
+                        <div class="timeline-date">${log.date}</div>
+                        <div class="timeline-content">
+                            <strong>${log.product}</strong>
+                            <div style="font-size: 12px; color: #636E72; margin-top: 4px;">
+                                ${log.course} • ${log.applicator}
+                            </div>
+                            <span class="badge badge-success" style="margin-top: 8px;">✓ Complete</span>
+                        </div>
+                    </div>
+                `;
+            });
+            timelineHtml += '</div>';
+
+            return `
+                <div class="tab-content">
+                    <h2 class="section-title">Compliance & Spray Logs</h2>
+                    <div class="chart-panel">
+                        <h3>Application Timeline (Jan-Apr 2026)</h3>
+                        ${timelineHtml}
+                    </div>
+
+                    <div style="margin-top: 32px;">
+                        <h3 class="section-title">Licensed Applicators</h3>
+                        <div class="chart-panel">
+                            <div class="license-row">
+                                <div class="license-info">
+                                    <h4>Paul Toussaint</h4>
+                                    <div class="license-number">License #144743</div>
+                                </div>
+                                <span class="badge badge-success">Active</span>
+                            </div>
+                            <div class="license-row">
+                                <div class="license-info">
+                                    <h4>Rick White</h4>
+                                    <div class="license-number">License #156821</div>
+                                </div>
+                                <span class="badge badge-success">Active</span>
+                            </div>
+                            <div class="license-row">
+                                <div class="license-info">
+                                    <h4>Josh Butler</h4>
+                                    <div class="license-number">QAL Certification Pending</div>
+                                </div>
+                                <span class="badge badge-pending">Pending May 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTournaments() {
+            let tableHtml = '<table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Course</th><th>Players</th></tr></thead><tbody>';
+            tournaments.forEach(t => {
+                const notes = t.notes ? `<div style="font-size: 11px; color: #E96A97; margin-top: 4px;">⚠ ${t.notes}</div>` : '';
+                tableHtml += `
+                    <tr>
+                        <td>${t.date}</td>
+                        <td><strong>${t.event}</strong>${notes}</td>
+                        <td>${t.course}</td>
+                        <td><span style="font-weight: 600; color: #006B54;">${t.players}</span></td>
+                    </tr>
+                `;
+            });
+            tableHtml += '</tbody></table>';
+
+            return `
+                <div class="tab-content">
+                    <h2 class="section-title">2026 Tournament Calendar</h2>
+                    <div class="chart-panel">
+                        ${tableHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBudget() {
+            return `
+                <div class="tab-content">
+                    <h2 class="section-title">Budget & Spending Analysis</h2>
+
+                    <div class="chart-panel">
+                        <h3>Monthly Expense Distribution</h3>
+                        <p class="chart-subtitle">All facility costs</p>
+                        <div class="chart-container">
+                            ${createBarChart(budgetData)}
+                        </div>
+                    </div>
+
+                    <div class="chart-panel" style="margin-top: 32px;">
+                        <h3>Year-to-Date Summary</h3>
+                        <div style="margin-top: 20px;">
+                            <div class="status-row">
+                                <span class="status-label">Total Product Costs</span>
+                                <span class="status-value">$18,000</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Equipment Costs</span>
+                                <span class="status-value">$13,600</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Labor Costs</span>
+                                <span class="status-value">$72,900</span>
+                            </div>
+                            <div class="status-row" style="border-top: 2px solid #FFD700; padding-top: 16px; margin-top: 16px;">
+                                <span class="status-label" style="font-weight: 700;">Combined Facility Spend</span>
+                                <span class="status-value" style="font-size: 24px;">$104,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCrew() {
+            let crewGridHtml = '<div class="crew-grid">';
+            crewMembers.slice(0, 6).forEach(member => {
+                let certsHtml = member.certifications.map(cert => `<span class="cert-badge">${cert}</span>`).join('');
+                crewGridHtml += `
+                    <div class="crew-member-card">
+                        <div class="crew-name">${member.name}</div>
+                        <div class="crew-role">${member.role}</div>
+                        <div class="crew-certs">${certsHtml}</div>
+                    </div>
+                `;
+            });
+            crewGridHtml += '</div>';
+
+            return `
+                <div class="tab-content">
+                    <h2 class="section-title">Crew Management</h2>
+
+                    <div class="chart-panel">
+                        <div style="margin-bottom: 20px;">
+                            <div class="status-row">
+                                <span class="status-label">Total Crew Members</span>
+                                <span class="status-value">19</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Licensed Applicators</span>
+                                <span class="status-value">2</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Pending QAL</span>
+                                <span class="status-value">1</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Average Department Rating</span>
+                                <span class="status-value">4.3 / 5.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 32px;">
+                        <h3 class="section-title">Key Personnel</h3>
+                        ${crewGridHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAlerts() {
+            return `
+                <div class="tab-content">
+                    <h2 class="section-title">Active Alerts & Flags</h2>
+
+                    <div class="alerts-section">
+                        <div class="alert-item warning">
+                            <div class="alert-icon">⚠</div>
+                            <div class="alert-content">
+                                <h4>MacKenzie Greens Running Fast</h4>
+                                <p>Current stimp at 13.0" exceeds target of 10.5-11.5". Recommend reducing mowing height and increasing irrigation. Impacts AJGA preparation.</p>
+                            </div>
+                        </div>
+                        <div class="alert-item warning">
+                            <div class="alert-icon">⚠</div>
+                            <div class="alert-content">
+                                <h4>Arcade Creek Irrigation Incomplete</h4>
+                                <p>Irrigation head replacement on holes 12-1 pending completion. Must be resolved before spring tournament season.</p>
+                            </div>
+                        </div>
+                        <div class="alert-item info">
+                            <div class="alert-icon">ℹ</div>
+                            <div class="alert-content">
+                                <h4>AJGA Tournament Prep Underway</h4>
+                                <p>April 2-5 event on MacKenzie. Course CLOSED April 3-4 for setup. 150 players expected. Green speed adjustment in progress.</p>
+                            </div>
+                        </div>
+                        <div class="alert-item info">
+                            <div class="alert-icon">ℹ</div>
+                            <div class="alert-content">
+                                <h4>Josh Butler QAL Certification</h4>
+                                <p>Pending examination scheduled for May 2026. Currently working under supervised application protocols.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFooter() {
+            return `
+                <footer class="footer">
+                    Greenkeeper v1.0 · Links Lab · Executive Director Dashboard
+                </footer>
+            `;
+        }
+
+        function switchTab(tabName) {
+            appState.activeTab = tabName;
+            render();
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            let html = renderHeader();
+            html += '<div class="container" style="flex: 1;">';
+            html += renderTabs();
+
+            if (appState.activeTab === 'dashboard') {
+                html += renderDashboard();
+            } else if (appState.activeTab === 'compliance') {
+                html += renderCompliance();
+            } else if (appState.activeTab === 'tournaments') {
+                html += renderTournaments();
+            } else if (appState.activeTab === 'budget') {
+                html += renderBudget();
+            } else if (appState.activeTab === 'crew') {
+                html += renderCrew();
+            } else if (appState.activeTab === 'alerts') {
+                html += renderAlerts();
+            }
+
+            html += '</div>';
+            html += renderFooter();
+
+            app.innerHTML = html;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            render();
+            // Update time every minute
+            setInterval(() => {
+                const activeTab = appState.activeTab;
+                render();
+                appState.activeTab = activeTab;
+            }, 60000);
+        });
+    </script>
+</body>
+</html>

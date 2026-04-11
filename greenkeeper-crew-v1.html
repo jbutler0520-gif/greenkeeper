@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenkeeper Crew App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background-color: #FDF8F0;
+            color: #2D3436;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .heading {
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #00483A;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #FDF8F0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #006B54 0%, #00483A 100%);
+            color: #FFFEF9;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 72, 58, 0.2);
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #FFFEF9;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #FFD700;
+            opacity: 0.95;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 20px 16px 80px 16px;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* TAB CONTENT */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ASSIGNMENT CARD */
+        .assignment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #006B54;
+        }
+
+        .assignment-card h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #00483A;
+        }
+
+        .assignment-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .assignment-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2D3436;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* COURSE BADGE */
+        .course-badge {
+            display: inline-block;
+            background: #E96A97;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        /* EQUIPMENT */
+        .equipment-section {
+            background: #F5F5F5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .equipment-section .assignment-label {
+            margin-bottom: 6px;
+        }
+
+        .equipment-item {
+            font-size: 15px;
+            color: #2D3436;
+            padding: 6px 0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .equipment-item:last-child {
+            border-bottom: none;
+        }
+
+        /* NOTES */
+        .notes-section {
+            background: #FFF9E6;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid #FFD700;
+        }
+
+        .notes-section .assignment-label {
+            margin-bottom: 6px;
+        }
+
+        .notes-text {
+            font-size: 14px;
+            color: #5C4033;
+            line-height: 1.5;
+        }
+
+        /* SAFETY NOTICES */
+        .safety-notice {
+            background: #FFE5E5;
+            border-left: 4px solid #E96A97;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .safety-notice-title {
+            font-weight: 600;
+            color: #A94A6D;
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .safety-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        .safety-notice-text {
+            font-size: 13px;
+            color: #5C4033;
+            line-height: 1.5;
+        }
+
+        /* CHECKLIST */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #E0E0E0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: #006B54;
+        }
+
+        .checklist-item.completed {
+            background: #F0F9F6;
+            border-color: #006B54;
+        }
+
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #CCC;
+            border-radius: 6px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            margin-top: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item.completed .checklist-checkbox {
+            background: #006B54;
+            border-color: #006B54;
+        }
+
+        .checkmark {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .checklist-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #2D3436;
+            flex: 1;
+        }
+
+        .checklist-item.completed .checklist-label {
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        /* NOTES BOARD */
+        .note-item {
+            background: white;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #00483A;
+            font-size: 13px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .note-text {
+            font-size: 14px;
+            color: #2D3436;
+            line-height: 1.5;
+        }
+
+        /* ISSUE REPORTING */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #00483A;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #006B54;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* PROFILE */
+        .profile-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00483A;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .profile-field {
+            padding: 12px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .profile-field-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .profile-field-value {
+            font-size: 15px;
+            color: #2D3436;
+            font-weight: 500;
+            white-space: pre-wrap;
+        }
+
+        .certifications {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .cert-badge {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* BUTTONS */
+        .button-primary {
+            width: 100%;
+            padding: 16px;
+            background: #006B54;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background: #00483A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 107, 84, 0.2);
+        }
+
+        .button-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-secondary {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #006B54;
+            border: 2px solid #006B54;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .button-secondary:hover {
+            background: #F9F9F9;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            max-width: 480px;
+            margin: 0 auto;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: #006B54;
+            background: #F0F9F6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+        }
+
+        /* SUCCESS MESSAGE */
+        .success-message {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid #4CAF50;
+            font-weight: 500;
+        }
+
+        /* PROGRESS DISPLAY */
+        .progress-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #006B54;
+            margin: 8px 0;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .bottom-nav {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Greenkeeper</h1>
+            <div class="header-subtitle" id="dateDisplay">Wednesday, April 9, 2026</div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+
+            <!-- HOME TAB -->
+            <div class="tab-content active" id="tab-home">
+                <!-- CREW MEMBER CARD -->
+                <div class="assignment-card">
+                    <h2>Jay</h2>
+                    <div class="assignment-label">Role</div>
+                    <div class="assignment-value">Tees / Collars / Bunkers</div>
+                    <span class="course-badge">MacKenzie - Full Mo Day</span>
+                </div>
+
+                <!-- SAFETY NOTICES -->
+                <div class="safety-notice">
+                    <div class="safety-notice-title">
+                        <svg class="safety-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                        Tournament Alert
+                    </div>
+                    <div class="safety-notice-text">
+                        Tournament Saturday — extra attention on bunker faces holes 1, 7, 18
+                    </div>
+                </div>
+
+                <!-- PRIMARY ASSIGNMENT -->
+                <div class="assignment-card">
+                    <h2>Primary Assignment</h2>
+                    <div class="assignment-label">Time</div>
+                    <div class="assignment-value">5:00 AM – 8:30 AM</div>
+                    <div class="assignment-label">Work</div>
+                    <div class="assignment-value">Approaches and bunker raking — MacKenzie holes 1-9</div>
+                    <div class="equipment-section">
+                        <div class="assignment-label">Equipment</div>
+                        <div class="equipment-item">Sand Pro #1</div>
+                    </div>
+                    <div class="notes-section">
+                        <div class="assignment-label">Note from Rick</div>
+                        <div class="notes-text">Tournament Saturday — extra attention on bunker faces 1, 7, 18. Rake every bunker. No shortcuts.</div>
+                    </div>
+                </div>
+
+                <!-- SECONDARY ASSIGNMENT -->
+                <div class="assignment-card">
+                    <h2>Secondary Assignment</h2>
+                    <div class="assignment-label">Time</div>
+                    <div class="assignment-value">8:30 AM – 12:00 PM</div>
+                    <div class="assignment-label">Work</div>
+                    <div class="assignment-value">General maintenance — bunker edge repair hole 7</div>
+                    <div class="equipment-section">
+                        <div class="assignment-label">Equipment</div>
+                        <div class="equipment-item">Hand tools, sod cutter</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHECKLIST TAB -->
+            <div class="tab-content" id="tab-checklist">
+                <div class="assignment-card">
+                    <div class="assignment-label">Progress</div>
+                    <div class="progress-display" id="progressCount">0 / 4</div>
+                    <div class="progress-label">Tasks completed today</div>
+                </div>
+
+                <div class="checklist-item" data-id="rake-bunkers">
+                    <div class="checklist-checkbox">
+                        <span class="checkmark" style="display:none;">✓</span>
+                    </div>
+                    <label class="checklist-label">Rake bunkers holes 1-9</label>
+                </div>
+
+                <div class="checklist-item" data-id="edge-repair">
+                    <div class="checklist-checkbox">
+                        <span class="checkmark" style="display:none;">✓</span>
+                    </div>
+                    <label class="checklist-label">Edge repair bunker hole 7</label>
+                </div>
+
+                <div class="checklist-item" data-id="blow-paths">
+                    <div class="checklist-checkbox">
+                        <span class="checkmark" style="display:none;">✓</span>
+                    </div>
+                    <label class="checklist-label">Blow cart paths holes 1-9</label>
+                </div>
+
+                <div class="checklist-item" data-id="check-drainage">
+                    <div class="checklist-checkbox">
+                        <span class="checkmark" style="display:none;">✓</span>
+                    </div>
+                    <label class="checklist-label">Check bunker drainage hole 3</label>
+                </div>
+            </div>
+
+            <!-- NOTES TAB -->
+            <div class="tab-content" id="tab-notes">
+                <div class="assignment-card">
+                    <h2>Course Notes</h2>
+                </div>
+
+                <div class="note-item">
+                    <div class="note-title">Tournament Notice</div>
+                    <div class="note-text">AJGA Tournament April 3-4 — MacKenzie CLOSED to public. Arcade Creek will handle any walk-ons.</div>
+                </div>
+
+                <div class="note-item">
+                    <div class="note-title">Turf Management</div>
+                    <div class="note-text">Aeration recovery in progress — avoid greens traffic on MacKenzie holes 10-18 for 2 more weeks.</div>
+                </div>
+
+                <div class="note-item">
+                    <div class="note-title">Irrigation</div>
+                    <div class="note-text">Irrigation head on MacKenzie #5 will be repaired Friday. Water manually if needed.</div>
+                </div>
+
+                <div class="note-item">
+                    <div class="note-title">Chemical Alert</div>
+                    <div class="note-text">Spray application in progress — Greens 10-18. REI 4 hours. Avoid until 11:00 AM. PPE required if entering.</div>
+                </div>
+
+                <div class="note-item">
+                    <div class="note-title">Equipment Safety</div>
+                    <div class="note-text">Sand Pro #2 brake issue — do not operate until cleared by Tom. Use Sand Pro #1 or #3 only.</div>
+                </div>
+            </div>
+
+            <!-- REPORT ISSUE TAB -->
+            <div class="tab-content" id="tab-report">
+                <div class="assignment-card">
+                    <h2>Report a Problem</h2>
+                </div>
+
+                <div id="successMessage" class="success-message" style="display:none;">
+                    ✓ Issue submitted to Rick. Thank you!
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Course</label>
+                    <select class="form-select" id="reportCourse">
+                        <option value="mackenzie">MacKenzie</option>
+                        <option value="arcade">Arcade Creek</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Hole Number</label>
+                    <input type="number" class="form-input" id="reportHole" placeholder="e.g., 5" min="1" max="18">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Describe the Issue</label>
+                    <textarea class="form-textarea" id="reportDescription" placeholder="Irrigation head broken, equipment issue, turf damage, etc."></textarea>
+                </div>
+
+                <button class="button-primary" id="submitBtn">Submit Report</button>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div class="tab-content" id="tab-profile">
+                <div class="profile-section">
+                    <div class="profile-name">Jay</div>
+                    <div class="profile-role">Tees / Collars / Bunkers Crew</div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">Employee ID</div>
+                        <div class="profile-field-value">#2847</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">Years at Haggin Oaks</div>
+                        <div class="profile-field-value">7 years</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">Certifications</div>
+                        <div class="certifications">
+                            <span class="cert-badge">Pesticide License</span>
+                            <span class="cert-badge">Heavy Equipment</span>
+                            <span class="cert-badge">First Aid</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">Emergency Contact</div>
+                        <div class="profile-field-value">Monica (Spouse)
+(916) 555-0142</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">Superintendent</div>
+                        <div class="profile-field-value">Rick Sullivan</div>
+                    </div>
+                </div>
+
+                <button class="button-secondary" id="settingsBtn">Account Settings</button>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <button class="nav-item active" data-tab="home">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                Today
+            </button>
+            <button class="nav-item" data-tab="checklist">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Checklist
+            </button>
+            <button class="nav-item" data-tab="notes">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54 2.08 2.54h3.02L15 12.5z"/>
+                </svg>
+                Notes
+            </button>
+            <button class="nav-item" data-tab="report">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                Report
+            </button>
+            <button class="nav-item" data-tab="profile">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                Profile
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        const state = {
+            activeTab: 'home',
+            checklist: {
+                'rake-bunkers': false,
+                'edge-repair': false,
+                'blow-paths': false,
+                'check-drainage': false
+            },
+            formData: {
+                course: 'mackenzie',
+                hole: '',
+                description: ''
+            }
+        };
+
+        // Get current date
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('en-US', options);
+            document.getElementById('dateDisplay').textContent = today;
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            // Update nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
+
+            state.activeTab = tabName;
+        }
+
+        // Checklist functionality
+        function initChecklist() {
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            checklistItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    state.checklist[id] = !state.checklist[id];
+                    updateChecklistUI();
+                });
+            });
+        }
+
+        function updateChecklistUI() {
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            checklistItems.forEach(item => {
+                const id = item.getAttribute('data-id');
+                const isCompleted = state.checklist[id];
+                const checkbox = item.querySelector('.checklist-checkbox span');
+
+                if (isCompleted) {
+                    item.classList.add('completed');
+                    checkbox.style.display = 'inline';
+                } else {
+                    item.classList.remove('completed');
+                    checkbox.style.display = 'none';
+                }
+            });
+
+            // Update progress counter
+            const completed = Object.values(state.checklist).filter(Boolean).length;
+            document.getElementById('progressCount').textContent = completed + ' / 4';
+        }
+
+        // Report form functionality
+        function initReportForm() {
+            document.getElementById('reportCourse').addEventListener('change', function(e) {
+                state.formData.course = e.target.value;
+            });
+
+            document.getElementById('reportHole').addEventListener('change', function(e) {
+                state.formData.hole = e.target.value;
+            });
+
+            document.getElementById('reportDescription').addEventListener('input', function(e) {
+                state.formData.description = e.target.value;
+                updateSubmitButton();
+            });
+
+            document.getElementById('submitBtn').addEventListener('click', submitReport);
+        }
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('submitBtn');
+            const hasDescription = state.formData.description.trim().length > 0;
+            btn.disabled = !hasDescription;
+        }
+
+        function submitReport() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+
+            // Clear form
+            state.formData = {
+                course: 'mackenzie',
+                hole: '',
+                description: ''
+            };
+            document.getElementById('reportCourse').value = 'mackenzie';
+            document.getElementById('reportHole').value = '';
+            document.getElementById('reportDescription').value = '';
+            updateSubmitButton();
+
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        // Settings button
+        function initSettingsButton() {
+            document.getElementById('settingsBtn').addEventListener('click', function() {
+                alert('Settings would open here');
+            });
+        }
+
+        // Navigation setup
+        function initNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        // Initialize app
+        function init() {
+            updateDate();
+            initNavigation();
+            initChecklist();
+            initReportForm();
+            initSettingsButton();
+            updateChecklistUI();
+        }
+
+        // Start app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenkeeper Superintendent | Links Lab</title>
+
+    <style>
+        /* ===== RESET & FONTS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FDF8F0;
+            color: #2D3436;
+            line-height: 1.6;
+        }
+
+        /* ===== COLOR PALETTE ===== */
+        :root {
+            --masters-green: #006B54;
+            --augusta-dark: #00483A;
+            --masters-gold: #FFD700;
+            --azalea-pink: #E96A97;
+            --cream: #FDF8F0;
+            --warm-white: #FFFEF9;
+            --rich-brown: #5C4033;
+            --sand: #C2B280;
+            --fairway-green: #4A7C59;
+            --slate: #2D3436;
+            --soft-gray: #636E72;
+        }
+
+        /* ===== LAYOUT ===== */
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #root {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--masters-green) 0%, var(--augusta-dark) 100%);
+            color: var(--cream);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--masters-gold);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--masters-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--masters-green);
+            font-family: Georgia, serif;
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-app {
+            font-family: Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--masters-gold);
+        }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.05em;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .course-selector {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--cream);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .course-selector:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .weather-bar {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ===== TABS ===== */
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background-color: var(--cream);
+        }
+
+        .tabs-list {
+            display: flex;
+            gap: 0;
+            background-color: var(--warm-white);
+            border-bottom: 2px solid var(--sand);
+            overflow-x: auto;
+            padding: 0 2rem;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: var(--soft-gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: var(--masters-green);
+            background-color: rgba(0, 107, 84, 0.05);
+        }
+
+        .tab-button.active {
+            color: var(--masters-green);
+            border-bottom-color: var(--masters-gold);
+            font-weight: 600;
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background-color: var(--warm-white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--masters-green);
+        }
+
+        .card.alert {
+            border-left-color: var(--azalea-pink);
+        }
+
+        .card.success {
+            border-left-color: var(--fairway-green);
+        }
+
+        .card-title {
+            font-family: Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--masters-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* ===== GRID LAYOUTS ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-daily {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        /* ===== CREW CARD ===== */
+        .crew-card {
+            background-color: var(--warm-white);
+            border-radius: 6px;
+            padding: 1rem;
+            border-left: 4px solid var(--masters-green);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .crew-name {
+            font-weight: 600;
+            color: var(--masters-green);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .crew-role {
+            font-size: 0.85rem;
+            color: var(--soft-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .crew-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-badge {
+            background-color: var(--masters-gold);
+            color: var(--masters-green);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ===== SPRAY LOG ===== */
+        .spray-entry {
+            background-color: var(--warm-white);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--fairway-green);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .spray-date {
+            font-weight: 700;
+            color: var(--masters-green);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .spray-operator {
+            color: var(--soft-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .spray-products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-tag {
+            background-color: rgba(0, 107, 84, 0.1);
+            color: var(--masters-green);
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .spray-reason {
+            font-size: 0.9rem;
+            color: var(--soft-gray);
+            font-style: italic;
+        }
+
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--sand);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--masters-green);
+            box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--masters-green);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--augusta-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 107, 84, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--sand);
+            color: var(--slate);
+        }
+
+        .btn-secondary:hover {
+            background-color: #B8A875;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-icon {
+            background-color: transparent;
+            border: 1px solid var(--sand);
+            color: var(--slate);
+            padding: 0.5rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background-color: var(--cream);
+            border-color: var(--masters-green);
+            color: var(--masters-green);
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: rgba(74, 124, 89, 0.15);
+            color: var(--fairway-green);
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 215, 0, 0.2);
+            color: #D4A500;
+        }
+
+        .badge-alert {
+            background-color: rgba(233, 106, 151, 0.15);
+            color: var(--azalea-pink);
+        }
+
+        .badge-info {
+            background-color: rgba(0, 107, 84, 0.15);
+            color: var(--masters-green);
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--warm-white);
+        }
+
+        th {
+            background-color: rgba(0, 107, 84, 0.08);
+            color: var(--masters-green);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--sand);
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--sand);
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 107, 84, 0.04);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background-color: var(--augusta-dark);
+            color: var(--cream);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 2px solid var(--masters-green);
+        }
+
+        .footer a {
+            color: var(--masters-gold);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== CHART ===== */
+        .chart-container {
+            background-color: var(--warm-white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-title {
+            font-family: Georgia, serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--masters-green);
+            margin-bottom: 1rem;
+        }
+
+        /* ===== GRID POSITIONS ===== */
+        .pin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            max-width: 300px;
+            margin: 1rem 0;
+        }
+
+        .pin-position {
+            aspect-ratio: 1;
+            background-color: var(--warm-white);
+            border: 2px solid var(--sand);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--soft-gray);
+        }
+
+        .pin-position:hover {
+            border-color: var(--masters-green);
+            background-color: rgba(0, 107, 84, 0.08);
+        }
+
+        .pin-position.active {
+            background-color: var(--masters-green);
+            color: var(--cream);
+            border-color: var(--masters-green);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .tabs-list {
+                padding: 0 1rem;
+                overflow-x: auto;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-daily {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-button {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ===== MOISTURE MODULE ===== */
+        .moisture-hero {
+            background: linear-gradient(135deg, var(--masters-green) 0%, var(--augusta-dark) 100%);
+            color: var(--cream);
+            padding: 1.5rem 1.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 6px 18px -6px rgba(0, 61, 45, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .moisture-hero::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--masters-gold), transparent, var(--masters-gold));
+        }
+        .moisture-hero-title {
+            font-family: Georgia, serif;
+            font-size: 1.55rem;
+            font-style: italic;
+            color: var(--masters-gold);
+            margin-bottom: 0.25rem;
+        }
+        .moisture-hero-sub {
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255, 215, 0, 0.75);
+        }
+        .moisture-live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ADE80;
+            margin-right: 6px;
+            box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+        .kpi-card {
+            background: var(--warm-white);
+            border-radius: 6px;
+            padding: 1rem 1.1rem;
+            border: 1px solid var(--sand);
+            border-top: 3px solid var(--masters-green);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .kpi-card.kpi-gold { border-top-color: var(--masters-gold); }
+        .kpi-card.kpi-pink { border-top-color: var(--azalea-pink); }
+        .kpi-card.kpi-green { border-top-color: var(--fairway-green); }
+        .kpi-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--soft-gray);
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+        }
+        .kpi-value {
+            font-family: Georgia, serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--augusta-dark);
+            line-height: 1;
+            font-style: italic;
+        }
+        .kpi-sub {
+            font-size: 0.72rem;
+            color: var(--soft-gray);
+            margin-top: 0.35rem;
+        }
+        .kpi-trend-up { color: var(--fairway-green); font-weight: 600; }
+        .kpi-trend-down { color: var(--azalea-pink); font-weight: 600; }
+
+        .zone-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+        .zone-card {
+            background: var(--warm-white);
+            border-radius: 6px;
+            padding: 0.95rem 1rem;
+            border: 1px solid var(--sand);
+            border-left: 4px solid var(--fairway-green);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .zone-card.status-wet { border-left-color: #3B82F6; }
+        .zone-card.status-dry { border-left-color: var(--azalea-pink); }
+        .zone-card.status-watch { border-left-color: #F59E0B; }
+        .zone-name {
+            font-family: Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--augusta-dark);
+            margin-bottom: 0.3rem;
+        }
+        .zone-vwc {
+            font-family: Georgia, serif;
+            font-size: 1.65rem;
+            font-style: italic;
+            color: var(--masters-green);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        .zone-meta {
+            font-size: 0.7rem;
+            color: var(--soft-gray);
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sensor-grid-map {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
+            margin: 0.75rem 0;
+        }
+        .sensor-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.62rem;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.15s;
+            font-weight: 600;
+            padding: 2px;
+            position: relative;
+        }
+        .sensor-cell:hover {
+            transform: scale(1.08);
+            z-index: 5;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        }
+        .sensor-cell-label {
+            font-size: 0.6rem;
+            opacity: 0.85;
+        }
+        .sensor-cell-value {
+            font-family: Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-style: italic;
+            margin-top: 1px;
+        }
+        .sensor-cell.status-ok { background: var(--fairway-green); }
+        .sensor-cell.status-watch { background: #F59E0B; }
+        .sensor-cell.status-dry { background: var(--azalea-pink); }
+        .sensor-cell.status-wet { background: #3B82F6; }
+        .sensor-cell.status-offline { background: #6B7280; opacity: 0.6; }
+
+        .legend {
+            display: flex;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+            font-size: 0.72rem;
+            color: var(--soft-gray);
+            margin-top: 0.6rem;
+            padding-top: 0.6rem;
+            border-top: 1px dashed var(--sand);
+        }
+        .legend-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .moisture-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+        .moisture-table th {
+            font-size: 0.68rem;
+            padding: 0.55rem 0.55rem;
+        }
+        .moisture-table td {
+            padding: 0.55rem 0.55rem;
+        }
+        .sensor-bar {
+            display: inline-block;
+            width: 60px;
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            overflow: hidden;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        .sensor-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .sensor-bar-fill.ok { background: var(--fairway-green); }
+        .sensor-bar-fill.watch { background: #F59E0B; }
+        .sensor-bar-fill.dry { background: var(--azalea-pink); }
+        .sensor-bar-fill.wet { background: #3B82F6; }
+
+        .pill {
+            display: inline-block;
+            padding: 0.2rem 0.55rem;
+            border-radius: 10px;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .pill.ok { background: rgba(74, 124, 89, 0.15); color: var(--fairway-green); }
+        .pill.watch { background: rgba(245, 158, 11, 0.15); color: #B45309; }
+        .pill.dry { background: rgba(233, 106, 151, 0.15); color: var(--azalea-pink); }
+        .pill.wet { background: rgba(59, 130, 246, 0.15); color: #1D4ED8; }
+        .pill.offline { background: rgba(107, 114, 128, 0.15); color: #4B5563; }
+
+        .irrigation-plan {
+            background: linear-gradient(135deg, rgba(0, 107, 84, 0.04), rgba(255, 215, 0, 0.06));
+            border: 1px solid var(--masters-green);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .plan-zone {
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 0.75rem;
+            padding: 0.6rem 0.25rem;
+            border-bottom: 1px dashed var(--sand);
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .plan-zone:last-child { border-bottom: 0; }
+        .plan-zone-name { font-weight: 600; color: var(--augusta-dark); }
+        .plan-minutes {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: var(--masters-green);
+            font-weight: 700;
+        }
+        .plan-gallons { color: var(--soft-gray); font-size: 0.78rem; }
+
+        .alert-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+        .alert-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 0.65rem 0.85rem;
+            background: var(--warm-white);
+            border-radius: 6px;
+            border-left: 3px solid var(--sand);
+            font-size: 0.82rem;
+        }
+        .alert-row.urgent { border-left-color: var(--azalea-pink); background: rgba(233, 106, 151, 0.06); }
+        .alert-row.watch { border-left-color: #F59E0B; background: rgba(245, 158, 11, 0.05); }
+        .alert-row.info { border-left-color: var(--masters-green); }
+        .alert-icon {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--masters-green);
+            color: var(--masters-gold);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+        .alert-row.urgent .alert-icon { background: var(--azalea-pink); color: #fff; }
+        .alert-row.watch .alert-icon { background: #F59E0B; color: #fff; }
+        .alert-time {
+            font-size: 0.7rem;
+            color: var(--soft-gray);
+            white-space: nowrap;
+        }
+
+        .hw-log {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.55rem;
+        }
+        .hw-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 0.85rem;
+            padding: 0.55rem 0.85rem;
+            background: var(--cream);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            align-items: center;
+        }
+        .hw-time { font-size: 0.72rem; color: var(--soft-gray); }
+        .hw-op { font-weight: 600; color: var(--augusta-dark); }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1.25rem;
+            font-size: 0.82rem;
+            margin-top: 0.5rem;
+        }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px dotted var(--sand);
+        }
+        .spec-label { color: var(--soft-gray); font-size: 0.76rem; }
+        .spec-value { font-weight: 600; color: var(--augusta-dark); font-size: 0.8rem; }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
+        }
+        .roi-tile {
+            background: var(--warm-white);
+            border: 1px solid var(--sand);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            border-top: 3px solid var(--masters-gold);
+        }
+        .roi-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--soft-gray);
+            margin-bottom: 0.35rem;
+        }
+        .roi-value {
+            font-family: Georgia, serif;
+            font-size: 1.6rem;
+            font-style: italic;
+            font-weight: 700;
+            color: var(--masters-green);
+        }
+        .roi-detail {
+            font-size: 0.72rem;
+            color: var(--soft-gray);
+            margin-top: 0.25rem;
+        }
+
+        .section-header {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--masters-green);
+            margin: 1.5rem 0 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--sand);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .section-header-sub {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold-dark, #C9A227);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1100px) {
+            .kpi-row { grid-template-columns: repeat(3, 1fr); }
+            .zone-row { grid-template-columns: repeat(2, 1fr); }
+            .roi-grid { grid-template-columns: repeat(2, 1fr); }
+            .sensor-grid-map { grid-template-columns: repeat(6, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .zone-row { grid-template-columns: 1fr; }
+            .sensor-grid-map { grid-template-columns: repeat(4, 1fr); }
+            .spec-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        // ===== SVG CHART GENERATORS =====
+        function createLineChart(data, xKey, lines, width = 600, height = 300) {
+            const padding = 50;
+            const graphWidth = width - padding * 2;
+            const graphHeight = height - padding * 2;
+
+            const xValues = data.map(d => d[xKey]);
+            const allYValues = [];
+            lines.forEach(line => {
+                data.forEach(d => allYValues.push(d[line.dataKey]));
+            });
+
+            const minY = Math.min(...allYValues);
+            const maxY = Math.max(...allYValues);
+            const rangeY = maxY - minY || 1;
+
+            const xStep = graphWidth / (xValues.length - 1 || 1);
+            const yScale = graphHeight / rangeY;
+
+            let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+                <style>
+                    .chart-grid { stroke: #C2B280; stroke-dasharray: 3,3; }
+                    .chart-axis { stroke: #636E72; stroke-width: 1; }
+                    .chart-text { font-size: 12px; fill: #636E72; }
+                    .chart-line { fill: none; stroke-width: 2; }
+                </style>`;
+
+            // Grid lines
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (graphHeight / 5) * i;
+                svg += `<line class="chart-grid" x1="${padding}" y1="${y}" x2="${width - padding}" y2="${y}"/>`;
+                const value = (maxY - (rangeY / 5) * i).toFixed(1);
+                svg += `<text class="chart-text" x="${padding - 10}" y="${y + 4}" text-anchor="end">${value}</text>`;
+            }
+
+            // X axis labels and lines
+            for (let i = 0; i < xValues.length; i++) {
+                const x = padding + xStep * i;
+                svg += `<line class="chart-axis" x1="${x}" y1="${height - padding}" x2="${x}" y2="${height - padding + 5}"/>`;
+                svg += `<text class="chart-text" x="${x}" y="${height - padding + 20}" text-anchor="middle">${xValues[i]}</text>`;
+            }
+
+            // Draw lines
+            lines.forEach((line, lineIdx) => {
+                let pathD = '';
+                data.forEach((d, idx) => {
+                    const x = padding + xStep * idx;
+                    const yVal = d[line.dataKey];
+                    const y = height - padding - ((yVal - minY) * yScale);
+                    pathD += (idx === 0 ? 'M' : 'L') + x + ',' + y;
+                });
+                svg += `<path class="chart-line" d="${pathD}" stroke="${line.stroke}"/>`;
+            });
+
+            // Axes
+            svg += `<line class="chart-axis" x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}"/>`;
+            svg += `<line class="chart-axis" x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}"/>`;
+
+            svg += '</svg>';
+            return svg;
+        }
+
+        function createBarChart(data, xKey, barKey, barColor = '#4A7C59', width = 600, height = 300) {
+            const padding = 50;
+            const graphWidth = width - padding * 2;
+            const graphHeight = height - padding * 2;
+
+            const values = data.map(d => d[barKey]);
+            const maxVal = Math.max(...values);
+
+            const barWidth = (graphWidth / data.length) * 0.7;
+            const barSpacing = graphWidth / data.length;
+
+            let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+                <style>
+                    .bar-chart-grid { stroke: #C2B280; stroke-dasharray: 3,3; }
+                    .bar-chart-axis { stroke: #636E72; stroke-width: 1; }
+                    .bar-chart-text { font-size: 12px; fill: #636E72; }
+                    .bar-chart-bar { fill: ${barColor}; }
+                </style>`;
+
+            // Grid lines
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (graphHeight / 5) * i;
+                svg += `<line class="bar-chart-grid" x1="${padding}" y1="${y}" x2="${width - padding}" y2="${y}"/>`;
+                const value = (maxVal * (5 - i) / 5).toFixed(1);
+                svg += `<text class="bar-chart-text" x="${padding - 10}" y="${y + 4}" text-anchor="end">${value}</text>`;
+            }
+
+            // Bars
+            data.forEach((d, idx) => {
+                const val = d[barKey];
+                const barHeight = (val / maxVal) * graphHeight;
+                const x = padding + (idx * barSpacing) + (barSpacing - barWidth) / 2;
+                const y = height - padding - barHeight;
+
+                svg += `<rect class="bar-chart-bar" x="${x}" y="${y}" width="${barWidth}" height="${barHeight}"/>`;
+                svg += `<text class="bar-chart-text" x="${x + barWidth / 2}" y="${height - padding + 20}" text-anchor="middle">${d[xKey]}</text>`;
+                svg += `<text class="bar-chart-text" x="${x + barWidth / 2}" y="${y - 5}" text-anchor="middle">${val}</text>`;
+            });
+
+            // Axes
+            svg += `<line class="bar-chart-axis" x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}"/>`;
+            svg += `<line class="bar-chart-axis" x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}"/>`;
+
+            svg += '</svg>';
+            return svg;
+        }
+
+        // ===== ICONS =====
+        function createIcon(type) {
+            const icons = {
+                cloud: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15.5 11.5C15.5 13.43 13.93 15 12 15H5C2.79 15 1 13.21 1 11C1 9.16 2.4 7.66 4.18 7.44C4.64 4.18 7.38 1.5 10.75 1.5C14.32 1.5 17.25 4.43 17.25 8C18.08 8.74 18.5 9.78 18.5 10.93C18.5 12.86 16.93 14.5 15 14.5" stroke="currentColor" stroke-width="1.5"/></svg>',
+                check: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10L8 15L17 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                alert: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1L2 17H18L10 1Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14" r="0.5" fill="currentColor"/></svg>',
+                plus: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" stroke-width="2"/><line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="2"/></svg>'
+            };
+            return icons[type] || '';
+        }
+
+        // ===== DATA =====
+        const crewData = [
+            { name: 'Rick White', role: 'Superintendent', rating: 9.9 },
+            { name: 'Paul Toussaint', role: 'Assistant Superintendent', rating: 8.6 },
+            { name: 'Josh Butler', role: 'Asst Super in Training', rating: 8.8 },
+            { name: 'Tom', role: 'Mechanic', rating: 7.5 },
+            { name: 'Sean', role: 'Night Irrigation', rating: 8.3 },
+            { name: 'Dave', role: 'Fairways & Rough', rating: 8.4 },
+            { name: 'Liaqat', role: 'Fairways', rating: 8.1 },
+            { name: 'Richard', role: 'Arc Greens', rating: 8.0 },
+            { name: 'Steve', role: 'Landscaping & Greens', rating: 8.0 },
+            { name: 'Don', role: 'Setup & Arc Greens', rating: 7.8 },
+            { name: 'Chad', role: 'Rough Mac', rating: 7.5 },
+            { name: 'Jeff', role: 'Night Irrigation', rating: 7.3 },
+            { name: 'Joshua', role: 'Setup & Shop', rating: 6.9 },
+            { name: 'Jay', role: 'Tees/Collars/Bunkers', rating: 6.6 },
+            { name: 'Alicia', role: 'Rough', rating: 6.6 },
+            { name: 'Robert', role: 'Tees/Collars/Bunkers', rating: 6.9 },
+            { name: 'Joe', role: 'Approaches/Bunkers', rating: 5.6 },
+            { name: 'Doug', role: 'Facilities', rating: 5.0 },
+            { name: 'Travis', role: 'Assistant', rating: null }
+        ];
+
+        const sprayLog = [
+            {
+                date: 'Mar 23, 2026',
+                operator: 'Paul Toussaint',
+                products: ['Scimitar', 'Pedigree', 'Border', 'Coron', 'Tricure'],
+                reason: 'Insects/Spring Disease',
+                course: 'MacKenzie Greens'
+            },
+            {
+                date: 'Mar 2, 2026',
+                operator: 'Rick White',
+                products: ['Banner Maxx II', 'Secure Action', 'Border', 'Coron', 'Primo Maxx', 'Proxy'],
+                reason: 'Spring Prep',
+                course: 'MacKenzie Greens'
+            },
+            {
+                date: 'Jan 30, 2026',
+                operator: 'Paul Toussaint',
+                products: ['Navicon Intrinsic', 'Xemplar', 'Border', 'Coron'],
+                reason: 'Winter Protection',
+                course: 'MacKenzie Greens'
+            },
+            {
+                date: 'Jan 14, 2026',
+                operator: 'Paul Toussaint',
+                products: ['Instrata', 'Daconil Weatherstik', 'Border', '18-3-6', 'Iron'],
+                reason: 'Anthracnose/Snow Mold',
+                course: 'MacKenzie Greens 1-18 + Putter'
+            },
+            {
+                date: 'Jan 9, 2026',
+                operator: 'Paul Toussaint',
+                products: ['Instrata', 'Daconil Weatherstik', 'Border', '18-3-6', 'Iron'],
+                reason: 'Winter Disease Prevention',
+                course: 'MacKenzie Greens'
+            },
+            {
+                date: 'Feb 25, 2026',
+                operator: 'Paul Toussaint',
+                products: ['Tricure', 'Border', 'Coron'],
+                reason: 'Early Spring Prep',
+                course: 'Arcade Creek Greens'
+            }
+        ];
+
+        const tournaments = [
+            { date: 'Apr 2-5', event: 'AJGA Tournament', course: 'MacKenzie', players: 150 },
+            { date: 'Apr 6-7', event: 'AERIFICATION', course: 'MacKenzie', players: 0 },
+            { date: 'Apr 10', event: 'PGA Hope Graduation', course: 'Arcade Creek Back 9', players: 50 },
+            { date: 'Apr 12', event: 'Notah Begay + NCGA', course: 'Mac + Arc F9', players: 100 },
+            { date: 'Apr 17', event: 'Rio Americano', course: 'MacKenzie', players: 144 },
+            { date: 'Apr 18-19', event: 'JTNC Competition', course: 'Mac + Arcade', players: 150 },
+            { date: 'Apr 22', event: 'NCGA', course: 'MacKenzie', players: 84 },
+            { date: 'Apr 25', event: 'SABGC', course: 'MacKenzie', players: 144 },
+            { date: 'May 8', event: 'SMUD', course: 'Both Courses', players: 288 },
+            { date: 'May 23', event: 'JGANC Spring', course: 'Both Courses', players: 336 },
+            { date: 'Aug 8', event: '🏆 HAGGIN OAKS CLASSIC', course: 'Both Courses', players: 400 }
+        ];
+
+        const mowerHeights = [
+            { location: 'MacKenzie Greens', height: '0.100"' },
+            { location: 'Arcade Creek Greens', height: '0.115"' },
+            { location: 'Fairways', height: '0.500"' },
+            { location: 'Tees', height: '0.400"' },
+            { location: 'Rough', height: '2.5"' }
+        ];
+
+        const greenSpeedData = [
+            { week: 'Week 1', mackenzie: 13.0, arcade: 12.0 },
+            { week: 'Week 2', mackenzie: 12.9, arcade: 11.9 },
+            { week: 'Week 3', mackenzie: 12.7, arcade: 11.8 },
+            { week: 'Week 4', mackenzie: 12.5, arcade: 11.6 }
+        ];
+
+        // ===== MOISTURE SENSOR NETWORK =====
+        // Target ranges for bentgrass putting greens (Haggin Oaks standard)
+        const moistureTargets = {
+            vwcMin: 18, vwcMax: 22,
+            vwcCriticalLow: 15, vwcCriticalHigh: 26,
+            tempMin: 55, tempMax: 78,
+            ecMax: 1.8,
+            firmnessMin: 88, firmnessMax: 115 // Clegg CIV (gmax)
+        };
+
+        function moistureStatus(vwc) {
+            if (vwc < moistureTargets.vwcCriticalLow) return 'dry';
+            if (vwc < moistureTargets.vwcMin) return 'watch';
+            if (vwc > moistureTargets.vwcCriticalHigh) return 'wet';
+            if (vwc > moistureTargets.vwcMax) return 'watch';
+            return 'ok';
+        }
+
+        // 38 green sensors (Mac 1-18 + Arc 1-18 + 2 practice greens)
+        const moistureSensors = [
+            // MacKenzie Course (1932) - Front 9
+            { id: 'M-G01', hole: 'Mac 1',  course: 'mac', zone: 'mac-front', vwc: 19.4, temp: 61, ec: 0.82, battery: 94, signal: 4, ping: 3,  firmness: 98,  lastIrrigate: '1d' },
+            { id: 'M-G02', hole: 'Mac 2',  course: 'mac', zone: 'mac-front', vwc: 18.7, temp: 62, ec: 0.76, battery: 92, signal: 4, ping: 2,  firmness: 102, lastIrrigate: '1d' },
+            { id: 'M-G03', hole: 'Mac 3',  course: 'mac', zone: 'mac-front', vwc: 17.9, temp: 64, ec: 0.71, battery: 89, signal: 3, ping: 4,  firmness: 106, lastIrrigate: '1d' },
+            { id: 'M-G04', hole: 'Mac 4',  course: 'mac', zone: 'mac-front', vwc: 20.3, temp: 60, ec: 0.88, battery: 96, signal: 5, ping: 1,  firmness: 94,  lastIrrigate: '1d' },
+            { id: 'M-G05', hole: 'Mac 5',  course: 'mac', zone: 'mac-front', vwc: 19.1, temp: 62, ec: 0.79, battery: 91, signal: 4, ping: 3,  firmness: 100, lastIrrigate: '1d' },
+            { id: 'M-G06', hole: 'Mac 6',  course: 'mac', zone: 'mac-front', vwc: 16.8, temp: 65, ec: 0.94, battery: 87, signal: 3, ping: 5,  firmness: 112, lastIrrigate: '2d' },
+            { id: 'M-G07', hole: 'Mac 7',  course: 'mac', zone: 'mac-front', vwc: 19.8, temp: 63, ec: 0.83, battery: 93, signal: 4, ping: 2,  firmness: 97,  lastIrrigate: '1d' },
+            { id: 'M-G08', hole: 'Mac 8',  course: 'mac', zone: 'mac-front', vwc: 21.2, temp: 61, ec: 0.86, battery: 95, signal: 5, ping: 1,  firmness: 92,  lastIrrigate: '1d' },
+            { id: 'M-G09', hole: 'Mac 9',  course: 'mac', zone: 'mac-front', vwc: 20.0, temp: 62, ec: 0.80, battery: 90, signal: 4, ping: 3,  firmness: 99,  lastIrrigate: '1d' },
+            // MacKenzie - Back 9
+            { id: 'M-G10', hole: 'Mac 10', course: 'mac', zone: 'mac-back', vwc: 21.6, temp: 60, ec: 0.92, battery: 88, signal: 4, ping: 2,  firmness: 90,  lastIrrigate: '1d' },
+            { id: 'M-G11', hole: 'Mac 11', course: 'mac', zone: 'mac-back', vwc: 22.4, temp: 59, ec: 1.02, battery: 86, signal: 3, ping: 4,  firmness: 87,  lastIrrigate: '1d' },
+            { id: 'M-G12', hole: 'Mac 12', course: 'mac', zone: 'mac-back', vwc: 20.9, temp: 61, ec: 0.85, battery: 92, signal: 4, ping: 2,  firmness: 93,  lastIrrigate: '1d' },
+            { id: 'M-G13', hole: 'Mac 13', course: 'mac', zone: 'mac-back', vwc: 19.7, temp: 62, ec: 0.81, battery: 94, signal: 5, ping: 1,  firmness: 98,  lastIrrigate: '1d' },
+            { id: 'M-G14', hole: 'Mac 14', course: 'mac', zone: 'mac-back', vwc: 18.3, temp: 63, ec: 0.77, battery: 89, signal: 4, ping: 3,  firmness: 104, lastIrrigate: '1d' },
+            { id: 'M-G15', hole: 'Mac 15', course: 'mac', zone: 'mac-back', vwc: 20.6, temp: 61, ec: 0.84, battery: 91, signal: 4, ping: 2,  firmness: 95,  lastIrrigate: '1d' },
+            { id: 'M-G16', hole: 'Mac 16', course: 'mac', zone: 'mac-back', vwc: 19.0, temp: 62, ec: 0.79, battery: 90, signal: 4, ping: 3,  firmness: 101, lastIrrigate: '1d' },
+            { id: 'M-G17', hole: 'Mac 17', course: 'mac', zone: 'mac-back', vwc: 23.8, temp: 58, ec: 1.14, battery: 12, signal: 2, ping: 47, firmness: 82,  lastIrrigate: '0d' },
+            { id: 'M-G18', hole: 'Mac 18', course: 'mac', zone: 'mac-back', vwc: 20.4, temp: 61, ec: 0.87, battery: 93, signal: 4, ping: 1,  firmness: 96,  lastIrrigate: '1d' },
+            // Arcade Creek Course (1952) - Front 9
+            { id: 'A-G01', hole: 'Arc 1',  course: 'arc', zone: 'arc-front', vwc: 22.1, temp: 60, ec: 0.91, battery: 89, signal: 4, ping: 3,  firmness: 91,  lastIrrigate: '1d' },
+            { id: 'A-G02', hole: 'Arc 2',  course: 'arc', zone: 'arc-front', vwc: 21.5, temp: 61, ec: 0.88, battery: 91, signal: 4, ping: 2,  firmness: 93,  lastIrrigate: '1d' },
+            { id: 'A-G03', hole: 'Arc 3',  course: 'arc', zone: 'arc-front', vwc: 20.8, temp: 62, ec: 0.82, battery: 88, signal: 3, ping: 5,  firmness: 96,  lastIrrigate: '1d' },
+            { id: 'A-G04', hole: 'Arc 4',  course: 'arc', zone: 'arc-front', vwc: 22.7, temp: 59, ec: 0.98, battery: 86, signal: 4, ping: 2,  firmness: 88,  lastIrrigate: '1d' },
+            { id: 'A-G05', hole: 'Arc 5',  course: 'arc', zone: 'arc-front', vwc: 21.0, temp: 61, ec: 0.85, battery: 92, signal: 4, ping: 3,  firmness: 94,  lastIrrigate: '1d' },
+            { id: 'A-G06', hole: 'Arc 6',  course: 'arc', zone: 'arc-front', vwc: 20.2, temp: 62, ec: 0.83, battery: 90, signal: 4, ping: 2,  firmness: 97,  lastIrrigate: '1d' },
+            { id: 'A-G07', hole: 'Arc 7',  course: 'arc', zone: 'arc-front', vwc: 21.8, temp: 60, ec: 0.89, battery: 93, signal: 5, ping: 1,  firmness: 92,  lastIrrigate: '1d' },
+            { id: 'A-G08', hole: 'Arc 8',  course: 'arc', zone: 'arc-front', vwc: 19.6, temp: 62, ec: 0.80, battery: 89, signal: 4, ping: 3,  firmness: 99,  lastIrrigate: '1d' },
+            { id: 'A-G09', hole: 'Arc 9',  course: 'arc', zone: 'arc-front', vwc: 20.7, temp: 61, ec: 0.84, battery: 91, signal: 4, ping: 2,  firmness: 95,  lastIrrigate: '1d' },
+            // Arcade Creek - Back 9 (post-aeration recovery zone)
+            { id: 'A-G10', hole: 'Arc 10', course: 'arc', zone: 'arc-back', vwc: 23.5, temp: 58, ec: 1.08, battery: 84, signal: 4, ping: 2,  firmness: 86,  lastIrrigate: '1d' },
+            { id: 'A-G11', hole: 'Arc 11', course: 'arc', zone: 'arc-back', vwc: 22.9, temp: 59, ec: 1.02, battery: 87, signal: 4, ping: 3,  firmness: 87,  lastIrrigate: '1d' },
+            { id: 'A-G12', hole: 'Arc 12', course: 'arc', zone: 'arc-back', vwc: 21.4, temp: 60, ec: 0.93, battery: 88, signal: 3, ping: 4,  firmness: 92,  lastIrrigate: '1d' },
+            { id: 'A-G13', hole: 'Arc 13', course: 'arc', zone: 'arc-back', vwc: 22.6, temp: 59, ec: 0.99, battery: 85, signal: 4, ping: 2,  firmness: 89,  lastIrrigate: '1d' },
+            { id: 'A-G14', hole: 'Arc 14', course: 'arc', zone: 'arc-back', vwc: 24.2, temp: 58, ec: 1.21, battery: 83, signal: 3, ping: 5,  firmness: 84,  lastIrrigate: '1d' },
+            { id: 'A-G15', hole: 'Arc 15', course: 'arc', zone: 'arc-back', vwc: 21.9, temp: 60, ec: 0.94, battery: 86, signal: 4, ping: 3,  firmness: 91,  lastIrrigate: '1d' },
+            { id: 'A-G16', hole: 'Arc 16', course: 'arc', zone: 'arc-back', vwc: 20.5, temp: 61, ec: 0.86, battery: 88, signal: 4, ping: 2,  firmness: 94,  lastIrrigate: '1d' },
+            { id: 'A-G17', hole: 'Arc 17', course: 'arc', zone: 'arc-back', vwc: 0,    temp: 0,  ec: 0,    battery: 0,  signal: 0, ping: 1440, firmness: 0, lastIrrigate: '-', offline: true },
+            { id: 'A-G18', hole: 'Arc 18', course: 'arc', zone: 'arc-back', vwc: 22.3, temp: 59, ec: 0.96, battery: 87, signal: 4, ping: 3,  firmness: 90,  lastIrrigate: '1d' },
+            // Practice greens
+            { id: 'P-PR01', hole: 'Mac Practice', course: 'mac', zone: 'practice', vwc: 20.1, temp: 62, ec: 0.85, battery: 92, signal: 5, ping: 1, firmness: 96, lastIrrigate: '1d' },
+            { id: 'P-PR02', hole: 'Arc Practice', course: 'arc', zone: 'practice', vwc: 21.6, temp: 61, ec: 0.90, battery: 90, signal: 4, ping: 2, firmness: 92, lastIrrigate: '1d' }
+        ];
+
+        // Compute status for each sensor
+        moistureSensors.forEach(s => {
+            s.status = s.offline ? 'offline' : moistureStatus(s.vwc);
+        });
+
+        // 14-day VWC trend per course (daily zone averages)
+        const vwc14Day = [
+            { day: 'Mar 29', mac: 19.8, arc: 20.4, et: 0.14, rain: 0.00 },
+            { day: 'Mar 30', mac: 19.5, arc: 20.1, et: 0.16, rain: 0.00 },
+            { day: 'Mar 31', mac: 19.2, arc: 21.6, et: 0.17, rain: 0.00 },
+            { day: 'Apr 1',  mac: 18.9, arc: 21.2, et: 0.19, rain: 0.00 },
+            { day: 'Apr 2',  mac: 19.6, arc: 20.8, et: 0.18, rain: 0.00 },
+            { day: 'Apr 3',  mac: 20.1, arc: 20.5, et: 0.15, rain: 0.12 },
+            { day: 'Apr 4',  mac: 20.8, arc: 21.3, et: 0.13, rain: 0.08 },
+            { day: 'Apr 5',  mac: 20.4, arc: 21.0, et: 0.17, rain: 0.00 },
+            { day: 'Apr 6',  mac: 19.9, arc: 22.5, et: 0.19, rain: 0.00 }, // Arc aeration water-in
+            { day: 'Apr 7',  mac: 19.5, arc: 22.8, et: 0.20, rain: 0.00 },
+            { day: 'Apr 8',  mac: 19.2, arc: 22.3, et: 0.18, rain: 0.00 },
+            { day: 'Apr 9',  mac: 19.8, arc: 21.9, et: 0.17, rain: 0.00 },
+            { day: 'Apr 10', mac: 20.0, arc: 21.7, et: 0.18, rain: 0.00 },
+            { day: 'Apr 11', mac: 19.9, arc: 21.6, et: 0.18, rain: 0.00 }
+        ];
+
+        // Yesterday's irrigation events (zone runtimes & gallons applied)
+        const irrigationEvents = [
+            { zone: 'Mac Front 9 Greens',  start: '3:20 AM', runtime: 14, gallons: 12400, cycles: 2 },
+            { zone: 'Mac Back 9 Greens',   start: '3:38 AM', runtime: 16, gallons: 14200, cycles: 2 },
+            { zone: 'Arc Front 9 Greens',  start: '3:56 AM', runtime: 12, gallons: 10800, cycles: 2 },
+            { zone: 'Arc Back 9 Greens',   start: '4:10 AM', runtime: 18, gallons: 16100, cycles: 2 }, // Post-aerate water-in
+            { zone: 'Mac Fairways',        start: '4:32 AM', runtime: 22, gallons: 48600, cycles: 1 },
+            { zone: 'Arc Fairways',        start: '5:08 AM', runtime: 24, gallons: 52300, cycles: 1 },
+            { zone: 'Practice Greens',     start: '3:12 AM', runtime: 10, gallons: 3800,  cycles: 2 }
+        ];
+
+        // Tonight's recommended irrigation (calculated from ET - rainfall - VWC delta)
+        const tonightPlan = [
+            { zone: 'Mac Front 9 Greens',  recommended: 13, baseline: 14, gallons: 11500, reason: 'ET deficit 0.18", skip 1 min (rain Sun forecast)' },
+            { zone: 'Mac Back 9 Greens',   recommended: 15, baseline: 16, gallons: 13300, reason: 'Trending stable, minor reduction' },
+            { zone: 'Arc Front 9 Greens',  recommended: 11, baseline: 12, gallons: 9900,  reason: 'Well within range, -1 min' },
+            { zone: 'Arc Back 9 Greens',   recommended: 8,  baseline: 18, gallons: 7200,  reason: 'POST-AERATE: still water-logged; reduce -10 min' },
+            { zone: 'Practice Greens',     start: '3:12 AM', recommended: 9, baseline: 10, gallons: 3400, reason: 'On target; -1 min' }
+        ];
+
+        // Hand-watering POGO log (Josh's walk rounds)
+        const handWateringLog = [
+            { time: '6:42 AM', op: 'Josh B.',      hole: 'Mac 3',  reading: 17.9, action: 'Spot syringe — high front shelf', gallons: 35 },
+            { time: '6:51 AM', op: 'Josh B.',      hole: 'Mac 6',  reading: 16.8, action: 'Hand water 4 min — south bowl', gallons: 55 },
+            { time: '7:04 AM', op: 'Josh B.',      hole: 'Mac 14', reading: 18.3, action: 'Light syringe — green complex', gallons: 25 },
+            { time: '7:18 AM', op: 'Josh B.',      hole: 'Arc 10', reading: 23.5, action: 'NO WATER — Post-aerate recovery', gallons: 0 },
+            { time: '7:29 AM', op: 'Paul T.',      hole: 'Arc 14', reading: 24.2, action: 'NO WATER — drainage check', gallons: 0 },
+            { time: '8:02 AM', op: 'Josh B.',      hole: 'Mac 17', reading: 23.8, action: 'OFFLINE sensor — manual POGO verified', gallons: 0 }
+        ];
+
+        // Active alerts
+        const moistureAlerts = [
+            { severity: 'urgent', node: 'A-G17 (Arc 17)',  message: 'Sensor OFFLINE — 24h no ping. Battery fault suspected.', time: '24h ago' },
+            { severity: 'urgent', node: 'M-G17 (Mac 17)',  message: 'Battery CRITICAL 12% — replace within 48h', time: '6h ago' },
+            { severity: 'watch',  node: 'A-G14 (Arc 14)',  message: 'VWC 24.2% above critical high — monitor drainage', time: '2h ago' },
+            { severity: 'watch',  node: 'A-G10 (Arc 10)',  message: 'Post-aerate recovery — VWC holding 23.5% (expected)', time: '1h ago' },
+            { severity: 'info',   node: 'Gateway MAC-01',  message: 'Firmware v2.14.1 available (current v2.13.6)', time: '12h ago' },
+            { severity: 'info',   node: 'Zone Mac-Front',  message: 'Auto irrigation reduction -1 min queued for tonight', time: '15m ago' }
+        ];
+
+        // Network hardware / gateway info
+        const moistureHardware = {
+            gatewayMac:   { name: 'POGO Gateway MAC-01', ip: '10.14.1.22', uptime: '47d 8h', status: 'online', firmware: 'v2.13.6', protocol: 'Cellular LTE-M + LoRa mesh' },
+            gatewayArc:   { name: 'POGO Gateway ARC-01', ip: '10.14.1.23', uptime: '47d 8h', status: 'online', firmware: 'v2.13.6', protocol: 'Cellular LTE-M + LoRa mesh' },
+            sensorModel:  'POGO Turf Pro / in-ground capacitance probe',
+            installDepth: '2.5" rootzone (tip at 4")',
+            pingInterval: '15 minutes',
+            readings:     'VWC, Soil Temp, Bulk EC, Battery, RSSI',
+            accuracy:     '±1.5% VWC, ±0.5°F, ±0.05 mS/cm',
+            apiEndpoint:  'https://api.linkslab.golf/v1/moisture',
+            dataRetention:'730 days on-gateway, unlimited cloud'
+        };
+
+        // ROI / impact metrics (YTD through Apr 11, 2026)
+        const moistureROI = {
+            waterSavedGal: 1840000,
+            waterSavedAcIn: 68,
+            dollarsSaved: 14200,
+            laborHoursSaved: 186,
+            handWaterReduction: '34%',
+            turfQualityDelta: '+8%',
+            diseasePressureDelta: '-22%',
+            greensLossDays: 0
+        };
+
+        // Keep legacy export for any existing code that references it
+        const soilMoistureData = [
+            { hole: 'Mac F9', vwc: 19.6 },
+            { hole: 'Mac B9', vwc: 20.3 },
+            { hole: 'Arc F9', vwc: 21.2 },
+            { hole: 'Arc B9', vwc: 22.4 },
+            { hole: 'Practice', vwc: 20.9 }
+        ];
+
+        // ===== APP STATE =====
+        let appState = {
+            activeTab: 0,
+            selectedCourse: 'mackenzie',
+            tasks: [
+                { id: 1, title: 'Greens aeration - Arc', priority: 'high', status: 'completed', owner: 'Paul', dueDate: '3/30-31' },
+                { id: 2, title: 'MacKenzie aeration setup', priority: 'high', status: 'in-progress', owner: 'Josh B', dueDate: '4/6-7' },
+                { id: 3, title: 'Irrigation head replacement - Arc Holes 1-12', priority: 'medium', status: 'pending', owner: 'Sean', dueDate: '4/20' },
+                { id: 4, title: 'Green speed reduction plan', priority: 'medium', status: 'in-progress', owner: 'Rick', dueDate: '4/15' },
+                { id: 5, title: 'Spring fertility schedule review', priority: 'high', status: 'pending', owner: 'Paul', dueDate: '4/10' },
+                { id: 6, title: 'JTNC Arcade pin sheets submission', priority: 'high', status: 'pending', owner: 'Rick', dueDate: '4/18' }
+            ]
+        };
+
+        // ===== RENDER FUNCTIONS =====
+        function toggleTask(id) {
+            const task = appState.tasks.find(t => t.id === id);
+            if (task) {
+                task.status = task.status === 'completed' ? 'pending' : 'completed';
+                render();
+            }
+        }
+
+        function switchTab(idx) {
+            appState.activeTab = idx;
+            render();
+        }
+
+        function priorityColor(priority) {
+            if (priority === 'high') return 'alert';
+            if (priority === 'medium') return 'warning';
+            return 'success';
+        }
+
+        // ===== MOISTURE MODULE RENDERER =====
+        function renderMoistureTab() {
+            const onlineSensors = moistureSensors.filter(s => !s.offline);
+            const totalSensors = moistureSensors.length;
+            const avgVwc = (onlineSensors.reduce((a, s) => a + s.vwc, 0) / onlineSensors.length).toFixed(1);
+            const avgTemp = Math.round(onlineSensors.reduce((a, s) => a + s.temp, 0) / onlineSensors.length);
+            const avgFirmness = Math.round(onlineSensors.reduce((a, s) => a + s.firmness, 0) / onlineSensors.length);
+            const alertsUrgent = moistureAlerts.filter(a => a.severity === 'urgent').length;
+            const alertsWatch = moistureAlerts.filter(a => a.severity === 'watch').length;
+            const lowBattery = onlineSensors.filter(s => s.battery < 20).length;
+
+            // Zone aggregates
+            const zones = [
+                { key: 'mac-front', label: 'Mac Front 9',   holes: 'Mac 1-9' },
+                { key: 'mac-back',  label: 'Mac Back 9',    holes: 'Mac 10-18' },
+                { key: 'arc-front', label: 'Arc Front 9',   holes: 'Arc 1-9' },
+                { key: 'arc-back',  label: 'Arc Back 9',    holes: 'Arc 10-18 (post-aerate)' },
+                { key: 'practice',  label: 'Practice',      holes: 'Mac + Arc Practice' }
+            ];
+            const zoneStats = zones.map(z => {
+                const zs = onlineSensors.filter(s => s.zone === z.key);
+                if (!zs.length) return { ...z, avg: 0, min: 0, max: 0, status: 'offline' };
+                const avg = zs.reduce((a, s) => a + s.vwc, 0) / zs.length;
+                const min = Math.min(...zs.map(s => s.vwc));
+                const max = Math.max(...zs.map(s => s.vwc));
+                return { ...z, avg: avg.toFixed(1), min: min.toFixed(1), max: max.toFixed(1), status: moistureStatus(avg), count: zs.length };
+            });
+
+            const zoneCards = zoneStats.map(z => `
+                <div class="zone-card status-${z.status}">
+                    <div class="zone-name">${z.label}</div>
+                    <div class="zone-vwc">${z.avg}<span style="font-size: 0.72rem; font-style: normal; color: var(--soft-gray); font-weight: 400; margin-left: 4px;">% VWC</span></div>
+                    <div class="zone-meta">
+                        <span>Range ${z.min}–${z.max}%</span>
+                        <span>${z.count || 0} sensors</span>
+                    </div>
+                    <div class="zone-meta" style="margin-top: 2px;">
+                        <span style="color: var(--masters-green); font-weight: 600;">${z.holes}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Sensor grid map
+            const macGrid = moistureSensors.filter(s => s.course === 'mac' && s.zone !== 'practice');
+            const arcGrid = moistureSensors.filter(s => s.course === 'arc' && s.zone !== 'practice');
+            const gridCell = (s) => `
+                <div class="sensor-cell status-${s.status}" title="${s.id} · ${s.hole} · ${s.offline ? 'OFFLINE' : s.vwc + '% VWC, ' + s.temp + '°F, bat ' + s.battery + '%'}">
+                    <div class="sensor-cell-label">${s.hole.replace('Mac ', '').replace('Arc ', '')}</div>
+                    <div class="sensor-cell-value">${s.offline ? '—' : s.vwc}</div>
+                </div>
+            `;
+            const macMap = `<div class="sensor-grid-map">${macGrid.map(gridCell).join('')}</div>`;
+            const arcMap = `<div class="sensor-grid-map">${arcGrid.map(gridCell).join('')}</div>`;
+
+            // Sensor table — full 38 rows
+            const sensorRows = moistureSensors.map(s => {
+                if (s.offline) return `
+                    <tr>
+                        <td><strong>${s.id}</strong></td>
+                        <td>${s.hole}</td>
+                        <td colspan="6" style="color: var(--soft-gray); font-style: italic;">Sensor offline — last ping ${Math.round(s.ping / 60)}h ago</td>
+                        <td><span class="pill offline">Offline</span></td>
+                    </tr>
+                `;
+                const barPct = Math.min(100, Math.max(0, ((s.vwc - 10) / 20) * 100));
+                return `
+                    <tr>
+                        <td><strong>${s.id}</strong></td>
+                        <td>${s.hole}</td>
+                        <td>
+                            <span class="sensor-bar"><span class="sensor-bar-fill ${s.status}" style="width: ${barPct}%"></span></span>
+                            <strong style="color: var(--augusta-dark);">${s.vwc}%</strong>
+                        </td>
+                        <td>${s.temp}°F</td>
+                        <td>${s.ec.toFixed(2)}</td>
+                        <td>${s.firmness}</td>
+                        <td>
+                            ${s.battery < 20 ? '<span style="color: var(--azalea-pink); font-weight: 700;">' + s.battery + '%</span>' : s.battery + '%'}
+                        </td>
+                        <td>${s.ping}m</td>
+                        <td><span class="pill ${s.status}">${s.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            // 14-day line chart (mac + arc)
+            const trendChart = createLineChart(
+                vwc14Day,
+                'day',
+                [
+                    { dataKey: 'mac', stroke: '#006B54', label: 'MacKenzie' },
+                    { dataKey: 'arc', stroke: '#E96A97', label: 'Arcade Creek' }
+                ],
+                640, 240
+            );
+
+            // ET/Rain bar chart data
+            const etBar = vwc14Day.map(d => ({ day: d.day.replace('Apr ', '').replace('Mar ', ''), et: d.et }));
+
+            // Irrigation plan
+            const totalGallonsTonight = tonightPlan.reduce((a, p) => a + p.gallons, 0);
+            const totalMinutesTonight = tonightPlan.reduce((a, p) => a + p.recommended, 0);
+            const baselineGallons = tonightPlan.reduce((a, p) => a + (p.gallons / p.recommended) * p.baseline, 0);
+            const savedTonight = Math.round(baselineGallons - totalGallonsTonight);
+            const planRows = tonightPlan.map(p => `
+                <div class="plan-zone">
+                    <div>
+                        <div class="plan-zone-name">${p.zone}</div>
+                        <div style="font-size: 0.72rem; color: var(--soft-gray); margin-top: 2px;">${p.reason}</div>
+                    </div>
+                    <div class="plan-minutes">${p.recommended} min</div>
+                    <div class="plan-gallons">${p.gallons.toLocaleString()} gal</div>
+                    <div class="pill ${p.recommended < p.baseline ? 'ok' : 'watch'}">${p.recommended - p.baseline >= 0 ? '+' : ''}${p.recommended - p.baseline}</div>
+                </div>
+            `).join('');
+
+            // Alert feed
+            const alertRows = moistureAlerts.map(a => `
+                <div class="alert-row ${a.severity}">
+                    <div class="alert-icon">${a.severity === 'urgent' ? '!' : a.severity === 'watch' ? '◐' : 'i'}</div>
+                    <div>
+                        <strong style="color: var(--augusta-dark);">${a.node}</strong>
+                        <div style="color: var(--soft-gray); font-size: 0.78rem; margin-top: 1px;">${a.message}</div>
+                    </div>
+                    <div class="alert-time">${a.time}</div>
+                </div>
+            `).join('');
+
+            // Hand-watering log
+            const hwRows = handWateringLog.map(h => `
+                <div class="hw-row">
+                    <div class="hw-time">${h.time}</div>
+                    <div>
+                        <span class="hw-op">${h.op}</span>
+                        <span style="color: var(--soft-gray); margin: 0 0.4rem;">·</span>
+                        <strong>${h.hole}</strong>
+                        <span style="color: var(--soft-gray); margin-left: 0.4rem;">${h.reading}% VWC</span>
+                        <div style="font-size: 0.72rem; color: var(--soft-gray); margin-top: 2px;">${h.action}</div>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--masters-green); font-weight: 600;">${h.gallons} gal</div>
+                    <div class="pill ${h.gallons > 0 ? 'watch' : 'ok'}">${h.gallons > 0 ? 'Watered' : 'No-op'}</div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="tab-content active fade-in">
+
+                    <div class="moisture-hero">
+                        <div>
+                            <div class="moisture-hero-sub"><span class="moisture-live-dot"></span>LIVE SENSOR NETWORK</div>
+                            <div class="moisture-hero-title">Soil Moisture Command</div>
+                            <div style="font-size: 0.82rem; opacity: 0.85; margin-top: 2px;">${onlineSensors.length} of ${totalSensors} nodes online · Last sync 3 min ago · POGO gateway MAC-01 &amp; ARC-01</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8;">Course Average</div>
+                                <div style="font-family: Georgia, serif; font-size: 2.4rem; font-style: italic; color: var(--masters-gold); line-height: 1; font-weight: 700;">${avgVwc}<span style="font-size: 1rem; opacity: 0.7; margin-left: 4px;">% VWC</span></div>
+                                <div style="font-size: 0.72rem; opacity: 0.7; margin-top: 2px;">Target window 18-22% · Bentgrass</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Row -->
+                    <div class="kpi-row">
+                        <div class="kpi-card kpi-green">
+                            <div class="kpi-label">Network Health</div>
+                            <div class="kpi-value">${onlineSensors.length}<span style="font-size: 0.9rem; color: var(--soft-gray); font-style: normal;">/${totalSensors}</span></div>
+                            <div class="kpi-sub">Nodes reporting</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Avg VWC</div>
+                            <div class="kpi-value">${avgVwc}%</div>
+                            <div class="kpi-sub">On target · <span class="kpi-trend-up">▲ 0.3</span> vs 7d</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Soil Temp</div>
+                            <div class="kpi-value">${avgTemp}°F</div>
+                            <div class="kpi-sub">Range 58-65°F</div>
+                        </div>
+                        <div class="kpi-card kpi-gold">
+                            <div class="kpi-label">Surface Firmness</div>
+                            <div class="kpi-value">${avgFirmness}</div>
+                            <div class="kpi-sub">Clegg gmax · ideal 95-110</div>
+                        </div>
+                        <div class="kpi-card kpi-pink">
+                            <div class="kpi-label">Active Alerts</div>
+                            <div class="kpi-value">${alertsUrgent + alertsWatch}</div>
+                            <div class="kpi-sub">${alertsUrgent} urgent · ${alertsWatch} watch · ${lowBattery} low-bat</div>
+                        </div>
+                    </div>
+
+                    <!-- Zone Summary -->
+                    <div class="section-header">Zone Summary <span class="section-header-sub">5 Zones · Real-Time</span></div>
+                    <div class="zone-row">${zoneCards}</div>
+
+                    <!-- Sensor Grid Map -->
+                    <div class="section-header">Live Sensor Map <span class="section-header-sub">Click-to-inspect · Hover for detail</span></div>
+                    <div class="grid-2" style="gap: 1.25rem;">
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">MacKenzie Course (1932)</div>
+                            <p style="font-size: 0.78rem; color: var(--soft-gray); margin-bottom: 0.4rem;">18 greens + practice · Alister MacKenzie original design</p>
+                            ${macMap}
+                        </div>
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">Arcade Creek Course (1952)</div>
+                            <p style="font-size: 0.78rem; color: var(--soft-gray); margin-bottom: 0.4rem;">18 greens + practice · Post-aerate recovery window</p>
+                            ${arcMap}
+                        </div>
+                    </div>
+                    <div class="legend" style="margin: 0.5rem 0 1.25rem;">
+                        <span><span class="legend-dot" style="background: var(--fairway-green);"></span>On Target (18-22%)</span>
+                        <span><span class="legend-dot" style="background: #F59E0B;"></span>Watch (15-18 / 22-26%)</span>
+                        <span><span class="legend-dot" style="background: var(--azalea-pink);"></span>Dry (&lt;15%)</span>
+                        <span><span class="legend-dot" style="background: #3B82F6;"></span>Wet (&gt;26%)</span>
+                        <span><span class="legend-dot" style="background: #6B7280;"></span>Offline</span>
+                    </div>
+
+                    <!-- 14-day trend + ET -->
+                    <div class="section-header">14-Day Trend <span class="section-header-sub">Mac &amp; Arc Zone Averages · ET Overlay</span></div>
+                    <div class="chart-container">
+                        <div class="chart-title">VWC by Course · Mar 29 – Apr 11</div>
+                        ${trendChart}
+                        <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.78rem;">
+                            <span><span style="display: inline-block; width: 12px; height: 2px; background: #006B54; vertical-align: middle; margin-right: 4px;"></span>MacKenzie</span>
+                            <span><span style="display: inline-block; width: 12px; height: 2px; background: #E96A97; vertical-align: middle; margin-right: 4px;"></span>Arcade Creek</span>
+                            <span style="color: var(--soft-gray);">Target band 18-22% · Dashed</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Daily Reference ET (inches) · Haggin Oaks Weather Station</div>
+                        ${createBarChart(etBar, 'day', 'et', '#C9A227', 640, 180)}
+                        <p style="font-size: 0.78rem; color: var(--soft-gray); margin-top: 0.5rem;">14-day cumulative ET: <strong style="color: var(--masters-green);">2.39"</strong> · Rainfall: <strong style="color: #3B82F6;">0.20"</strong> · Net deficit: <strong style="color: var(--azalea-pink);">2.19"</strong> · Supplied via irrigation: 2.11" (96.3% replacement)</p>
+                    </div>
+
+                    <!-- Tonight's Irrigation Plan -->
+                    <div class="section-header">Tonight's Irrigation Plan <span class="section-header-sub">Auto-generated · Applied at 3:00 AM</span></div>
+                    <div class="irrigation-plan">
+                        ${planRows}
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 0.75rem; border-top: 2px solid var(--masters-green);">
+                            <div>
+                                <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soft-gray);">Total Tonight</div>
+                                <div style="font-family: Georgia, serif; font-style: italic; font-size: 1.5rem; color: var(--masters-green); font-weight: 700;">${totalMinutesTonight} minutes · ${totalGallonsTonight.toLocaleString()} gal</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soft-gray);">Saved vs Baseline</div>
+                                <div style="font-family: Georgia, serif; font-style: italic; font-size: 1.5rem; color: var(--fairway-green); font-weight: 700;">${savedTonight.toLocaleString()} gal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Sensor Table -->
+                    <div class="section-header">All Sensors <span class="section-header-sub">${totalSensors} nodes · Live telemetry</span></div>
+                    <div class="card" style="padding: 0.5rem;">
+                        <div class="table-wrapper">
+                            <table class="moisture-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sensor ID</th>
+                                        <th>Location</th>
+                                        <th>VWC</th>
+                                        <th>Soil T</th>
+                                        <th>EC mS/cm</th>
+                                        <th>Firm</th>
+                                        <th>Battery</th>
+                                        <th>Last Ping</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${sensorRows}</tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Alerts + Hand Water -->
+                    <div class="grid-2" style="gap: 1.25rem; margin-top: 1.25rem;">
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">Active Alerts</div>
+                            <div class="alert-feed">${alertRows}</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">Hand-Watering Log · Today</div>
+                            <p style="font-size: 0.78rem; color: var(--soft-gray); margin-bottom: 0.5rem;">POGO walk rounds by assistant supers</p>
+                            <div class="hw-log">${hwRows}</div>
+                        </div>
+                    </div>
+
+                    <!-- Irrigation Events Yesterday -->
+                    <div class="section-header">Yesterday's Irrigation <span class="section-header-sub">Zone Runtime &amp; Flow Logs</span></div>
+                    <div class="card">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr><th>Zone</th><th>Start</th><th>Runtime</th><th>Cycles</th><th>Gallons</th><th>Notes</th></tr>
+                                </thead>
+                                <tbody>
+                                    ${irrigationEvents.map(e => `
+                                        <tr>
+                                            <td><strong>${e.zone}</strong></td>
+                                            <td>${e.start}</td>
+                                            <td>${e.runtime} min</td>
+                                            <td>${e.cycles}</td>
+                                            <td>${e.gallons.toLocaleString()}</td>
+                                            <td style="color: var(--soft-gray); font-size: 0.8rem;">${e.zone.includes('Arc Back') ? 'Post-aerate recovery water-in' : e.zone.includes('Fairway') ? 'Nightly cycle' : 'Nightly × 2 cycles'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ROI -->
+                    <div class="section-header">ROI · Year-to-Date Impact <span class="section-header-sub">Jan 1 – Apr 11, 2026</span></div>
+                    <div class="roi-grid">
+                        <div class="roi-tile">
+                            <div class="roi-label">Water Saved</div>
+                            <div class="roi-value">${(moistureROI.waterSavedGal / 1000000).toFixed(2)}M</div>
+                            <div class="roi-detail">gallons · ${moistureROI.waterSavedAcIn} acre-inches</div>
+                        </div>
+                        <div class="roi-tile">
+                            <div class="roi-label">Dollars Saved</div>
+                            <div class="roi-value">$${moistureROI.dollarsSaved.toLocaleString()}</div>
+                            <div class="roi-detail">water + pumping + chem uniformity</div>
+                        </div>
+                        <div class="roi-tile">
+                            <div class="roi-label">Labor Hours Saved</div>
+                            <div class="roi-value">${moistureROI.laborHoursSaved}</div>
+                            <div class="roi-detail">Hand-water ${moistureROI.handWaterReduction} reduction</div>
+                        </div>
+                        <div class="roi-tile">
+                            <div class="roi-label">Turf Quality</div>
+                            <div class="roi-value">${moistureROI.turfQualityDelta}</div>
+                            <div class="roi-detail">NDVI · Disease pressure ${moistureROI.diseasePressureDelta}</div>
+                        </div>
+                    </div>
+
+                    <!-- Hardware / Network -->
+                    <div class="section-header">Network Hardware <span class="section-header-sub">Gateways, Probes, API</span></div>
+                    <div class="grid-2" style="gap: 1.25rem;">
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">Gateways</div>
+                            <div class="spec-grid">
+                                <div class="spec-row"><span class="spec-label">MAC-01</span><span class="spec-value">● Online · ${moistureHardware.gatewayMac.ip}</span></div>
+                                <div class="spec-row"><span class="spec-label">MAC-01 Uptime</span><span class="spec-value">${moistureHardware.gatewayMac.uptime}</span></div>
+                                <div class="spec-row"><span class="spec-label">MAC-01 Firmware</span><span class="spec-value">${moistureHardware.gatewayMac.firmware}</span></div>
+                                <div class="spec-row"><span class="spec-label">ARC-01</span><span class="spec-value">● Online · ${moistureHardware.gatewayArc.ip}</span></div>
+                                <div class="spec-row"><span class="spec-label">ARC-01 Uptime</span><span class="spec-value">${moistureHardware.gatewayArc.uptime}</span></div>
+                                <div class="spec-row"><span class="spec-label">ARC-01 Firmware</span><span class="spec-value">${moistureHardware.gatewayArc.firmware}</span></div>
+                                <div class="spec-row"><span class="spec-label">Protocol</span><span class="spec-value">${moistureHardware.gatewayMac.protocol}</span></div>
+                                <div class="spec-row"><span class="spec-label">Ping Interval</span><span class="spec-value">${moistureHardware.pingInterval}</span></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title" style="color: var(--masters-green);">Sensor Probes</div>
+                            <div class="spec-grid">
+                                <div class="spec-row"><span class="spec-label">Model</span><span class="spec-value">${moistureHardware.sensorModel}</span></div>
+                                <div class="spec-row"><span class="spec-label">Install Depth</span><span class="spec-value">${moistureHardware.installDepth}</span></div>
+                                <div class="spec-row"><span class="spec-label">Readings</span><span class="spec-value">${moistureHardware.readings}</span></div>
+                                <div class="spec-row"><span class="spec-label">Accuracy</span><span class="spec-value">${moistureHardware.accuracy}</span></div>
+                                <div class="spec-row"><span class="spec-label">API</span><span class="spec-value" style="font-family: ui-monospace, Consolas, monospace; font-size: 0.72rem;">${moistureHardware.apiEndpoint}</span></div>
+                                <div class="spec-row"><span class="spec-label">Retention</span><span class="spec-value">${moistureHardware.dataRetention}</span></div>
+                                <div class="spec-row"><span class="spec-label">Total Installed</span><span class="spec-value">38 greens - 2 gateways</span></div>
+                                <div class="spec-row"><span class="spec-label">Expansion Ready</span><span class="spec-value">+12 fairway - +4 approach</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card alert" style="margin-top: 1.25rem;">
+                        <strong>Presentation Note — Cross-Reference Hooks:</strong>
+                        <p style="font-size: 0.85rem; margin-top: 0.4rem;">Moisture data feeds four modules: (1) <strong>Spray &amp; Fertility</strong> — no-spray 24h buffer auto-flags overwet zones, (2) <strong>Aeration</strong> — recovery window tracking on Arc 10-18 through Apr 14, (3) <strong>Green Speed</strong> — firmness correlation r=0.82 to stimpmeter, (4) <strong>Irrigation</strong> — 93 Toro 730 heads on Arc greens tied to per-sensor zones.</p>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        function render() {
+            const tabs = ['Daily Operations', 'Spray & Fertility', 'Course Health', 'Green Speed', 'Aeration', 'Soil Moisture', 'Irrigation', 'Pin Sheets', 'Task Manager'];
+
+            // Build tab content based on active tab
+            let tabContent = '';
+
+            if (appState.activeTab === 0) {
+                const crewRoles = [
+                    { name: 'Greens - MacKenzie', role: 'Mower/Roller', who: 'Rick White, Steve', badge: 'success', label: 'Active' },
+                    { name: 'Greens - Arcade Creek', role: 'Mower/Roller', who: 'Richard, Don', badge: 'success', label: 'Active' },
+                    { name: 'Tees', role: 'Tee Operators', who: 'Jay, Robert', badge: 'success', label: 'Active' },
+                    { name: 'Fairways Unit 1', role: 'Fairway Operations', who: 'Dave', badge: 'success', label: 'Active' },
+                    { name: 'Fairways Unit 2', role: 'Fairway Operations', who: 'Liaqat', badge: 'success', label: 'Active' },
+                    { name: 'Bunkers & Approaches', role: 'Sand Maintenance', who: 'Joe, Robert', badge: 'info', label: 'Rotating' },
+                    { name: 'Rough - MacKenzie', role: 'Rough Maintenance', who: 'Chad', badge: 'success', label: 'Active' },
+                    { name: 'Rough - Arcade Creek', role: 'Rough Maintenance', who: 'Alicia', badge: 'success', label: 'Active' },
+                    { name: 'Night Irrigation', role: 'Irrigation', who: 'Sean, Jeff', badge: 'info', label: 'Night Shift' },
+                    { name: 'Shop & Setup', role: 'Support', who: 'Joshua, Doug', badge: 'success', label: 'Active' },
+                    { name: 'Landscaping', role: 'Horticulture', who: 'Steve', badge: 'success', label: 'Active' },
+                    { name: 'Assistant Super', role: 'Operations', who: 'Paul Toussaint', badge: 'success', label: 'On Duty' },
+                    { name: 'Super-in-Training', role: 'Learning', who: 'Josh Butler', badge: 'info', label: 'Training' }
+                ];
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Daily Operations Log - Crew Assignment Board · ${new Date().toDateString()}</h2>
+                        <div class="grid-daily">
+                            ${crewRoles.map(c => `
+                                <div class="crew-card">
+                                    <div class="crew-name">${c.name}</div>
+                                    <div class="crew-role">${c.role}</div>
+                                    <div>${c.who}</div>
+                                    <span class="badge badge-${c.badge}">${c.label}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="grid-2" style="margin-top: 1.5rem;">
+                            <div class="card">
+                                <div class="card-title">This Morning's Focus</div>
+                                <ul style="margin-left: 1.5rem;">
+                                    <li>Greens mowing and rolling - both courses</li>
+                                    <li>Hand-watering rounds w/ POGO (Josh) - Mac 3, 6, 14 flagged</li>
+                                    <li>Arc 10-18 post-aeration recovery monitoring</li>
+                                    <li>Bunker edging - Mac front 9</li>
+                                    <li>Tournament prep - JTNC (Apr 18-19)</li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Weather & Conditions</div>
+                                <p><strong>68°F</strong> - Mostly Clear - 45% RH</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.9rem;">Wind: 6 mph SW - Soil temp 62°F - ET 0.18"</p>
+                                <p style="margin-top: 0.75rem;"><strong>Forecast:</strong> Rain probable Sun-Mon (60-70%)</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 1) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Spray & Fertility Log</h2>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">Spray Equipment Specs</div>
+                                <p><strong>Boom Sprayer</strong></p>
+                                <ul style="margin-left: 1.5rem;">
+                                    <li>1st Gear: 2.5 mph</li>
+                                    <li>Nozzles: 95-9225 SS at 0.8 GPM</li>
+                                    <li>Pressure: 40 PSI</li>
+                                    <li>Tank: 175 gallons</li>
+                                    <li>License: 144743</li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Active Licenses</div>
+                                <p><strong>Rick White:</strong> QAL (Turf)</p>
+                                <p><strong>Paul Toussaint:</strong> QAL (Turf)</p>
+                                <p><strong>Josh Butler:</strong> QAL exam scheduled May 2026</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.85rem;">17 products in active rotation</p>
+                            </div>
+                        </div>
+                        <h3 style="margin: 1.5rem 0 1rem; color: var(--masters-green); font-family: Georgia, serif;">Recent Spray Events</h3>
+                        ${sprayLog.map(entry => `
+                            <div class="spray-entry fade-in">
+                                <div class="spray-date">${entry.date}</div>
+                                <div class="spray-operator"><strong>${entry.operator}</strong> - ${entry.course}</div>
+                                <div class="spray-products">
+                                    ${entry.products.map(p => `<span class="product-tag">${p}</span>`).join('')}
+                                </div>
+                                <div class="spray-reason">${entry.reason}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (appState.activeTab === 2) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Course Health Overview</h2>
+                        <div class="chart-container">
+                            <div class="chart-title">Green Speed Trend (Last 4 Weeks)</div>
+                            ${createLineChart(greenSpeedData, 'week', [
+                                { dataKey: 'mackenzie', stroke: '#006B54', label: 'MacKenzie' },
+                                { dataKey: 'arcade', stroke: '#E96A97', label: 'Arcade Creek' }
+                            ])}
+                            <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.85rem;">
+                                <span><span style="display: inline-block; width: 12px; height: 2px; background: #006B54; vertical-align: middle; margin-right: 4px;"></span>MacKenzie (Target 12.0)</span>
+                                <span><span style="display: inline-block; width: 12px; height: 2px; background: #E96A97; vertical-align: middle; margin-right: 4px;"></span>Arcade Creek (Target 11.5)</span>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Crew Performance Ratings</div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead><tr><th>Name</th><th>Role</th><th>Rating</th></tr></thead>
+                                    <tbody>
+                                        ${crewData.map(c => `
+                                            <tr>
+                                                <td><strong>${c.name}</strong></td>
+                                                <td>${c.role}</td>
+                                                <td>${c.rating !== null ? c.rating.toFixed(1) + ' / 10' : '-'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 3) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Green Speed Management</h2>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">Current Targets</div>
+                                <p><strong>MacKenzie:</strong> 12.0 (Tournament 12.5-13.0)</p>
+                                <p><strong>Arcade Creek:</strong> 11.5 (Tournament 11.5-12.0)</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.85rem;">Stimpmeter reading taken 7 AM daily, north-south + east-west average</p>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Current Mower Heights</div>
+                                <table>
+                                    <thead><tr><th>Location</th><th>HOC</th></tr></thead>
+                                    <tbody>
+                                        ${mowerHeights.map(m => `<tr><td>${m.location}</td><td><strong>${m.height}</strong></td></tr>`).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">Weekly Stimp Trend</div>
+                            ${createLineChart(greenSpeedData, 'week', [
+                                { dataKey: 'mackenzie', stroke: '#006B54' },
+                                { dataKey: 'arcade', stroke: '#E96A97' }
+                            ])}
+                        </div>
+                        <div class="card alert">
+                            <strong>Speed Reduction Plan:</strong>
+                            <p>Rick targeting gradual reduction to ~12.0 on Mac. Current 12.5 avg. Implement: reduce rolling frequency, soften mow schedule, increase moisture window.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 4) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Aeration Program</h2>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">2026 Schedule</div>
+                                <p><strong>Arcade Creek:</strong> Mar 30-31 (completed by Paul)</p>
+                                <p><strong>MacKenzie:</strong> Apr 6-7 (Josh leading setup)</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.85rem;">42 total surfaces (21 per course) - approx 18,500 sq ft each course</p>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Aeration Specifications</div>
+                                <table>
+                                    <thead><tr><th>Spec</th><th>Detail</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Tine Type</td><td>Hollow - 3/8" diameter</td></tr>
+                                        <tr><td>Depth</td><td>2.5 inches</td></tr>
+                                        <tr><td>Spacing</td><td>2" x 2"</td></tr>
+                                        <tr><td>Topdress</td><td>Straight sand</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">Post-Aeration SOP</div>
+                                <ol style="margin-left: 1.5rem;">
+                                    <li>Punch</li><li>Harvest</li><li>Blow</li><li>Topdress</li>
+                                    <li>Fertilize</li><li>Drag</li><li>Broom</li><li>Roll</li>
+                                    <li>Irrigate (deep water-in)</li><li>Cut Cup</li>
+                                </ol>
+                            </div>
+                            <div class="card alert">
+                                <strong>Recovery Window:</strong>
+                                <p>No-go for tournaments: 7-10 days post-aeration. Arc 10-18 currently in recovery - see Soil Moisture tab for real-time VWC tracking.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 5) {
+                tabContent = renderMoistureTab();
+            } else if (appState.activeTab === 6) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Irrigation Head Tracker</h2>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">Arcade Creek - Greens</div>
+                                <p><strong>93 Total Heads</strong> - Toro 730 Series</p>
+                                <div style="margin-top: 1rem;">
+                                    <div style="margin-bottom: 0.75rem;">
+                                        <strong style="font-size: 0.9rem; color: #006B54;">Holes 18-13:</strong>
+                                        <span class="badge badge-success">Complete</span>
+                                        <span style="font-size: 0.85rem; color: #636E72; margin-left: 0.5rem;">approx 30 heads</span>
+                                    </div>
+                                    <div>
+                                        <strong style="font-size: 0.9rem; color: #E96A97;">Holes 12-1 + Putter:</strong>
+                                        <span class="badge badge-alert">Needs Work</span>
+                                        <span style="font-size: 0.85rem; color: #636E72; margin-left: 0.5rem;">approx 63 heads</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Maintenance Priority</div>
+                                <div style="padding: 0.75rem; background-color: rgba(233, 106, 151, 0.1); border-radius: 4px; margin-bottom: 0.5rem;">
+                                    <div style="font-weight: 600; color: #E96A97;">Cleaning</div>
+                                    <p style="font-size: 0.85rem; margin-top: 0.25rem;">40 heads - sediment / mineral buildup</p>
+                                </div>
+                                <div style="padding: 0.75rem; background-color: rgba(233, 106, 151, 0.1); border-radius: 4px;">
+                                    <div style="font-weight: 600; color: #E96A97;">Replacement</div>
+                                    <p style="font-size: 0.85rem; margin-top: 0.25rem;">23 heads - mechanical failure / wear</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Head Status Summary</div>
+                            <table>
+                                <thead><tr><th>Status</th><th>Count</th><th>Action</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Good</td><td>30</td><td>Monitor</td></tr>
+                                    <tr><td>Needs Cleaning</td><td>40</td><td>Schedule cleaning</td></tr>
+                                    <tr><td>Needs Replacement</td><td>23</td><td>Order parts</td></tr>
+                                    <tr><td>Broken</td><td>0</td><td>Immediate repair</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card alert">
+                            <strong>Next Steps:</strong>
+                            <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Schedule cleaning crew for Holes 12-1 (40 heads)</li>
+                                <li>Order replacement heads (23 units)</li>
+                                <li>Complete by April 20 before May tournaments</li>
+                            </ol>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 7) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Pin Sheet Generator</h2>
+                        <div class="card">
+                            <div class="card-title">Pin Position Selector</div>
+                            <p style="font-size: 0.9rem; color: #636E72; margin-bottom: 0.5rem;">Click a grid cell to set today's pin position. 9-section grid (Front/Mid/Back x Left/Center/Right).</p>
+                            <div class="pin-grid">
+                                ${['FL','FC','FR','ML','MC','MR','BL','BC','BR'].map(p => `
+                                    <div class="pin-position ${p === 'MC' ? 'active' : ''}">${p}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">Today's Pin Plan - MacKenzie</div>
+                                <p>Mixed rotation - 3 Front, 6 Middle, 9 Back positions</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.85rem;">Green speed 12.5 - firm conditions</p>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Today's Pin Plan - Arcade</div>
+                                <p>Conservative rotation (post-aerate Back 9) - mostly Center</p>
+                                <p style="margin-top: 0.5rem; color: var(--soft-gray); font-size: 0.85rem;">Arc 10-18 recovery - tucked positions avoided</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.activeTab === 8) {
+                tabContent = `
+                    <div class="tab-content active fade-in">
+                        <h2 class="card-title">Task Manager & Tournament Calendar</h2>
+                        <div class="card">
+                            <div class="card-title">Active Tasks</div>
+                            <table>
+                                <thead><tr><th>Task</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    ${appState.tasks.map(t => `
+                                        <tr>
+                                            <td><strong>${t.title}</strong></td>
+                                            <td>${t.owner}</td>
+                                            <td>${t.dueDate}</td>
+                                            <td><span class="badge badge-${t.status === 'completed' ? 'success' : t.status === 'in-progress' ? 'info' : priorityColor(t.priority)}">${t.status}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Tournament Calendar - 2026</div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead><tr><th>Date</th><th>Event</th><th>Course</th><th>Players</th></tr></thead>
+                                    <tbody>
+                                        ${tournaments.map(t => `
+                                            <tr>
+                                                <td>${t.date}</td>
+                                                <td style="font-weight: 600;">${t.event}</td>
+                                                <td>${t.course}</td>
+                                                <td>${t.players || '-'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const html = `
+                <header class="header">
+                    <div class="header-left">
+                        <a href="#" class="logo">
+                            <div class="logo-icon">LL</div>
+                            <div>Links Lab</div>
+                        </a>
+                        <div class="header-title">
+                            <div class="header-app">Greenkeeper</div>
+                            <div class="header-subtitle">SUPERINTENDENT OPERATIONS</div>
+                        </div>
+                    </div>
+                    <div class="header-controls">
+                        <select class="course-selector" onchange="appState.selectedCourse = this.value; render();">
+                            <option value="mackenzie">MacKenzie Course (1932)</option>
+                            <option value="arcade">Arcade Creek Course (1952)</option>
+                            <option value="both">Both Courses</option>
+                        </select>
+                        <div class="weather-bar">
+                            ${createIcon('cloud')}
+                            <span>68&deg;F - Mostly Clear - 45% RH - ET 0.18"</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="main-container">
+                    <div class="tabs-container">
+                        <div class="tabs-list">
+                            ${tabs.map((name, idx) => `
+                                <button class="tab-button ${appState.activeTab === idx ? 'active' : ''}" onclick="switchTab(${idx})">${name}</button>
+                            `).join('')}
+                        </div>
+                        <div style="flex: 1; overflow-y: auto;">
+                            ${tabContent}
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    Greenkeeper v1.0 - Links Lab - Haggin Oaks Golf Complex - MacKenzie (1932) &amp; Arcade Creek (1952)
+                </footer>
+            `;
+
+            document.getElementById('root').innerHTML = html;
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>

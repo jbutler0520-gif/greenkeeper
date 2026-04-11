@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenkeeper Mechanic App | Haggin Oaks Golf Complex</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #FDF8F0;
+            color: #2D3436;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Georgia', serif;
+            color: #00483A;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #006B54 0%, #00483A 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #C2B280;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D3436;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: #006B54;
+        }
+
+        .nav-tab.active {
+            color: #006B54;
+            border-bottom-color: #FFD700;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: #FFFEF9;
+            border: 1px solid #E0D7C8;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h3 {
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: #00483A;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 16px;
+        }
+
+        .equipment-card {
+            background: #FFFEF9;
+            border: 2px solid #E0D7C8;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .equipment-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 107, 84, 0.1);
+            border-color: #006B54;
+        }
+
+        .equipment-card h4 {
+            font-size: 14px;
+            color: #2D3436;
+            margin-bottom: 8px;
+        }
+
+        .equipment-card p {
+            font-size: 12px;
+            color: #5C4033;
+            margin-bottom: 4px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-ready {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+
+        .status-in-service {
+            background-color: #FFF3CD;
+            color: #856404;
+            border: 1px solid #FFEAA7;
+        }
+
+        .status-down {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+
+        .status-ordered {
+            background-color: #D1ECF1;
+            color: #0C5460;
+            border: 1px solid #BEE5EB;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #F5F1E8;
+            color: #00483A;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 2px solid #C2B280;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #E0D7C8;
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background-color: #FDFAF5;
+        }
+
+        .alert-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .alert-urgent {
+            background-color: #E96A97;
+            color: white;
+        }
+
+        .alert-warning {
+            background-color: #FFD700;
+            color: #5C4033;
+        }
+
+        .alert-info {
+            background-color: #D1ECF1;
+            color: #0C5460;
+        }
+
+        .maintenance-list {
+            list-style: none;
+        }
+
+        .maintenance-item {
+            background: #F5F1E8;
+            border-left: 4px solid #006B54;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .maintenance-item.urgent {
+            border-left-color: #E96A97;
+            background: #FDF5F8;
+        }
+
+        .maintenance-item.warning {
+            border-left-color: #FFD700;
+            background: #FFFEF5;
+        }
+
+        .parts-low {
+            background-color: #FDF5F8;
+            border: 1px solid #E96A97;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #006B54 0%, #00483A 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-box h4 {
+            color: #FFD700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .metric-box .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .metric-box .subtext {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .chart-container {
+            background: #FFFEF9;
+            border: 1px solid #E0D7C8;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .repair-status {
+            background: #F5F1E8;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .repair-status h4 {
+            color: #00483A;
+            margin-bottom: 6px;
+        }
+
+        .repair-status p {
+            font-size: 13px;
+            margin: 4px 0;
+        }
+
+        .repair-status .diagnosis {
+            color: #5C4033;
+            font-weight: 600;
+        }
+
+        .repair-status .fix {
+            color: #006B54;
+            margin-top: 8px;
+        }
+
+        .ordered-equipment {
+            background: linear-gradient(135deg, #D1ECF1 0%, #E7F3F8 100%);
+            border: 2px solid #0C5460;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .ordered-equipment h4 {
+            color: #0C5460;
+            margin-bottom: 8px;
+        }
+
+        .ordered-equipment p {
+            font-size: 13px;
+            margin: 4px 0;
+            color: #2D3436;
+        }
+
+        .spec-list {
+            background: #FDFAF5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .spec-list li {
+            margin: 4px 0;
+            margin-left: 20px;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        .cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .cost-box {
+            background: #FFFEF9;
+            border: 1px solid #E0D7C8;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .cost-box h4 {
+            color: #00483A;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .cost-box .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #006B54;
+        }
+
+        .cost-box .detail {
+            font-size: 12px;
+            color: #5C4033;
+            margin-top: 4px;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00483A;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .nav-tabs {
+                gap: 5px;
+            }
+
+            .nav-tab {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>Greenkeeper Mechanic</h1>
+            <p>Equipment Maintenance & Service Management | Haggin Oaks Golf Complex</p>
+        </div>
+
+        <div class="nav-tabs" id="navTabs">
+            <!-- Tabs will be generated here -->
+        </div>
+
+        <!-- Content sections will be generated here -->
+        <div id="contentArea"></div>
+    </div>
+
+    <script>
+        // Equipment Data
+        const equipmentInventory = [
+            { id: 'gm1', name: 'Greens 1', make: 'Toro', model: 'Greensmaster 3250-D', year: 2020, serial: 'TGM32500001', hours: 3240, status: 'Ready' },
+            { id: 'gm2', name: 'Greens 2', make: 'Toro', model: 'Greensmaster 3250-D', year: 2021, serial: 'TGM32500002', hours: 2890, status: 'Ready' },
+            { id: 'gm3', name: 'Greens 3', make: 'Toro', model: 'Greensmaster 3250-D', year: 2021, serial: 'TGM32500003', hours: 2650, status: 'In Service' },
+            { id: 'gm4', name: 'Greens 4', make: 'Toro', model: 'Greensmaster 3250-D', year: 2022, serial: 'TGM32500004', hours: 1850, status: 'Ready' },
+            { id: 'fw1', name: 'Fairway 1', make: 'Toro', model: 'Groundsmaster 4700-D', year: 2019, serial: 'TGS47000001', hours: 4120, status: 'Ready' },
+            { id: 'fw2', name: 'Fairway 2', make: 'Toro', model: 'Groundsmaster 4700-D', year: 2020, serial: 'TGS47000002', hours: 3680, status: 'Down' },
+            { id: 'fw3', name: 'Fairway 3', make: 'Toro', model: 'Groundsmaster 4700-D', year: 2021, serial: 'TGS47000003', hours: 3100, status: 'Ready' },
+            { id: 'rg1', name: 'Rough 1', make: 'Toro', model: 'Groundsmaster 4500-D', year: 2020, serial: 'TGS45000001', hours: 2950, status: 'Ready' },
+            { id: 'rg2', name: 'Rough 2', make: 'Toro', model: 'Groundsmaster 4500-D', year: 2021, serial: 'TGS45000002', hours: 2480, status: 'Ready' },
+            { id: 'rg3', name: 'Rough 3', make: 'Toro', model: 'Groundsmaster 4500-D', year: 2022, serial: 'TGS45000003', hours: 1620, status: 'In Service' },
+            { id: 'tr1', name: 'Triplex 1', make: 'Toro', model: 'Reelmaster 3575-D', year: 2020, serial: 'TRM35750001', hours: 3200, status: 'Ready' },
+            { id: 'tr2', name: 'Triplex 2', make: 'Toro', model: 'Reelmaster 3575-D', year: 2021, serial: 'TRM35750002', hours: 2760, status: 'Ready' },
+            { id: 'tr3', name: 'Triplex 3', make: 'Toro', model: 'Reelmaster 3575-D', year: 2022, serial: 'TRM35750003', hours: 1940, status: 'Ready' },
+            { id: 'rl1', name: 'Roller 1', make: 'Toro', model: 'Grooming Roller', year: 2019, serial: 'TRL001', hours: 1250, status: 'Ready' },
+            { id: 'rl2', name: 'Roller 2', make: 'Toro', model: 'Grooming Roller', year: 2020, serial: 'TRL002', hours: 980, status: 'Ready' },
+            { id: 'ar1', name: 'Aerator 1', make: 'Toro', model: 'Aercore Ultra', year: 2019, serial: 'TAE001', hours: 420, status: 'Ready' },
+            { id: 'ar2', name: 'Aerator 2', make: 'Toro', model: 'Aercore Ultra', year: 2020, serial: 'TAE002', hours: 380, status: 'Ready' },
+            { id: 'sp1', name: 'Spray Boom', make: 'Toro', model: 'T-3000 Sprayer', year: 2020, serial: 'TSP001', hours: 890, status: 'Ready' },
+            { id: 'sb1', name: 'Sand Pro 1', make: 'Toro', model: 'Sand Pro 2000', year: 2019, serial: 'TSB001', hours: 1680, status: 'Ready' },
+            { id: 'sb2', name: 'Sand Pro 2', make: 'Toro', model: 'Sand Pro 2000', year: 2020, serial: 'TSB002', hours: 1420, status: 'Ready' },
+            { id: 'uv1', name: 'Utility 1', make: 'Kubota', model: 'RTV-X900', year: 2021, serial: 'KUB001', hours: 2100, status: 'Ready' },
+            { id: 'uv2', name: 'Utility 2', make: 'Kubota', model: 'RTV-X900', year: 2021, serial: 'KUB002', hours: 1950, status: 'Ready' },
+            { id: 'uv3', name: 'Utility 3', make: 'Kubota', model: 'RTV-X900', year: 2022, serial: 'KUB003', hours: 1320, status: 'Ready' },
+            { id: 'uv4', name: 'Utility 4', make: 'John Deere', model: 'XUV865M', year: 2022, serial: 'JDE004', hours: 980, status: 'In Service' },
+            { id: 'ff1', name: 'FireFly AMP 1', make: 'FireFly Robotics', model: 'AMP RTK+Starlink', year: 2024, serial: 'FF001', hours: 0, status: 'Ordered' },
+            { id: 'ff2', name: 'FireFly AMP 2', make: 'FireFly Robotics', model: 'AMP RTK+Starlink', year: 2024, serial: 'FF002', hours: 0, status: 'Ordered' }
+        ];
+
+        const maintenanceSchedule = [
+            { id: 1, equipment: 'Greens 1', task: 'Oil & filter change', dueDate: '2026-04-12', urgency: 'urgent' },
+            { id: 2, equipment: 'Greens 2', task: 'Blade sharpening & balance', dueDate: '2026-04-15', urgency: 'warning' },
+            { id: 3, equipment: 'Fairway 2', task: 'Hydraulic fluid check & top-up', dueDate: '2026-04-14', urgency: 'urgent' },
+            { id: 4, equipment: 'Triplex 1', task: 'Reel bearing inspection', dueDate: '2026-04-18', urgency: 'info' },
+            { id: 5, equipment: 'Fairway 1', task: 'Belt inspection & replacement', dueDate: '2026-04-20', urgency: 'warning' },
+            { id: 6, equipment: 'Rough 1', task: 'Fuel system flush', dueDate: '2026-04-25', urgency: 'info' },
+            { id: 7, equipment: 'Greens 3', task: 'Clutch adjustment', dueDate: '2026-04-22', urgency: 'warning' },
+            { id: 8, equipment: 'Spray Boom', task: 'Nozzle inspection & cleaning', dueDate: '2026-04-28', urgency: 'info' }
+        ];
+
+        const repairLog = [
+            { id: 1, equipment: 'Fairway 2', diagnosis: 'Transmission slipping under load', fix: 'Rebuilt transmission cooler', parts: 'Cooler lines, gasket kit', hours: 6, completedDate: '2026-04-08', status: 'completed' },
+            { id: 2, equipment: 'Greens 4', diagnosis: 'Engine will not start', fix: 'Replaced fuel pump & injectors', parts: 'Fuel pump, injector set, filters', hours: 4.5, completedDate: '2026-04-07', status: 'completed' },
+            { id: 3, equipment: 'Rough 2', diagnosis: 'Hydraulic pressure low', fix: 'Flushed system, replaced filter', parts: 'Hydraulic filter, fluid (10gal)', hours: 3, completedDate: '2026-04-06', status: 'completed' },
+            { id: 4, equipment: 'Fairway 2', diagnosis: 'Bearing noise in spindle', fix: 'Bearing replacement in progress', parts: 'Spindle bearings, seals', hours: 2.5, completedDate: null, status: 'active' }
+        ];
+
+        const serviceLog = [
+            { date: '2026-04-08', equipment: 'Fairway 2', service: 'Transmission repair completed', type: 'repair' },
+            { date: '2026-04-07', equipment: 'Greens 4', service: 'Engine fuel system service', type: 'maintenance' },
+            { date: '2026-04-06', equipment: 'Rough 2', service: 'Hydraulic system flush', type: 'maintenance' },
+            { date: '2026-04-05', equipment: 'Triplex 1', service: 'Routine oil & filter change', type: 'maintenance' },
+            { date: '2026-04-04', equipment: 'Greens 2', service: 'Blade sharpening & balance', type: 'maintenance' },
+            { date: '2026-04-03', equipment: 'Spray Boom', service: 'Pressure system check', type: 'maintenance' },
+            { date: '2026-04-02', equipment: 'Sand Pro 1', service: 'Rake mechanism inspection', type: 'maintenance' },
+            { date: '2026-04-01', equipment: 'Utility 4', service: 'Routine maintenance', type: 'maintenance' }
+        ];
+
+        const partsInventory = [
+            { id: 1, part: 'Hydraulic Filter (Greensmaster)', qty: 3, min: 5, status: 'adequate' },
+            { id: 2, part: 'Oil & Filter Kit (4700-D)', qty: 2, min: 4, status: 'low' },
+            { id: 3, part: 'Spindle Bearings (Toro)', qty: 1, min: 3, status: 'low' },
+            { id: 4, part: 'Reel Blades (Greens)', qty: 4, min: 3, status: 'adequate' },
+            { id: 5, part: 'Drive Belts (Assorted)', qty: 5, min: 6, status: 'low' },
+            { id: 6, part: 'Fuel Pump (Diesel)', qty: 0, min: 2, status: 'critical' },
+            { id: 7, part: 'Brake Pads (Universal)', qty: 6, min: 4, status: 'adequate' },
+            { id: 8, part: 'Battery (12V)', qty: 3, min: 3, status: 'adequate' },
+            { id: 9, part: 'Air Filters (Assorted)', qty: 8, min: 6, status: 'adequate' },
+            { id: 10, part: 'Hydraulic Fluid (ISO 46)', qty: 45, min: 40, status: 'adequate' },
+            { id: 11, part: 'Transmission Cooler Lines', qty: 1, min: 2, status: 'low' },
+            { id: 12, part: 'Spark Plugs (Assorted)', qty: 12, min: 10, status: 'adequate' }
+        ];
+
+        const downtimeData = [
+            { month: 'Jan', hours: 8, machines: 2 },
+            { month: 'Feb', hours: 12, machines: 3 },
+            { month: 'Mar', hours: 18, machines: 4 },
+            { month: 'Apr', hours: 24, machines: 3 }
+        ];
+
+        const costData = [
+            { machine: 'Greens 1', parts: 2400, labor: 1800, maintenance: 800, total: 5000 },
+            { machine: 'Greens 2', parts: 1900, labor: 1400, maintenance: 600, total: 3900 },
+            { machine: 'Fairway 1', parts: 3200, labor: 2400, maintenance: 1000, total: 6600 },
+            { machine: 'Fairway 2', parts: 5100, labor: 3600, maintenance: 900, total: 9600 },
+            { machine: 'Rough 1', parts: 2100, labor: 1600, maintenance: 700, total: 4400 },
+            { machine: 'Triplex 1', parts: 1800, labor: 1200, maintenance: 600, total: 3600 }
+        ];
+
+        // SVG Icon helpers
+        function createCheckIcon() {
+            return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        }
+
+        function createWrenchIcon() {
+            return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 1 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>`;
+        }
+
+        function createAlertIcon() {
+            return `<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg>`;
+        }
+
+        function createTruckIcon() {
+            return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1h14v12H1z"></path><path d="M16 8h4l3 3v6"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>`;
+        }
+
+        // Line Chart SVG Generator
+        function createLineChart(data, height = 300) {
+            const width = 700;
+            const padding = 50;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            const maxHours = Math.max(...data.map(d => d.hours));
+            const points = data.map((d, i) => {
+                const x = padding + (i / (data.length - 1)) * chartWidth;
+                const y = padding + chartHeight - (d.hours / maxHours) * chartHeight;
+                return { x, y, value: d.hours };
+            });
+
+            let pointsStr = points.map(p => `${p.x},${p.y}`).join(' ');
+
+            return `
+                <svg viewBox="0 0 ${width} ${height}" style="max-width: 100%; height: auto;">
+                    <defs>
+                        <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#006B54;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#006B54;stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#C2B280" stroke-width="2"/>
+                        <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#C2B280" stroke-width="2"/>
+                        <text x="${width - padding}" y="${height - 30}" font-size="12" fill="#5C4033" text-anchor="end">Months</text>
+                        <text x="20" y="30" font-size="12" fill="#5C4033">Hours</text>
+                        ${data.map((d, i) => {
+                            const x = padding + (i / (data.length - 1)) * chartWidth;
+                            return `<text x="${x}" y="${height - padding + 20}" font-size="11" fill="#5C4033" text-anchor="middle">${d.month}</text>`;
+                        }).join('')}
+                        ${points.map((p, i) => {
+                            return `<text x="${p.x}" y="${p.y - 10}" font-size="10" fill="#006B54" text-anchor="middle" font-weight="bold">${p.value}h</text>`;
+                        }).join('')}
+                        <polyline points="${pointsStr}" fill="none" stroke="#006B54" stroke-width="3"/>
+                        <polygon points="${pointsStr} ${width - padding},${height - padding} ${padding},${height - padding}" fill="url(#chartGradient)"/>
+                    </g>
+                </svg>
+            `;
+        }
+
+        // Bar Chart SVG Generator
+        function createBarChart(data, height = 400) {
+            const width = 800;
+            const padding = 60;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+            const barWidth = Math.floor(chartWidth / data.length * 0.7);
+            const spacing = Math.floor(chartWidth / data.length);
+
+            const maxTotal = Math.max(...data.map(d => d.total));
+            const colors = { parts: '#006B54', labor: '#FFD700', maintenance: '#E96A97' };
+
+            return `
+                <svg viewBox="0 0 ${width} ${height}" style="max-width: 100%; height: auto;">
+                    <defs>
+                        <linearGradient id="partsGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#006B54;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00483A;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#C2B280" stroke-width="2"/>
+                        <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#C2B280" stroke-width="2"/>
+                        <text x="${width - padding}" y="${height - 30}" font-size="12" fill="#5C4033" text-anchor="end">Machines</text>
+                        <text x="20" y="30" font-size="12" fill="#5C4033">Costs ($)</text>
+                        ${data.map((d, i) => {
+                            const x = padding + i * spacing + spacing / 2;
+                            const total = d.total;
+                            const yPos = height - padding - (total / maxTotal) * chartHeight;
+                            return `
+                                <g>
+                                    <rect x="${x - barWidth / 2}" y="${yPos}" width="${barWidth}" height="${height - padding - yPos}" fill="url(#partsGrad)" stroke="#005A47" stroke-width="1"/>
+                                    <text x="${x}" y="${height - padding + 30}" font-size="11" fill="#5C4033" text-anchor="middle">${d.machine}</text>
+                                    <text x="${x}" y="${yPos - 5}" font-size="11" fill="#006B54" text-anchor="middle" font-weight="bold">$${(total / 1000).toFixed(1)}k</text>
+                                </g>
+                            `;
+                        }).join('')}
+                    </g>
+                </svg>
+            `;
+        }
+
+        // App State
+        let currentTab = 'status';
+
+        // Helper functions
+        function getStatusBadgeClass(status) {
+            const baseClass = 'status-badge status-';
+            switch(status) {
+                case 'Ready': return baseClass + 'ready';
+                case 'In Service': return baseClass + 'in-service';
+                case 'Down': return baseClass + 'down';
+                case 'Ordered': return baseClass + 'ordered';
+                default: return baseClass + 'ready';
+            }
+        }
+
+        function getAlertBadgeClass(urgency) {
+            return `alert-badge alert-${urgency}`;
+        }
+
+        // Build nav tabs
+        function buildNavTabs() {
+            const tabs = ['status', 'inventory', 'maintenance', 'repairs', 'parts', 'downtime', 'costs'];
+            const navTabs = document.getElementById('navTabs');
+            navTabs.innerHTML = tabs.map(tab => `
+                <button class="nav-tab ${currentTab === tab ? 'active' : ''}" data-tab="${tab}">
+                    ${tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+            `).join('');
+
+            navTabs.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    currentTab = e.target.dataset.tab;
+                    renderContent();
+                });
+            });
+        }
+
+        // Build content
+        function buildStatusSection() {
+            const readyCount = equipmentInventory.filter(e => e.status === 'Ready').length;
+            const inServiceCount = equipmentInventory.filter(e => e.status === 'In Service').length;
+            const downCount = equipmentInventory.filter(e => e.status === 'Down').length;
+            const orderedCount = equipmentInventory.filter(e => e.status === 'Ordered').length;
+
+            return `
+                <div class="card">
+                    <h3>${createCheckIcon()} Equipment Status Board</h3>
+                </div>
+                <div class="grid-2">
+                    <div class="metric-box">
+                        <h4>Ready</h4>
+                        <div class="value">${readyCount}</div>
+                        <div class="subtext">Machines operational</div>
+                    </div>
+                    <div class="metric-box">
+                        <h4>In Service</h4>
+                        <div class="value">${inServiceCount}</div>
+                        <div class="subtext">Being mowed/maintained</div>
+                    </div>
+                    <div class="metric-box">
+                        <h4>Down</h4>
+                        <div class="value">${downCount}</div>
+                        <div class="subtext">Awaiting repair</div>
+                    </div>
+                    <div class="metric-box">
+                        <h4>Ordered</h4>
+                        <div class="value">${orderedCount}</div>
+                        <div class="subtext">On order</div>
+                    </div>
+                </div>
+                <div class="status-grid" style="margin-top: 20px;">
+                    ${equipmentInventory.map(equipment => `
+                        <div class="equipment-card">
+                            <h4>${equipment.name}</h4>
+                            <p>${equipment.make}</p>
+                            <p>${equipment.model}</p>
+                            <p>${equipment.hours}h</p>
+                            <span class="${getStatusBadgeClass(equipment.status)}">${equipment.status}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function buildInventorySection() {
+            return `
+                <div class="card">
+                    <h3>${createTruckIcon()} Complete Equipment Inventory</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Year</th>
+                                    <th>Serial</th>
+                                    <th>Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${equipmentInventory.map(equip => `
+                                    <tr>
+                                        <td><strong>${equip.name}</strong></td>
+                                        <td>${equip.make}</td>
+                                        <td>${equip.model}</td>
+                                        <td>${equip.year}</td>
+                                        <td>${equip.serial}</td>
+                                        <td>${equip.hours}</td>
+                                        <td><span class="${getStatusBadgeClass(equip.status)}">${equip.status}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>On Order: FireFly AMP Robotic Mowers</h3>
+                    ${equipmentInventory.filter(e => e.status === 'Ordered').map(equip => `
+                        <div class="ordered-equipment">
+                            <h4>${equip.name}</h4>
+                            <p><strong>${equip.make} ${equip.model}</strong></p>
+                            <p>Serial: ${equip.serial}</p>
+                            <ul class="spec-list">
+                                <li>RTK GPS precision positioning</li>
+                                <li>Starlink connectivity</li>
+                                <li>25 acres per charge</li>
+                                <li>100" swath width</li>
+                                <li>App-controlled operation</li>
+                            </ul>
+                            <p style="margin-top: 12px; font-size: 12px; color: #0C5460;">Delivery expected Q2 2026</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function buildMaintenanceSection() {
+            return `
+                <div class="card">
+                    <h3>${createWrenchIcon()} Preventive Maintenance Schedule</h3>
+                    <ul class="maintenance-list">
+                        ${maintenanceSchedule.map(item => `
+                            <li class="maintenance-item ${item.urgency}">
+                                <div>
+                                    <strong>${item.equipment}</strong>
+                                    <span class="${getAlertBadgeClass(item.urgency)}" style="margin-left: 12px;">
+                                        ${item.urgency.toUpperCase()}
+                                    </span>
+                                </div>
+                                <div style="margin-top: 4px; font-size: 13px;">${item.task}</div>
+                                <div style="margin-top: 4px; font-size: 12px; opacity: 0.7;">Due: ${item.dueDate}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Recent Service Log</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Equipment</th>
+                                    <th>Service</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${serviceLog.map((log, idx) => `
+                                    <tr>
+                                        <td>${log.date}</td>
+                                        <td><strong>${log.equipment}</strong></td>
+                                        <td>${log.service}</td>
+                                        <td>
+                                            <span class="alert-badge ${log.type === 'repair' ? 'alert-urgent' : 'alert-info'}">
+                                                ${log.type.toUpperCase()}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildRepairsSection() {
+            return `
+                <div class="card">
+                    <h3>${createAlertIcon()} Active & Recent Repairs</h3>
+                    ${repairLog.map(repair => `
+                        <div class="repair-status">
+                            <h4>
+                                ${repair.equipment}
+                                <span class="alert-badge ${repair.status === 'active' ? 'alert-urgent' : 'alert-info'}" style="margin-left: 10px;">
+                                    ${repair.status === 'active' ? 'ACTIVE' : 'COMPLETED'}
+                                </span>
+                            </h4>
+                            <p class="diagnosis">Diagnosis: ${repair.diagnosis}</p>
+                            <p>Fix: ${repair.fix}</p>
+                            <p>Parts: ${repair.parts}</p>
+                            <p class="fix">Labor Hours: ${repair.hours}h | ${repair.completedDate ? `Completed: ${repair.completedDate}` : 'In Progress'}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function buildPartsSection() {
+            const totalPartsValue = partsInventory.reduce((sum, p) => sum + (p.qty * 150), 0);
+            const lowStockItems = partsInventory.filter(p => p.status === 'low' || p.status === 'critical');
+
+            return `
+                <div class="card">
+                    <h3>Parts Inventory & Alerts</h3>
+                    <div class="grid-2">
+                        <div class="metric-box">
+                            <h4>Inventory Value</h4>
+                            <div class="value">$${totalPartsValue.toLocaleString()}</div>
+                            <div class="subtext">${partsInventory.length} part types</div>
+                        </div>
+                        <div class="metric-box">
+                            <h4>Low Stock Items</h4>
+                            <div class="value">${lowStockItems.length}</div>
+                            <div class="subtext">Need reordering</div>
+                        </div>
+                    </div>
+                    <div class="table-container" style="margin-top: 20px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Part</th>
+                                    <th>On Hand</th>
+                                    <th>Min. Qty</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${partsInventory.map(part => `
+                                    <tr class="${part.status === 'critical' || part.status === 'low' ? 'parts-low' : ''}">
+                                        <td><strong>${part.part}</strong></td>
+                                        <td>${part.qty}</td>
+                                        <td>${part.min}</td>
+                                        <td>
+                                            <span class="alert-badge ${part.status === 'critical' ? 'alert-urgent' : part.status === 'low' ? 'alert-warning' : 'alert-info'}">
+                                                ${part.status.toUpperCase()}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildDowntimeSection() {
+            return `
+                <div class="card">
+                    <h3>Machine Downtime History</h3>
+                    <div class="chart-container">
+                        ${createLineChart(downtimeData, 300)}
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Downtime Details</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Total Downtime Hours</th>
+                                    <th>Machines Affected</th>
+                                    <th>Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${downtimeData.map((data, idx) => `
+                                    <tr>
+                                        <td><strong>${data.month}</strong></td>
+                                        <td>${data.hours}h</td>
+                                        <td>${data.machines}</td>
+                                        <td>
+                                            <span class="alert-badge alert-info">
+                                                ${Math.round(data.hours / 24 * 10)}% of month
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildCostsSection() {
+            const totalCosts = costData.reduce((sum, item) => sum + item.total, 0);
+            const avgCostPerMachine = Math.round(totalCosts / costData.length);
+
+            return `
+                <div class="card">
+                    <h3>Cost Tracking & Analysis</h3>
+                    <div class="grid-2">
+                        <div class="metric-box">
+                            <h4>Total Season Cost</h4>
+                            <div class="value">$${totalCosts.toLocaleString()}</div>
+                            <div class="subtext">6-machine sample</div>
+                        </div>
+                        <div class="metric-box">
+                            <h4>Avg Cost/Machine</h4>
+                            <div class="value">$${avgCostPerMachine.toLocaleString()}</div>
+                            <div class="subtext">Parts + Labor + Maintenance</div>
+                        </div>
+                    </div>
+                    <div class="chart-container" style="margin-top: 20px;">
+                        <h4 class="chart-title">Cost Breakdown by Machine</h4>
+                        ${createBarChart(costData, 350)}
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Cost Summary by Machine</h3>
+                    <div class="cost-summary">
+                        ${costData.map(machine => `
+                            <div class="cost-box">
+                                <h4>${machine.machine}</h4>
+                                <div class="amount">$${machine.total.toLocaleString()}</div>
+                                <div class="detail">Parts: $${machine.parts}</div>
+                                <div class="detail">Labor: $${machine.labor}</div>
+                                <div class="detail">Maintenance: $${machine.maintenance}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+                // Render content based on current tab
+        function renderContent() {
+            const contentArea = document.getElementById('contentArea');
+            let html = '';
+            switch (currentTab) {
+                case 'status':      html = buildStatusSection(); break;
+                case 'inventory':   html = buildInventorySection(); break;
+                case 'maintenance': html = buildMaintenanceSection(); break;
+                case 'repairs':     html = buildRepairsSection(); break;
+                case 'parts':       html = buildPartsSection(); break;
+                case 'downtime':    html = buildDowntimeSection(); break;
+                case 'costs':       html = buildCostsSection(); break;
+                default:            html = buildStatusSection();
+            }
+            contentArea.innerHTML = html;
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === currentTab);
+            });
+        }
+
+        function init() {
+            buildNavTabs();
+            renderContent();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
