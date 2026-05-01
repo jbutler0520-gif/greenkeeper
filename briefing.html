@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Links Lab — Morning Briefing</title>
 <style>
-/* ===== RESET & BASE ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --masters-green:#006B54;--dark-green:#0d3b2e;--gold:#FFD700;--azalea:#E96A97;
@@ -17,9 +16,9 @@
 html,body{height:100%;width:100%;overflow:hidden;font-family:var(--font);background:var(--dark-green);color:var(--cream)}
 body{display:flex;flex-direction:column}
 
-/* ===== TOP BAR ===== */
+/* TOP BAR */
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;background:linear-gradient(135deg,#004d3d,var(--masters-green));border-bottom:3px solid var(--gold);flex-shrink:0;position:relative;z-index:100}
-.top-bar .brand{display:flex;align-items:center;gap:14px}
+.top-bar .brand{display:flex;align-items:center;gap:14px;cursor:pointer}
 .top-bar .crest{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:var(--dark-green);box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .top-bar h1{font-size:1.6rem;color:var(--gold);letter-spacing:1px;font-style:italic}
 .top-bar .subtitle{font-size:.8rem;color:var(--cream);opacity:.7;letter-spacing:2px;text-transform:uppercase}
@@ -27,38 +26,39 @@ body{display:flex;flex-direction:column}
 .top-bar .time{font-size:2.4rem;color:var(--gold);font-weight:bold;letter-spacing:2px}
 .top-bar .date{font-size:.9rem;color:var(--cream);opacity:.8;margin-top:2px}
 
-/* ===== PANEL CONTAINER ===== */
+/* PANEL CONTAINER */
 .panel-container{flex:1;position:relative;overflow:hidden}
-.panel{position:absolute;inset:0;padding:28px 32px;opacity:0;transform:translateX(60px);transition:opacity .7s ease,transform .7s ease;pointer-events:none;overflow-y:auto}
+.panel{position:absolute;inset:0;padding:14px 24px;opacity:0;transform:translateX(60px);transition:opacity .7s ease,transform .7s ease;pointer-events:none;overflow-y:auto}
 .panel.active{opacity:1;transform:translateX(0);pointer-events:auto}
 .panel.exit{opacity:0;transform:translateX(-60px)}
 
-/* ===== PANEL DOTS ===== */
+/* PANEL DOTS */
 .panel-dots{display:flex;justify-content:center;gap:10px;padding:10px 0;flex-shrink:0;background:var(--dark-green)}
 .panel-dots .dot{width:10px;height:10px;border-radius:50%;background:var(--glass2);cursor:pointer;transition:all .3s}
 .panel-dots .dot.active{background:var(--gold);transform:scale(1.3)}
 
-/* ===== SECTION HEADERS ===== */
-.section-title{font-size:1.3rem;color:var(--gold);margin-bottom:16px;letter-spacing:1px;border-bottom:2px solid var(--glass2);padding-bottom:8px;font-style:italic;display:flex;align-items:center;gap:10px}
+/* SECTION HEADERS */
+.section-title{font-size:1.1rem;color:var(--gold);margin-bottom:16px;letter-spacing:1px;border-bottom:2px solid var(--glass2);padding-bottom:8px;font-style:italic;display:flex;align-items:center;gap:10px}
 
-/* ===== CREW BOARD ===== */
-.crew-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.crew-row{display:grid;grid-template-columns:160px 1fr 1fr;gap:8px;align-items:center;background:var(--glass);border:1px solid var(--glass2);border-radius:var(--radius);padding:10px 14px;transition:all .3s}
+/* CREW BOARD */
+.crew-board-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.crew-header{display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;padding:0 10px 6px;font-size:.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);opacity:.7}
+.crew-row{display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;align-items:center;background:var(--glass);border:1px solid var(--glass2);border-radius:8px;padding:5px 10px;transition:all .3s}
 .crew-row:hover{background:var(--glass2);border-color:var(--gold)}
-.crew-name-cell{font-weight:bold;color:var(--cream);font-size:.95rem}
-.crew-name-cell .default-role{font-size:.7rem;color:var(--gold);opacity:.7;display:block;margin-top:2px}
-.job-badge{padding:6px 12px;border-radius:8px;font-size:.8rem;text-align:center;font-weight:bold;min-height:32px;display:flex;align-items:center;justify-content:center}
+.crew-row.off-duty{opacity:.4}
+.crew-name-cell{font-weight:bold;color:var(--cream);font-size:.82rem;line-height:1.2}
+.crew-name-cell .default-role{font-size:.6rem;color:var(--gold);opacity:.7;display:block;margin-top:1px}
+.job-badge{padding:4px 8px;border-radius:6px;font-size:.72rem;text-align:center;font-weight:bold;min-height:24px;display:flex;align-items:center;justify-content:center}
 .job-badge.primary{background:var(--masters-green);color:var(--cream);border:1px solid var(--gold)}
 .job-badge.secondary{background:var(--glass2);color:var(--cream);border:1px solid var(--glass3)}
-.crew-header{display:grid;grid-template-columns:160px 1fr 1fr;gap:8px;padding:0 14px 8px;font-size:.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);opacity:.7}
 
-/* ===== WEATHER ===== */
+/* WEATHER */
 .weather-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .weather-card{background:var(--glass);border:1px solid var(--glass2);border-radius:var(--radius);padding:18px;text-align:center}
 .weather-card .label{font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px}
 .weather-card .value{font-size:2rem;font-weight:bold;color:var(--cream)}
 .weather-card .unit{font-size:.8rem;color:var(--cream);opacity:.6}
-.weather-card.hero{grid-column:span 1;background:linear-gradient(135deg,var(--masters-green),#004d3d);border-color:var(--gold)}
+.weather-card.hero{background:linear-gradient(135deg,var(--masters-green),#004d3d);border-color:var(--gold)}
 .weather-card.hero .value{font-size:3rem;color:var(--gold)}
 .forecast-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
 .forecast-day{background:var(--glass);border:1px solid var(--glass2);border-radius:var(--radius);padding:14px 8px;text-align:center}
@@ -72,7 +72,7 @@ body{display:flex;flex-direction:column}
 .turf-card .label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);opacity:.8;margin-bottom:4px}
 .turf-card .value{font-size:1.6rem;font-weight:bold;color:var(--cream)}
 
-/* ===== ANNOUNCEMENTS ===== */
+/* ANNOUNCEMENTS */
 .announce-box{background:var(--glass);border:2px solid var(--gold);border-radius:var(--radius);padding:24px 28px;font-size:1.4rem;color:var(--cream);line-height:1.6;min-height:120px;white-space:pre-wrap;text-align:center}
 .announce-box.empty{opacity:.4;font-style:italic;font-size:1rem}
 .course-info{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
@@ -80,35 +80,82 @@ body{display:flex;flex-direction:column}
 .info-card .label{font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:4px}
 .info-card .value{font-size:1.1rem;color:var(--cream);font-weight:bold}
 
-/* ===== ADMIN PANEL ===== */
-.admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;overflow-y:auto;padding:20px}
-.admin-overlay.open{display:block}
-.admin-panel{max-width:900px;margin:0 auto;background:var(--dark-green);border:2px solid var(--gold);border-radius:var(--radius);padding:24px}
+/* ADMIN OVERLAY */
+.admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:none;overflow-y:auto;padding:20px}
+.admin-overlay.open{display:flex;justify-content:center}
+.admin-panel{width:100%;max-width:960px;background:var(--dark-green);border:2px solid var(--gold);border-radius:var(--radius);padding:24px;margin:auto}
 .admin-panel h2{color:var(--gold);font-style:italic;margin-bottom:16px;font-size:1.4rem}
-.admin-row{display:grid;grid-template-columns:140px 1fr 1fr;gap:10px;align-items:center;margin-bottom:8px;padding:8px 12px;background:var(--glass);border-radius:8px}
+
+/* ADMIN TABS */
+.admin-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:2px solid var(--glass2);padding-bottom:10px}
+.admin-tab{padding:10px 20px;border-radius:8px 8px 0 0;background:var(--glass);color:var(--cream);border:1px solid var(--glass2);border-bottom:none;cursor:pointer;font-family:var(--font);font-size:.9rem;font-weight:bold;transition:all .2s}
+.admin-tab.active{background:var(--masters-green);color:var(--gold);border-color:var(--gold)}
+.admin-tab:hover{background:var(--glass2)}
+.admin-section{display:none}
+.admin-section.active{display:block}
+
+/* ADMIN CREW ROW */
+.admin-row{display:grid;grid-template-columns:140px 1fr 1fr 36px;gap:10px;align-items:center;margin-bottom:8px;padding:8px 12px;background:var(--glass);border-radius:8px}
 .admin-row label{color:var(--cream);font-weight:bold;font-size:.9rem}
-.admin-row select{padding:8px 10px;border-radius:6px;border:1px solid var(--glass3);background:var(--dark-green);color:var(--cream);font-family:var(--font);font-size:.85rem;cursor:pointer}
+.admin-row select{padding:8px 10px;border-radius:6px;border:1px solid var(--glass3);background:var(--dark-green);color:var(--cream);font-family:var(--font);font-size:.85rem;cursor:pointer;width:100%}
 .admin-row select:focus{outline:2px solid var(--gold)}
-.admin-textarea{width:100%;min-height:100px;padding:14px;border-radius:8px;border:1px solid var(--glass3);background:var(--glass);color:var(--cream);font-family:var(--font);font-size:1rem;resize:vertical;margin-top:8px}
+.remove-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--azalea);background:transparent;color:var(--azalea);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.remove-btn:hover{background:var(--azalea);color:var(--dark-green)}
+.reorder-btns{display:flex;flex-direction:column;gap:2px}
+.reorder-btn{width:28px;height:20px;border-radius:4px;border:1px solid var(--glass3);background:transparent;color:var(--gold);font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0}
+.reorder-btn:hover{background:var(--glass2);border-color:var(--gold)}
+.reorder-btn:disabled{opacity:.2;cursor:default}
+
+/* ADMIN INPUTS */
+.admin-textarea{width:100%;min-height:120px;padding:14px;border-radius:8px;border:1px solid var(--glass3);background:var(--glass);color:var(--cream);font-family:var(--font);font-size:1rem;resize:vertical;margin-top:8px}
 .admin-textarea:focus{outline:2px solid var(--gold)}
+.admin-input{padding:10px 12px;border-radius:6px;border:1px solid var(--glass3);background:var(--dark-green);color:var(--cream);font-family:var(--font);font-size:.9rem;width:100%}
+.admin-input:focus{outline:2px solid var(--gold)}
+.admin-input::placeholder{color:var(--cream);opacity:.3}
+
+/* ADD ROW */
+.add-row{display:flex;gap:8px;align-items:center;margin-top:12px;padding:10px 12px;background:var(--glass);border:1px dashed var(--gold);border-radius:8px}
+.add-row input{flex:1}
+.add-btn{padding:8px 18px;border:none;border-radius:6px;background:var(--masters-green);color:var(--gold);font-family:var(--font);font-size:.85rem;font-weight:bold;cursor:pointer;white-space:nowrap;border:1px solid var(--gold)}
+.add-btn:hover{background:#008866}
+
+/* JOB LIST MANAGE */
+.job-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.job-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--glass);border:1px solid var(--glass2);border-radius:20px;font-size:.8rem;color:var(--cream)}
+.job-chip.custom{border-color:var(--gold);color:var(--gold)}
+.job-chip .chip-x{width:18px;height:18px;border-radius:50%;border:1px solid var(--azalea);background:transparent;color:var(--azalea);font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.job-chip .chip-x:hover{background:var(--azalea);color:var(--dark-green)}
+
+/* BUTTONS */
 .btn{padding:12px 28px;border:none;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:1rem;font-weight:bold;transition:all .2s}
 .btn-gold{background:var(--gold);color:var(--dark-green)}
 .btn-gold:hover{background:#ffe44d;transform:translateY(-1px)}
 .btn-outline{background:transparent;border:2px solid var(--gold);color:var(--gold)}
 .btn-outline:hover{background:var(--glass)}
-.admin-btns{display:flex;gap:12px;margin-top:16px;justify-content:flex-end}
-.gear-btn{position:absolute;right:16px;bottom:8px;background:none;border:none;color:var(--cream);opacity:.15;font-size:1.4rem;cursor:pointer;z-index:50;transition:opacity .3s}
-.gear-btn:hover{opacity:.6}
+.admin-btns{display:flex;gap:12px;margin-top:20px;justify-content:flex-end}
 
-/* ===== WEATHER ICONS ===== */
-.wi{display:inline-block}
+/* GEAR */
+.gear-btn{position:fixed;right:16px;bottom:50px;width:48px;height:48px;border-radius:50%;background:var(--masters-green);border:2px solid var(--gold);color:var(--gold);font-size:1.4rem;cursor:pointer;z-index:50;transition:all .3s;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.gear-btn:hover{transform:scale(1.1);background:#008866}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .top-bar{padding:10px 16px}
+  .top-bar h1{font-size:1.1rem}
+  .top-bar .time{font-size:1.6rem}
+  .panel{padding:16px}
+  .crew-header,.crew-row{grid-template-columns:100px 1fr 1fr}
+  .admin-row{grid-template-columns:100px 1fr 1fr 32px;gap:6px;padding:6px 8px}
+  .weather-grid{grid-template-columns:1fr 1fr}
+  .turf-grid{grid-template-columns:1fr 1fr}
+  .forecast-row{grid-template-columns:repeat(3,1fr)}
+}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="top-bar">
-  <div class="brand">
+  <div class="brand" id="brandBtn">
     <div class="crest">LL</div>
     <div>
       <h1>Links Lab Greenkeeper</h1>
@@ -121,435 +168,465 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-<!-- PANELS -->
 <div class="panel-container" id="panelContainer">
-
-  <!-- PANEL 0: WELCOME / ANNOUNCEMENTS -->
   <div class="panel active" data-panel="0">
     <div class="section-title">&#9733; Daily Briefing</div>
-    <div class="announce-box" id="announceDisplay">Loading announcements...</div>
+    <div class="announce-box" id="announceDisplay">Loading...</div>
     <div class="course-info" id="courseInfo"></div>
   </div>
-
-  <!-- PANEL 1: CREW ASSIGNMENTS -->
   <div class="panel" data-panel="1">
     <div class="section-title">&#9758; Crew Assignment Board</div>
-    <div class="crew-header"><span>Name</span><span>Primary Job</span><span>Secondary Job</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:6px"><div class="crew-header"><span>Name</span><span>Primary</span><span>Secondary</span></div><div class="crew-header"><span>Name</span><span>Primary</span><span>Secondary</span></div></div>
     <div id="crewBoard"></div>
   </div>
-
-  <!-- PANEL 2: WEATHER & TURF -->
   <div class="panel" data-panel="2">
     <div class="section-title">&#9729; Weather &amp; Turf Conditions</div>
     <div id="weatherContent">Loading weather data...</div>
   </div>
-
 </div>
 
-<!-- PANEL DOTS -->
 <div class="panel-dots" id="panelDots"></div>
-
-<!-- GEAR BUTTON (opens admin) -->
-<button class="gear-btn" id="gearBtn" title="Admin Settings">&#9881;</button>
+<button class="gear-btn" id="gearBtn" title="Open Settings">&#9881;</button>
 
 <!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="adminOverlay">
-  <div class="admin-panel">
-    <h2>&#9881; Morning Setup — <span id="adminDate"></span></h2>
-    <div style="margin-bottom:20px">
-      <label style="color:var(--gold);font-size:.85rem;text-transform:uppercase;letter-spacing:1px">Daily Announcement</label>
-      <textarea class="admin-textarea" id="adminAnnounce" placeholder="Type today's message for the crew...&#10;e.g. Cart path only — wet conditions&#10;AJGA tournament setup holes 1-9"></textarea>
-    </div>
-    <div style="margin-bottom:8px;color:var(--gold);font-size:.85rem;text-transform:uppercase;letter-spacing:1px">Crew Assignments</div>
+<div class="admin-panel">
+  <h2>&#9881; Morning Setup — <span id="adminDate"></span></h2>
+
+  <div class="admin-tabs">
+    <div class="admin-tab active" data-atab="assignments" onclick="switchAdminTab('assignments')">Assignments</div>
+    <div class="admin-tab" data-atab="crew" onclick="switchAdminTab('crew')">Manage Crew</div>
+    <div class="admin-tab" data-atab="jobs" onclick="switchAdminTab('jobs')">Manage Jobs</div>
+    <div class="admin-tab" data-atab="announce" onclick="switchAdminTab('announce')">Announcement</div>
+  </div>
+
+  <!-- TAB: ASSIGNMENTS -->
+  <div class="admin-section active" id="sec-assignments">
     <div id="adminCrewList"></div>
-    <div class="admin-btns">
-      <button class="btn btn-outline" onclick="closeAdmin()">Cancel</button>
-      <button class="btn btn-gold" onclick="saveAdmin()">Save &amp; Display</button>
+  </div>
+
+  <!-- TAB: MANAGE CREW -->
+  <div class="admin-section" id="sec-crew">
+    <p style="color:var(--cream);opacity:.6;margin-bottom:12px;font-size:.85rem">Add or remove crew members. Changes are saved when you hit Save &amp; Display.</p>
+    <div id="crewManageList"></div>
+    <div class="add-row">
+      <input class="admin-input" id="newCrewName" placeholder="Name (e.g. Mike)">
+      <input class="admin-input" id="newCrewRole" placeholder="Default role (e.g. Fairways)">
+      <button class="add-btn" onclick="addCrewMember()">+ Add</button>
     </div>
   </div>
+
+  <!-- TAB: MANAGE JOBS -->
+  <div class="admin-section" id="sec-jobs">
+    <p style="color:var(--cream);opacity:.6;margin-bottom:12px;font-size:.85rem">Add custom jobs to the dropdown list. Default jobs cannot be removed.</p>
+    <div class="add-row" style="margin-bottom:16px">
+      <input class="admin-input" id="newJobName" placeholder="New job name (e.g. Drain Cleanout)">
+      <button class="add-btn" onclick="addJob()">+ Add Job</button>
+    </div>
+    <div class="job-list" id="jobList"></div>
+  </div>
+
+  <!-- TAB: ANNOUNCEMENT -->
+  <div class="admin-section" id="sec-announce">
+    <p style="color:var(--cream);opacity:.6;margin-bottom:8px;font-size:.85rem">Type your daily message for the crew. Shows on the first panel.</p>
+    <textarea class="admin-textarea" id="adminAnnounce" placeholder="Type today's message for the crew...&#10;e.g. Cart path only — wet conditions&#10;AJGA tournament setup holes 1-9&#10;Mower clinic at 2pm"></textarea>
+  </div>
+
+  <div class="admin-btns">
+    <button class="btn btn-outline" onclick="closeAdmin()">Cancel</button>
+    <button class="btn btn-gold" onclick="saveAdmin()">Save &amp; Display</button>
+  </div>
+</div>
 </div>
 
 <script>
-// ===== CREW DATA =====
-const CREW = [
-  { id:1,  name:'Rick White',     defaultRole:'Superintendent' },
-  { id:2,  name:'Paul Toussaint', defaultRole:'Assistant Superintendent' },
-  { id:3,  name:'Josh Butler',    defaultRole:'Asst Super in Training' },
-  { id:4,  name:'Tom',            defaultRole:'Mechanic' },
-  { id:5,  name:'Sean',           defaultRole:'Night Irrigation' },
-  { id:6,  name:'Dave',           defaultRole:'Fairways & Rough' },
-  { id:7,  name:'Liaqat',         defaultRole:'Fairways' },
-  { id:8,  name:'Richard',        defaultRole:'Arc Greens' },
-  { id:9,  name:'Steve',          defaultRole:'Landscaping & Greens' },
-  { id:10, name:'Don',            defaultRole:'Setup & Arc Greens' },
-  { id:11, name:'Chad',           defaultRole:'Rough Mac' },
-  { id:12, name:'Jeff',           defaultRole:'Night Irrigation' },
-  { id:13, name:'Joshua',         defaultRole:'Setup & Shop' },
-  { id:14, name:'Jay',            defaultRole:'Tees/Collars/Bunkers' },
-  { id:15, name:'Alicia',         defaultRole:'Rough' },
-  { id:16, name:'Robert',         defaultRole:'Tees/Collars/Bunkers' },
-  { id:17, name:'Joe',            defaultRole:'Approaches/Bunkers' },
-  { id:18, name:'Doug',           defaultRole:'Facilities' },
-  { id:19, name:'Travis',         defaultRole:'Assistant' }
+// ===== DEFAULT DATA =====
+const DEFAULT_CREW = [
+  {id:1,name:'Rick White',defaultRole:'Superintendent'},
+  {id:2,name:'Paul Toussaint',defaultRole:'Assistant Superintendent'},
+  {id:3,name:'Josh Butler',defaultRole:'Asst Super in Training'},
+  {id:4,name:'Tom',defaultRole:'Mechanic'},
+  {id:5,name:'Sean',defaultRole:'Night Irrigation'},
+  {id:6,name:'Dave',defaultRole:'Fairways & Rough'},
+  {id:7,name:'Liaqat',defaultRole:'Fairways'},
+  {id:8,name:'Richard',defaultRole:'Arc Greens'},
+  {id:9,name:'Steve',defaultRole:'Landscaping & Greens'},
+  {id:10,name:'Don',defaultRole:'Setup & Arc Greens'},
+  {id:11,name:'Chad',defaultRole:'Rough Mac'},
+  {id:12,name:'Jeff',defaultRole:'Night Irrigation'},
+  {id:13,name:'Joshua',defaultRole:'Setup & Shop'},
+  {id:14,name:'Jay',defaultRole:'Tees/Collars/Bunkers'},
+  {id:15,name:'Alicia',defaultRole:'Rough'},
+  {id:16,name:'Robert',defaultRole:'Tees/Collars/Bunkers'},
+  {id:17,name:'Joe',defaultRole:'Approaches/Bunkers'},
+  {id:18,name:'Doug',defaultRole:'Facilities'},
+  {id:19,name:'Travis',defaultRole:'Assistant'}
 ];
 
-const JOBS = [
-  '— None —',
-  'Greens Mow - Mac',
-  'Greens Mow - Arc',
-  'Greens Roll - Mac',
-  'Greens Roll - Arc',
-  'Tees Mow - Mac',
-  'Tees Mow - Arc',
-  'Collars/Approaches - Mac',
-  'Collars/Approaches - Arc',
-  'Fairways Mow - Mac',
-  'Fairways Mow - Arc',
-  'Rough Mow - Mac',
-  'Rough Mow - Arc',
-  'Bunkers Rake/Edge',
-  'Bunkers Sand Work',
+const DEFAULT_JOBS = [
+  '-- None --',
+  'Greens Mow - Mac','Greens Mow - Arc',
+  'Greens Roll - Mac','Greens Roll - Arc',
+  'Tees Mow - Mac','Tees Mow - Arc',
+  'Collars/Approaches - Mac','Collars/Approaches - Arc',
+  'Fairways Mow - Mac','Fairways Mow - Arc',
+  'Rough Mow - Mac','Rough Mow - Arc',
+  'Bunkers Rake/Edge','Bunkers Sand Work',
   'Course Setup (Cups/Tees/Flags)',
-  'Hand Water - Mac',
-  'Hand Water - Arc',
-  'Hand Water - Practice',
-  'Irrigation Repairs',
-  'Irrigation - Night Run',
-  'Spray Application',
-  'Fertilizer Application',
-  'Topdress/Aeration',
-  'Tree/Landscape Work',
-  'Debris Blowing/Cleanup',
-  'Cart Paths/Roads',
-  'Practice Facility',
-  'Equipment Maintenance',
-  'Shop/Facilities',
-  'Project Work',
-  'Training',
-  'Off'
+  'Hand Water - Mac','Hand Water - Arc','Hand Water - Practice',
+  'Irrigation Repairs','Irrigation - Night Run',
+  'Spray Application','Fertilizer Application',
+  'Topdress/Aeration','Tree/Landscape Work',
+  'Debris Blowing/Cleanup','Cart Paths/Roads',
+  'Practice Facility','Equipment Maintenance',
+  'Shop/Facilities','Project Work','Training','Off'
 ];
 
 // ===== STATE =====
 let currentPanel = 0;
 const PANEL_COUNT = 3;
-const ROTATE_INTERVAL = 20000; // 20 seconds
+const ROTATE_MS = 20000;
 let rotateTimer = null;
 let weatherData = null;
 
-// ===== HELPERS =====
-function todayKey() {
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
+// Editable state held in admin during editing
+let editCrew = [];
+let editJobs = [];
+let editAssignments = {};
+let editAnnouncement = '';
 
-function loadAssignments() {
-  const saved = localStorage.getItem('briefing_' + todayKey());
-  if (saved) return JSON.parse(saved);
-  return { announcement:'', crew: CREW.map(c=>({ id:c.id, primary:'', secondary:'' })) };
-}
+// ===== PERSISTENCE =====
+function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 
-function saveAssignments(data) {
-  localStorage.setItem('briefing_' + todayKey(), JSON.stringify(data));
+function loadCrew(){
+  const s = localStorage.getItem('ll_crew');
+  if(s){ try{ return JSON.parse(s); }catch(e){} }
+  return JSON.parse(JSON.stringify(DEFAULT_CREW));
 }
+function saveCrew(list){ localStorage.setItem('ll_crew', JSON.stringify(list)); }
+
+function loadJobs(){
+  const s = localStorage.getItem('ll_jobs');
+  if(s){ try{ return JSON.parse(s); }catch(e){} }
+  return [...DEFAULT_JOBS];
+}
+function saveJobs(list){ localStorage.setItem('ll_jobs', JSON.stringify(list)); }
+
+function loadToday(){
+  const s = localStorage.getItem('ll_day_'+todayKey());
+  if(s){ try{ return JSON.parse(s); }catch(e){} }
+  return { announcement:'', assignments:{} };
+}
+function saveToday(data){ localStorage.setItem('ll_day_'+todayKey(), JSON.stringify(data)); }
 
 // ===== CLOCK =====
-function updateClock() {
-  const now = new Date();
-  const h = now.getHours();
-  const m = String(now.getMinutes()).padStart(2,'0');
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  document.getElementById('clock').textContent = h12 + ':' + m + ' ' + ampm;
-
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('dateDisplay').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+function updateClock(){
+  const now=new Date();
+  const h=now.getHours(), m=String(now.getMinutes()).padStart(2,'0');
+  const ampm=h>=12?'PM':'AM', h12=h%12||12;
+  document.getElementById('clock').textContent=h12+':'+m+' '+ampm;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dateDisplay').textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
 }
 
 // ===== PANELS =====
-function showPanel(idx) {
-  const panels = document.querySelectorAll('.panel');
-  panels.forEach((p,i) => {
-    if (i === currentPanel) { p.classList.remove('active'); p.classList.add('exit'); }
-    else { p.classList.remove('active','exit'); }
-  });
-  currentPanel = idx;
-  setTimeout(() => {
-    panels.forEach((p,i) => {
-      p.classList.remove('exit');
-      if (i === idx) p.classList.add('active');
-    });
-  }, 50);
-  document.querySelectorAll('.panel-dots .dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+function showPanel(idx){
+  const panels=document.querySelectorAll('.panel');
+  panels.forEach((p,i)=>{if(i===currentPanel){p.classList.remove('active');p.classList.add('exit');}else{p.classList.remove('active','exit');}});
+  currentPanel=idx;
+  setTimeout(()=>{panels.forEach((p,i)=>{p.classList.remove('exit');if(i===idx)p.classList.add('active');});},50);
+  document.querySelectorAll('.panel-dots .dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
 }
-
-function nextPanel() { showPanel((currentPanel + 1) % PANEL_COUNT); }
-
-function buildDots() {
-  const container = document.getElementById('panelDots');
-  const labels = ['Briefing','Crew','Weather'];
-  container.innerHTML = labels.map((l,i) => '<span class="dot'+(i===0?' active':'')+'" data-idx="'+i+'" title="'+l+'"></span>').join('');
-  container.querySelectorAll('.dot').forEach(d => {
-    d.addEventListener('click', () => { showPanel(parseInt(d.dataset.idx)); resetRotate(); });
-  });
+function nextPanel(){showPanel((currentPanel+1)%PANEL_COUNT);}
+function buildDots(){
+  const c=document.getElementById('panelDots');
+  const labels=['Briefing','Crew','Weather'];
+  c.innerHTML=labels.map((l,i)=>'<span class="dot'+(i===0?' active':'')+'" data-idx="'+i+'" title="'+l+'"></span>').join('');
+  c.querySelectorAll('.dot').forEach(d=>{d.addEventListener('click',()=>{showPanel(parseInt(d.dataset.idx));resetRotate();});});
 }
+function resetRotate(){clearInterval(rotateTimer);rotateTimer=setInterval(nextPanel,ROTATE_MS);}
 
-function resetRotate() {
-  clearInterval(rotateTimer);
-  rotateTimer = setInterval(nextPanel, ROTATE_INTERVAL);
-}
+// ===== WEATHER =====
+const LAT=38.6048, LON=-121.4310;
+function weatherIcon(code){if(code<=1)return'☀️';if(code<=3)return'⛅';if(code<=48)return'☁️';if(code<=65)return'🌧️';if(code<=77)return'❄️';if(code<=82)return'🌧️';if(code<=99)return'⚡';return'☀️';}
+function weatherDesc(code){if(code===0)return'Clear Sky';if(code<=3)return'Partly Cloudy';if(code<=48)return'Overcast / Fog';if(code<=55)return'Drizzle';if(code<=65)return'Rain';if(code<=77)return'Snow';if(code<=82)return'Showers';if(code<=99)return'Thunderstorm';return'Clear';}
+function windDir(deg){const dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return dirs[Math.round(deg/22.5)%16]||'N';}
 
-// ===== WEATHER (Open-Meteo, free, no key) =====
-const HAGGIN_OAKS_LAT = 38.6048;
-const HAGGIN_OAKS_LON = -121.4310;
-
-function weatherIcon(code) {
-  if (code <= 1) return '☀️'; // sun
-  if (code <= 3) return '⛅'; // partly cloudy
-  if (code <= 48) return '☁️'; // cloudy/fog
-  if (code <= 55) return '🌧️'; // drizzle
-  if (code <= 65) return '🌧️'; // rain
-  if (code <= 77) return '❄️'; // snow
-  if (code <= 82) return '🌧️'; // showers
-  if (code <= 99) return '⚡'; // thunderstorm
-  return '☀️';
-}
-
-function weatherDesc(code) {
-  if (code === 0) return 'Clear Sky';
-  if (code <= 3) return 'Partly Cloudy';
-  if (code <= 48) return 'Overcast / Fog';
-  if (code <= 55) return 'Drizzle';
-  if (code <= 65) return 'Rain';
-  if (code <= 77) return 'Snow';
-  if (code <= 82) return 'Showers';
-  if (code <= 99) return 'Thunderstorm';
-  return 'Clear';
-}
-
-async function fetchWeather() {
-  try {
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude='+HAGGIN_OAKS_LAT+'&longitude='+HAGGIN_OAKS_LON
+async function fetchWeather(){
+  try{
+    const url='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON
       +'&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure'
       +'&hourly=dew_point_2m,soil_temperature_6cm,et0_fao_evapotranspiration'
       +'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,et0_fao_evapotranspiration,wind_speed_10m_max'
       +'&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch'
       +'&timezone=America/Los_Angeles&forecast_days=6';
-    const resp = await fetch(url);
-    weatherData = await resp.json();
+    const resp=await fetch(url);
+    weatherData=await resp.json();
     renderWeather();
-  } catch(e) {
-    document.getElementById('weatherContent').innerHTML = '<div style="text-align:center;padding:40px;color:var(--azalea)">Weather data unavailable — check connection</div>';
+  }catch(e){
+    document.getElementById('weatherContent').innerHTML='<div style="text-align:center;padding:40px;color:var(--azalea)">Weather data unavailable</div>';
   }
 }
 
-function renderWeather() {
-  if (!weatherData) return;
-  const c = weatherData.current;
-  const d = weatherData.daily;
-  const h = weatherData.hourly;
+function renderWeather(){
+  if(!weatherData)return;
+  const c=weatherData.current, d=weatherData.daily, h=weatherData.hourly;
+  const nowHour=new Date().getHours();
+  let et0Today=d.et0_fao_evapotranspiration&&d.et0_fao_evapotranspiration[0]!=null?d.et0_fao_evapotranspiration[0]:0;
+  let soilTemp=h.soil_temperature_6cm&&h.soil_temperature_6cm[nowHour]!=null?Math.round(h.soil_temperature_6cm[nowHour]):'--';
+  let dewPoint=h.dew_point_2m&&h.dew_point_2m[nowHour]!=null?Math.round(h.dew_point_2m[nowHour]):'--';
+  let sunrise='--',sunset='--';
+  if(d.sunrise&&d.sunrise[0]){const sr=new Date(d.sunrise[0]);sunrise=(sr.getHours()%12||12)+':'+String(sr.getMinutes()).padStart(2,'0')+' AM';}
+  if(d.sunset&&d.sunset[0]){const ss=new Date(d.sunset[0]);sunset=(ss.getHours()%12||12)+':'+String(ss.getMinutes()).padStart(2,'0')+' PM';}
 
-  // Current hour index for turf data
-  const nowHour = new Date().getHours();
+  let html='<div class="weather-grid">';
+  html+='<div class="weather-card hero"><div class="label">Current Temp</div><div class="value">'+Math.round(c.temperature_2m)+'°</div><div class="unit">Feels like '+Math.round(c.apparent_temperature)+'°F</div></div>';
+  html+='<div class="weather-card"><div class="label">Conditions</div><div class="value" style="font-size:2.6rem">'+weatherIcon(c.weather_code)+'</div><div class="unit">'+weatherDesc(c.weather_code)+'</div></div>';
+  html+='<div class="weather-card"><div class="label">Wind</div><div class="value" style="font-size:1.8rem">'+Math.round(c.wind_speed_10m)+'</div><div class="unit">mph '+windDir(c.wind_direction_10m)+'</div></div>';
+  html+='</div>';
 
-  // ET0 today (sum of hourly)
-  let et0Today = 0;
-  if (d.et0_fao_evapotranspiration && d.et0_fao_evapotranspiration[0] != null) {
-    et0Today = d.et0_fao_evapotranspiration[0];
+  html+='<div class="section-title" style="margin-top:20px">&#127793; Turf Intelligence</div><div class="turf-grid">';
+  html+='<div class="turf-card"><div class="label">Soil Temp (6cm)</div><div class="value">'+soilTemp+'°F</div></div>';
+  html+='<div class="turf-card"><div class="label">Dew Point</div><div class="value">'+dewPoint+'°F</div></div>';
+  html+='<div class="turf-card"><div class="label">ET₀ Today</div><div class="value">'+et0Today.toFixed(2)+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">in/day</div></div>';
+  html+='<div class="turf-card"><div class="label">Humidity</div><div class="value">'+c.relative_humidity_2m+'%</div></div>';
+  html+='<div class="turf-card"><div class="label">Sunrise</div><div class="value" style="font-size:1.2rem">'+sunrise+'</div></div>';
+  html+='<div class="turf-card"><div class="label">Sunset</div><div class="value" style="font-size:1.2rem">'+sunset+'</div></div>';
+  html+='<div class="turf-card"><div class="label">Precip Chance</div><div class="value">'+(d.precipitation_probability_max[0]||0)+'%</div></div>';
+  html+='<div class="turf-card"><div class="label">Max Wind</div><div class="value">'+Math.round(d.wind_speed_10m_max[0])+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">mph</div></div>';
+  html+='</div>';
+
+  html+='<div class="section-title" style="margin-top:20px">&#128197; 5-Day Forecast</div><div class="forecast-row">';
+  const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  for(let i=1;i<=5;i++){
+    if(!d.time[i])continue;
+    const dt=new Date(d.time[i]+'T12:00:00');
+    html+='<div class="forecast-day"><div class="day-name">'+dayNames[dt.getDay()]+'</div><div class="icon">'+weatherIcon(d.weather_code[i])+'</div><div class="hi-lo">'+Math.round(d.temperature_2m_max[i])+'° <span>/ '+Math.round(d.temperature_2m_min[i])+'°</span></div><div class="precip">'+(d.precipitation_probability_max[i]||0)+'% rain</div></div>';
   }
-
-  // Soil temp (current hour)
-  let soilTemp = '--';
-  if (h.soil_temperature_6cm && h.soil_temperature_6cm[nowHour] != null) {
-    soilTemp = Math.round(h.soil_temperature_6cm[nowHour]);
-  }
-
-  // Dew point
-  let dewPoint = '--';
-  if (h.dew_point_2m && h.dew_point_2m[nowHour] != null) {
-    dewPoint = Math.round(h.dew_point_2m[nowHour]);
-  }
-
-  // Sunrise/sunset
-  let sunrise = '--', sunset = '--';
-  if (d.sunrise && d.sunrise[0]) {
-    const sr = new Date(d.sunrise[0]);
-    sunrise = (sr.getHours()%12||12) + ':' + String(sr.getMinutes()).padStart(2,'0') + ' AM';
-  }
-  if (d.sunset && d.sunset[0]) {
-    const ss = new Date(d.sunset[0]);
-    sunset = (ss.getHours()%12||12) + ':' + String(ss.getMinutes()).padStart(2,'0') + ' PM';
-  }
-
-  let html = '';
-
-  // Current conditions row
-  html += '<div class="weather-grid">';
-  html += '<div class="weather-card hero"><div class="label">Current Temp</div><div class="value">'+Math.round(c.temperature_2m)+'°</div><div class="unit">Feels like '+Math.round(c.apparent_temperature)+'°F</div></div>';
-  html += '<div class="weather-card"><div class="label">Conditions</div><div class="value" style="font-size:2.6rem">'+weatherIcon(c.weather_code)+'</div><div class="unit">'+weatherDesc(c.weather_code)+'</div></div>';
-  html += '<div class="weather-card"><div class="label">Wind</div><div class="value" style="font-size:1.8rem">'+Math.round(c.wind_speed_10m)+'</div><div class="unit">mph '+windDir(c.wind_direction_10m)+'</div></div>';
-  html += '</div>';
-
-  // Turf conditions
-  html += '<div class="section-title" style="margin-top:20px">&#127793; Turf Intelligence</div>';
-  html += '<div class="turf-grid">';
-  html += '<div class="turf-card"><div class="label">Soil Temp (6cm)</div><div class="value">'+soilTemp+'°F</div></div>';
-  html += '<div class="turf-card"><div class="label">Dew Point</div><div class="value">'+dewPoint+'°F</div></div>';
-  html += '<div class="turf-card"><div class="label">ET₀ Today</div><div class="value">'+et0Today.toFixed(2)+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">in/day</div></div>';
-  html += '<div class="turf-card"><div class="label">Humidity</div><div class="value">'+c.relative_humidity_2m+'%</div></div>';
-  html += '<div class="turf-card"><div class="label">Sunrise</div><div class="value" style="font-size:1.2rem">'+sunrise+'</div></div>';
-  html += '<div class="turf-card"><div class="label">Sunset</div><div class="value" style="font-size:1.2rem">'+sunset+'</div></div>';
-  html += '<div class="turf-card"><div class="label">Precip Chance</div><div class="value">'+(d.precipitation_probability_max[0] || 0)+'%</div></div>';
-  html += '<div class="turf-card"><div class="label">Max Wind</div><div class="value">'+Math.round(d.wind_speed_10m_max[0])+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">mph</div></div>';
-  html += '</div>';
-
-  // 5-day forecast
-  html += '<div class="section-title" style="margin-top:20px">&#128197; 5-Day Forecast</div>';
-  html += '<div class="forecast-row">';
-  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  for (let i = 1; i <= 5; i++) {
-    if (!d.time[i]) continue;
-    const dt = new Date(d.time[i] + 'T12:00:00');
-    const dn = dayNames[dt.getDay()];
-    html += '<div class="forecast-day">';
-    html += '<div class="day-name">'+dn+'</div>';
-    html += '<div class="icon">'+weatherIcon(d.weather_code[i])+'</div>';
-    html += '<div class="hi-lo">'+Math.round(d.temperature_2m_max[i])+'° <span>/ '+Math.round(d.temperature_2m_min[i])+'°</span></div>';
-    html += '<div class="precip">'+(d.precipitation_probability_max[i]||0)+'% rain</div>';
-    html += '</div>';
-  }
-  html += '</div>';
-
-  document.getElementById('weatherContent').innerHTML = html;
+  html+='</div>';
+  document.getElementById('weatherContent').innerHTML=html;
 }
 
-function windDir(deg) {
-  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-  return dirs[Math.round(deg/22.5)%16] || 'N';
-}
-
-// ===== CREW BOARD RENDER =====
-function renderCrewBoard() {
-  const data = loadAssignments();
-  const container = document.getElementById('crewBoard');
-  let html = '';
-  CREW.forEach(c => {
-    const a = data.crew.find(x=>x.id===c.id) || {primary:'',secondary:''};
-    const pLabel = a.primary || c.defaultRole;
-    const sLabel = a.secondary || '—';
-    const isOff = (a.primary === 'Off' || a.secondary === 'Off');
-    html += '<div class="crew-row'+(isOff?' off':'')+'">';
-    html += '<div class="crew-name-cell">'+c.name+'<span class="default-role">'+c.defaultRole+'</span></div>';
-    html += '<div class="job-badge primary">'+pLabel+'</div>';
-    html += '<div class="job-badge secondary">'+sLabel+'</div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-}
-
-// ===== ANNOUNCEMENTS RENDER =====
-function renderAnnouncements() {
-  const data = loadAssignments();
-  const box = document.getElementById('announceDisplay');
-  if (data.announcement && data.announcement.trim()) {
-    box.textContent = data.announcement;
-    box.classList.remove('empty');
-  } else {
-    box.textContent = 'No announcements — tap the gear icon to add one';
-    box.classList.add('empty');
+// ===== DISPLAY RENDERS =====
+function renderCrewBoard(){
+  const crew=loadCrew(), today=loadToday();
+  const container=document.getElementById('crewBoard');
+  const mid=Math.ceil(crew.length/2);
+  const colL=crew.slice(0,mid), colR=crew.slice(mid);
+  function buildCol(list){
+    let h='';
+    list.forEach(c=>{
+      const a=today.assignments[c.id]||{primary:'',secondary:''};
+      const pLabel=a.primary&&a.primary!=='-- None --'?a.primary:c.defaultRole;
+      const sLabel=a.secondary&&a.secondary!=='-- None --'?a.secondary:'—';
+      const isOff=a.primary==='Off'||a.secondary==='Off';
+      h+='<div class="crew-row'+(isOff?' off-duty':'')+'">';
+      h+='<div class="crew-name-cell">'+c.name+'<span class="default-role">'+c.defaultRole+'</span></div>';
+      h+='<div class="job-badge primary">'+pLabel+'</div>';
+      h+='<div class="job-badge secondary">'+sLabel+'</div>';
+      h+='</div>';
+    });
+    return h;
   }
-
-  // Course info cards
-  const now = new Date();
-  const h = now.getHours();
-  let greeting = 'Good Morning';
-  if (h >= 12 && h < 17) greeting = 'Good Afternoon';
-  if (h >= 17) greeting = 'Good Evening';
-
-  document.getElementById('courseInfo').innerHTML = ''
-    + '<div class="info-card"><div class="label">'+greeting+'</div><div class="value">Haggin Oaks Golf Complex</div></div>'
-    + '<div class="info-card"><div class="label">MacKenzie Course (1932)</div><div class="value">Arcade Creek Course (1952)</div></div>'
-    + '<div class="info-card"><div class="label">Crew On Duty</div><div class="value" id="crewCount">'+countOnDuty()+' of '+CREW.length+'</div></div>'
-    + '<div class="info-card"><div class="label">Superintendent</div><div class="value">Rick White</div></div>';
+  container.innerHTML='<div class="crew-board-wrap"><div>'+buildCol(colL)+'</div><div>'+buildCol(colR)+'</div></div>';
 }
 
-function countOnDuty() {
-  const data = loadAssignments();
-  return data.crew.filter(c => c.primary && c.primary !== 'Off' && c.primary !== '— None —').length || CREW.length;
+function renderAnnouncements(){
+  const today=loadToday();
+  const box=document.getElementById('announceDisplay');
+  if(today.announcement&&today.announcement.trim()){box.textContent=today.announcement;box.classList.remove('empty');}
+  else{box.textContent='No announcements — tap the gear icon to add one';box.classList.add('empty');}
+  const now=new Date(),h=now.getHours();
+  let greeting=h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening';
+  const crew=loadCrew(), today2=loadToday();
+  const onDuty=crew.filter(c=>{const a=today2.assignments[c.id];return!a||!a.primary||a.primary!=='Off';}).length;
+  document.getElementById('courseInfo').innerHTML=
+    '<div class="info-card"><div class="label">'+greeting+'</div><div class="value">Haggin Oaks Golf Complex</div></div>'
+    +'<div class="info-card"><div class="label">MacKenzie Course (1932)</div><div class="value">Arcade Creek Course (1952)</div></div>'
+    +'<div class="info-card"><div class="label">Crew On Duty</div><div class="value">'+onDuty+' of '+crew.length+'</div></div>'
+    +'<div class="info-card"><div class="label">Superintendent</div><div class="value">Rick White</div></div>';
 }
 
 // ===== ADMIN =====
-function openAdmin() {
-  clearInterval(rotateTimer);
-  const data = loadAssignments();
-  document.getElementById('adminDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  document.getElementById('adminAnnounce').value = data.announcement || '';
+function switchAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.toggle('active',t.dataset.atab===tab));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.toggle('active',s.id==='sec-'+tab));
+}
 
-  let html = '';
-  CREW.forEach(c => {
-    const a = data.crew.find(x=>x.id===c.id) || {primary:'',secondary:''};
-    html += '<div class="admin-row">';
-    html += '<label>'+c.name+'</label>';
-    html += '<select data-crew="'+c.id+'" data-type="primary">';
-    JOBS.forEach(j => { html += '<option value="'+j+'"'+(a.primary===j?' selected':'')+'>'+j+'</option>'; });
-    html += '</select>';
-    html += '<select data-crew="'+c.id+'" data-type="secondary">';
-    JOBS.forEach(j => { html += '<option value="'+j+'"'+(a.secondary===j?' selected':'')+'>'+j+'</option>'; });
-    html += '</select>';
-    html += '</div>';
-  });
-  document.getElementById('adminCrewList').innerHTML = html;
+function openAdmin(){
+  clearInterval(rotateTimer);
+  editCrew=JSON.parse(JSON.stringify(loadCrew()));
+  editJobs=[...loadJobs()];
+  const today=loadToday();
+  editAssignments=JSON.parse(JSON.stringify(today.assignments||{}));
+  editAnnouncement=today.announcement||'';
+
+  document.getElementById('adminDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('adminAnnounce').value=editAnnouncement;
+
+  renderAdminAssignments();
+  renderAdminCrew();
+  renderAdminJobs();
+  switchAdminTab('assignments');
   document.getElementById('adminOverlay').classList.add('open');
 }
 
-function closeAdmin() {
+function renderAdminAssignments(){
+  let html='';
+  editCrew.forEach(c=>{
+    const a=editAssignments[c.id]||{primary:'',secondary:''};
+    html+='<div class="admin-row">';
+    html+='<label>'+c.name+'</label>';
+    html+='<select data-crew="'+c.id+'" data-type="primary">';
+    editJobs.forEach(j=>{html+='<option value="'+j+'"'+(a.primary===j?' selected':'')+'>'+j+'</option>';});
+    html+='</select>';
+    html+='<select data-crew="'+c.id+'" data-type="secondary">';
+    editJobs.forEach(j=>{html+='<option value="'+j+'"'+(a.secondary===j?' selected':'')+'>'+j+'</option>';});
+    html+='</select>';
+    html+='<div></div>';
+    html+='</div>';
+  });
+  document.getElementById('adminCrewList').innerHTML=html;
+}
+
+function renderAdminCrew(){
+  let html='';
+  editCrew.forEach((c,idx)=>{
+    html+='<div class="admin-row" style="grid-template-columns:1fr 1fr 36px">';
+    html+='<input class="admin-input" value="'+c.name+'" onchange="editCrew['+idx+'].name=this.value">';
+    html+='<input class="admin-input" value="'+c.defaultRole+'" onchange="editCrew['+idx+'].defaultRole=this.value">';
+    html+='<button class="remove-btn" onclick="removeCrew('+idx+')" title="Remove">✕</button>';
+    html+='</div>';
+  });
+  document.getElementById('crewManageList').innerHTML=html;
+}
+
+function addCrewMember(){
+  const nameInput=document.getElementById('newCrewName');
+  const roleInput=document.getElementById('newCrewRole');
+  const name=nameInput.value.trim();
+  const role=roleInput.value.trim();
+  if(!name){nameInput.focus();return;}
+  const maxId=editCrew.reduce((mx,c)=>Math.max(mx,c.id),0);
+  editCrew.push({id:maxId+1,name:name,defaultRole:role||'Crew'});
+  nameInput.value='';roleInput.value='';
+  renderAdminCrew();
+  renderAdminAssignments();
+}
+
+function removeCrew(idx){
+  if(editCrew.length<=1)return;
+  const removed=editCrew.splice(idx,1)[0];
+  delete editAssignments[removed.id];
+  renderAdminCrew();
+  renderAdminAssignments();
+}
+
+function moveCrewUp(idx){
+  if(idx<=0)return;
+  const tmp=editCrew[idx-1];
+  editCrew[idx-1]=editCrew[idx];
+  editCrew[idx]=tmp;
+  renderAdminCrew();
+  renderAdminAssignments();
+}
+
+function moveCrewDown(idx){
+  if(idx>=editCrew.length-1)return;
+  const tmp=editCrew[idx+1];
+  editCrew[idx+1]=editCrew[idx];
+  editCrew[idx]=tmp;
+  renderAdminCrew();
+  renderAdminAssignments();
+}
+
+function renderAdminJobs(){
+  let html='';
+  editJobs.forEach((j,idx)=>{
+    const isDefault=DEFAULT_JOBS.includes(j);
+    html+='<div class="job-chip'+(isDefault?'':' custom')+'">';
+    html+=j;
+    if(!isDefault){html+=' <button class="chip-x" onclick="removeJob('+idx+')">✕</button>';}
+    html+='</div>';
+  });
+  document.getElementById('jobList').innerHTML=html;
+}
+
+function addJob(){
+  const input=document.getElementById('newJobName');
+  const name=input.value.trim();
+  if(!name||editJobs.includes(name))return;
+  editJobs.push(name);
+  input.value='';
+  renderAdminJobs();
+  renderAdminAssignments();
+}
+
+function removeJob(idx){
+  if(DEFAULT_JOBS.includes(editJobs[idx]))return;
+  editJobs.splice(idx,1);
+  renderAdminJobs();
+  renderAdminAssignments();
+}
+
+function closeAdmin(){
   document.getElementById('adminOverlay').classList.remove('open');
   resetRotate();
 }
 
-function saveAdmin() {
-  const announcement = document.getElementById('adminAnnounce').value;
-  const crew = CREW.map(c => {
-    const pSel = document.querySelector('select[data-crew="'+c.id+'"][data-type="primary"]');
-    const sSel = document.querySelector('select[data-crew="'+c.id+'"][data-type="secondary"]');
-    return { id:c.id, primary: pSel ? pSel.value : '', secondary: sSel ? sSel.value : '' };
+function saveAdmin(){
+  // Collect assignments from dropdowns
+  const assignments={};
+  editCrew.forEach(c=>{
+    const pSel=document.querySelector('select[data-crew="'+c.id+'"][data-type="primary"]');
+    const sSel=document.querySelector('select[data-crew="'+c.id+'"][data-type="secondary"]');
+    assignments[c.id]={primary:pSel?pSel.value:'',secondary:sSel?sSel.value:''};
   });
-  saveAssignments({ announcement, crew });
+  const announcement=document.getElementById('adminAnnounce').value;
+
+  saveCrew(editCrew);
+  saveJobs(editJobs);
+  saveToday({announcement:announcement,assignments:assignments});
+
   renderCrewBoard();
   renderAnnouncements();
   closeAdmin();
 }
 
 // ===== INIT =====
-function init() {
+function init(){
   updateClock();
-  setInterval(updateClock, 1000);
+  setInterval(updateClock,1000);
   buildDots();
   renderCrewBoard();
   renderAnnouncements();
   fetchWeather();
-  setInterval(fetchWeather, 600000); // refresh weather every 10 min
+  setInterval(fetchWeather,600000);
   resetRotate();
 
-  document.getElementById('gearBtn').addEventListener('click', openAdmin);
+  document.getElementById('gearBtn').addEventListener('click',openAdmin);
 
-  // Double-tap crest also opens admin
-  let lastTap = 0;
-  document.querySelector('.crest').addEventListener('click', () => {
-    const now = Date.now();
-    if (now - lastTap < 400) openAdmin();
-    lastTap = now;
+  let lastTap=0;
+  document.getElementById('brandBtn').addEventListener('click',()=>{
+    const now=Date.now();
+    if(now-lastTap<400)openAdmin();
+    lastTap=now;
   });
 
-  // Keyboard: Escape closes admin, arrows change panels
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAdmin();
-    if (e.key === 'ArrowRight') { nextPanel(); resetRotate(); }
-    if (e.key === 'ArrowLeft') { showPanel((currentPanel - 1 + PANEL_COUNT) % PANEL_COUNT); resetRotate(); }
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')closeAdmin();
+    if(e.key==='ArrowRight'){nextPanel();resetRotate();}
+    if(e.key==='ArrowLeft'){showPanel((currentPanel-1+PANEL_COUNT)%PANEL_COUNT);resetRotate();}
   });
+
+  // Enter key in add fields
+  document.getElementById('newCrewName').addEventListener('keydown',e=>{if(e.key==='Enter')addCrewMember();});
+  document.getElementById('newCrewRole').addEventListener('keydown',e=>{if(e.key==='Enter')addCrewMember();});
+  document.getElementById('newJobName').addEventListener('keydown',e=>{if(e.key==='Enter')addJob();});
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
