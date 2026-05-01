@@ -167,6 +167,39 @@ body{display:flex;flex-direction:column}
 .admin-ops-grid label{display:block;color:var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .admin-ops-grid select,.admin-ops-grid input{width:100%}
 
+/* FRONT PAGE 2-COL LAYOUT */
+.front-page{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;height:100%}
+.fp-left,.fp-right{display:flex;flex-direction:column;gap:12px}
+.announce-box{font-size:1.1rem;padding:14px 18px;min-height:60px}
+.announce-box.empty{font-size:.85rem}
+
+/* COMPACT WEATHER */
+.wx-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.wx-cell{background:var(--glass);border:1px solid var(--glass2);border-radius:8px;padding:10px 8px;text-align:center}
+.wx-cell .wx-label{font-size:.55rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);opacity:.7;margin-bottom:3px}
+.wx-cell .wx-val{font-size:1.3rem;font-weight:bold;color:var(--cream)}
+.wx-cell .wx-sub{font-size:.6rem;color:var(--cream);opacity:.5}
+.wx-cell.wx-hero{background:linear-gradient(135deg,var(--masters-green),#004d3d);border-color:var(--gold)}
+.wx-cell.wx-hero .wx-val{color:var(--gold);font-size:1.8rem}
+.wx-forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.wx-fday{background:var(--glass);border:1px solid var(--glass2);border-radius:8px;padding:8px 4px;text-align:center}
+.wx-fday .wx-label{font-size:.6rem;text-transform:uppercase;color:var(--gold);letter-spacing:1px}
+.wx-fday .wx-icon{font-size:1.2rem;margin:2px 0}
+.wx-fday .wx-val{font-size:.85rem;font-weight:bold;color:var(--cream)}
+.wx-fday .wx-val span{font-size:.7rem;opacity:.5;font-weight:normal}
+.wx-fday .wx-precip{font-size:.6rem;color:var(--azalea)}
+
+/* COMPACT SAFETY */
+.safety-compact{display:flex;flex-direction:column;gap:10px}
+.safety-compact .safety-card{padding:12px 14px}
+.safety-compact .safety-card .safety-body{font-size:.85rem;line-height:1.4}
+.safety-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+@media(max-width:900px){
+  .front-page{grid-template-columns:1fr}
+  .wx-row{grid-template-columns:repeat(2,1fr)}
+}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .top-bar{padding:10px 16px}
@@ -199,26 +232,23 @@ body{display:flex;flex-direction:column}
 
 <div class="panel-container" id="panelContainer">
   <div class="panel active" data-panel="0">
-    <div class="section-title">&#9733; Daily Briefing</div>
-    <div class="status-bar" id="statusBar"></div>
-    <div class="announce-box" id="announceDisplay">Loading...</div>
-    <div class="course-info" id="courseInfo"></div>
+    <div class="front-page">
+      <div class="fp-left">
+        <div class="status-bar" id="statusBar"></div>
+        <div class="announce-box" id="announceDisplay">Loading...</div>
+        <div id="weatherCompact">Loading weather...</div>
+      </div>
+      <div class="fp-right">
+        <div id="safetyCompact"></div>
+        <div class="course-info" id="courseInfo"></div>
+      </div>
+    </div>
   </div>
   <div class="panel" data-panel="1">
     <div class="section-title">&#9758; Crew Assignment Board</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:6px"><div class="crew-header"><span>Name</span><span>Primary</span><span>Secondary</span></div><div class="crew-header"><span>Name</span><span>Primary</span><span>Secondary</span></div></div>
     <div id="crewBoard"></div>
   </div>
-  <div class="panel" data-panel="2">
-    <div class="section-title">&#9729; Weather &amp; Turf Conditions</div>
-    <div id="weatherContent">Loading weather data...</div>
-  </div>
-  <!-- PANEL 3: SAFETY & OPERATIONS -->
-  <div class="panel" data-panel="3">
-    <div class="section-title">&#9888; Safety &amp; Operations</div>
-    <div id="safetyContent"></div>
-  </div>
-
 </div>
 
 <div class="panel-dots" id="panelDots"></div>
@@ -283,10 +313,7 @@ body{display:flex;flex-direction:column}
         <label>Today's Events (tournaments, outings, etc.)</label>
         <input class="admin-input" id="adminEvents" placeholder="e.g. AJGA Tournament, Ladies Outing PM">
       </div>
-      <div style="grid-column:span 2">
-        <label>Equipment Down (one per line)</label>
-        <textarea class="admin-textarea" id="adminEquipDown" style="min-height:60px" placeholder="e.g. Toro 3500 #4 - hydraulic leak&#10;Jacobsen LF510 - blade change"></textarea>
-      </div>
+
     </div>
     <label style="display:block;color:var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Daily Announcement</label>
     <textarea class="admin-textarea" id="adminAnnounce" placeholder="Type today's message for the crew...&#10;e.g. Wear sunscreen — UV index 9 today&#10;Mower clinic at 2pm in shop"></textarea>
@@ -369,7 +396,7 @@ function getTodaySafetyTip(){
 
 // ===== STATE =====
 let currentPanel = 0;
-const PANEL_COUNT = 4;
+const PANEL_COUNT = 2;
 const ROTATE_MS = 20000;
 let rotateTimer = null;
 let weatherData = null;
@@ -400,7 +427,7 @@ function saveJobs(list){ localStorage.setItem('ll_jobs', JSON.stringify(list)); 
 function loadToday(){
   const s = localStorage.getItem('ll_day_'+todayKey());
   if(s){ try{ return JSON.parse(s); }catch(e){} }
-  return { announcement:'', assignments:{}, courseStatus:'open', teeTime:'06:30', events:'', equipDown:'' };
+  return { announcement:'', assignments:{}, courseStatus:'open', teeTime:'06:30', events:'' };
 }
 function saveToday(data){ localStorage.setItem('ll_day_'+todayKey(), JSON.stringify(data)); }
 
@@ -426,7 +453,7 @@ function showPanel(idx){
 function nextPanel(){showPanel((currentPanel+1)%PANEL_COUNT);}
 function buildDots(){
   const c=document.getElementById('panelDots');
-  const labels=['Briefing','Crew','Weather','Safety'];
+  const labels=['Overview','Crew'];
   c.innerHTML=labels.map((l,i)=>'<span class="dot'+(i===0?' active':'')+'" data-idx="'+i+'" title="'+l+'"></span>').join('');
   c.querySelectorAll('.dot').forEach(d=>{d.addEventListener('click',()=>{showPanel(parseInt(d.dataset.idx));resetRotate();});});
 }
@@ -465,32 +492,30 @@ function renderWeather(){
   if(d.sunrise&&d.sunrise[0]){const sr=new Date(d.sunrise[0]);sunrise=(sr.getHours()%12||12)+':'+String(sr.getMinutes()).padStart(2,'0')+' AM';}
   if(d.sunset&&d.sunset[0]){const ss=new Date(d.sunset[0]);sunset=(ss.getHours()%12||12)+':'+String(ss.getMinutes()).padStart(2,'0')+' PM';}
 
-  let html='<div class="weather-grid">';
-  html+='<div class="weather-card hero"><div class="label">Current Temp</div><div class="value">'+Math.round(c.temperature_2m)+'°</div><div class="unit">Feels like '+Math.round(c.apparent_temperature)+'°F</div></div>';
-  html+='<div class="weather-card"><div class="label">Conditions</div><div class="value" style="font-size:2.6rem">'+weatherIcon(c.weather_code)+'</div><div class="unit">'+weatherDesc(c.weather_code)+'</div></div>';
-  html+='<div class="weather-card"><div class="label">Wind</div><div class="value" style="font-size:1.8rem">'+Math.round(c.wind_speed_10m)+'</div><div class="unit">mph '+windDir(c.wind_direction_10m)+'</div></div>';
+  let html='<div class="wx-row">';
+  html+='<div class="wx-cell wx-hero"><div class="wx-label">Now</div><div class="wx-val">'+Math.round(c.temperature_2m)+'\u00B0</div><div class="wx-sub">'+weatherDesc(c.weather_code)+'</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">Wind</div><div class="wx-val">'+Math.round(c.wind_speed_10m)+'</div><div class="wx-sub">mph '+windDir(c.wind_direction_10m)+'</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">Humidity</div><div class="wx-val">'+c.relative_humidity_2m+'%</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">Precip</div><div class="wx-val">'+(d.precipitation_probability_max[0]||0)+'%</div></div>';
+  html+='</div>';
+  html+='<div class="wx-row" style="margin-top:8px">';
+  html+='<div class="wx-cell"><div class="wx-label">Soil 6cm</div><div class="wx-val">'+soilTemp+'\u00B0</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">Dew Point</div><div class="wx-val">'+dewPoint+'\u00B0</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">ET\u2080</div><div class="wx-val">'+et0Today.toFixed(2)+'</div><div class="wx-sub">in/day</div></div>';
+  html+='<div class="wx-cell"><div class="wx-label">\u2600 / \u263D</div><div class="wx-val" style="font-size:.9rem">'+sunrise+'</div><div class="wx-sub">'+sunset+'</div></div>';
   html+='</div>';
 
-  html+='<div class="section-title" style="margin-top:20px">&#127793; Turf Intelligence</div><div class="turf-grid">';
-  html+='<div class="turf-card"><div class="label">Soil Temp (6cm)</div><div class="value">'+soilTemp+'°F</div></div>';
-  html+='<div class="turf-card"><div class="label">Dew Point</div><div class="value">'+dewPoint+'°F</div></div>';
-  html+='<div class="turf-card"><div class="label">ET₀ Today</div><div class="value">'+et0Today.toFixed(2)+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">in/day</div></div>';
-  html+='<div class="turf-card"><div class="label">Humidity</div><div class="value">'+c.relative_humidity_2m+'%</div></div>';
-  html+='<div class="turf-card"><div class="label">Sunrise</div><div class="value" style="font-size:1.2rem">'+sunrise+'</div></div>';
-  html+='<div class="turf-card"><div class="label">Sunset</div><div class="value" style="font-size:1.2rem">'+sunset+'</div></div>';
-  html+='<div class="turf-card"><div class="label">Precip Chance</div><div class="value">'+(d.precipitation_probability_max[0]||0)+'%</div></div>';
-  html+='<div class="turf-card"><div class="label">Max Wind</div><div class="value">'+Math.round(d.wind_speed_10m_max[0])+'</div><div class="unit" style="font-size:.65rem;color:var(--cream);opacity:.5">mph</div></div>';
-  html+='</div>';
-
-  html+='<div class="section-title" style="margin-top:20px">&#128197; 5-Day Forecast</div><div class="forecast-row">';
+  // 5-day forecast
+  html+='<div class="wx-forecast">';
   const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   for(let i=1;i<=5;i++){
     if(!d.time[i])continue;
     const dt=new Date(d.time[i]+'T12:00:00');
-    html+='<div class="forecast-day"><div class="day-name">'+dayNames[dt.getDay()]+'</div><div class="icon">'+weatherIcon(d.weather_code[i])+'</div><div class="hi-lo">'+Math.round(d.temperature_2m_max[i])+'° <span>/ '+Math.round(d.temperature_2m_min[i])+'°</span></div><div class="precip">'+(d.precipitation_probability_max[i]||0)+'% rain</div></div>';
+    html+='<div class="wx-fday"><div class="wx-label">'+dayNames[dt.getDay()]+'</div><div class="wx-icon">'+weatherIcon(d.weather_code[i])+'</div><div class="wx-val">'+Math.round(d.temperature_2m_max[i])+'\u00B0 <span>'+Math.round(d.temperature_2m_min[i])+'\u00B0</span></div><div class="wx-precip">'+(d.precipitation_probability_max[i]||0)+'%</div></div>';
   }
   html+='</div>';
-  document.getElementById('weatherContent').innerHTML=html;
+
+  document.getElementById('weatherCompact').innerHTML=html;
 }
 
 // ===== DISPLAY RENDERS =====
@@ -539,67 +564,39 @@ function renderStatusBar(){
 function renderSafety(){
   const today=loadToday();
   const tip=getTodaySafetyTip();
-  let html='';
+  let html='<div class="safety-compact">';
 
   // Safety tip
-  html+='<div class="safety-card"><div class="safety-title">\u{1F6E1}\uFE0F Daily Safety Moment</div><div class="safety-body"><strong>'+tip.title+'</strong><br>'+tip.body+'</div></div>';
+  html+='<div class="safety-card"><div class="safety-title">\u{1F6E1}\uFE0F Safety Moment</div><div class="safety-body"><strong>'+tip.title+'</strong> \u2014 '+tip.body+'</div></div>';
 
-  // UV and heat index from weather
-  html+='<div class="safety-grid">';
+  // UV and heat
+  html+='<div class="safety-row">';
   if(weatherData){
     const c=weatherData.current;
-    const h=weatherData.hourly;
-    const nowHour=new Date().getHours();
-    const dewPt=h.dew_point_2m&&h.dew_point_2m[nowHour]!=null?h.dew_point_2m[nowHour]:null;
     const temp=c.temperature_2m;
     const humid=c.relative_humidity_2m;
-
-    // Estimate UV index from solar radiation (rough: high=8+, moderate=3-5, low=1-2)
     const hour=new Date().getHours();
     let uvEst=0;
-    if(hour>=6&&hour<=18){
-      uvEst=hour<=9?3:hour<=15?7:3;
-      if(c.weather_code>3)uvEst=Math.max(1,uvEst-3);
-    }
+    if(hour>=6&&hour<=18){uvEst=hour<=9?3:hour<=15?7:3;if(c.weather_code>3)uvEst=Math.max(1,uvEst-3);}
     const uvColors=['#3ea72d','#3ea72d','#3ea72d','#f5c518','#f5c518','#f5c518','#f18b29','#f18b29','#e53210','#e53210','#e53210','#b567a4'];
     const uvLabels=['Low','Low','Low','Moderate','Moderate','Moderate','High','High','Very High','Very High','Very High','Extreme'];
     const uvIdx=Math.min(uvEst,11);
+    html+='<div class="safety-card"><div class="safety-title">\u2600\uFE0F UV Index</div><div class="safety-body" style="font-size:1.5rem;font-weight:bold;color:'+uvColors[uvIdx]+'">'+uvEst+' \u2014 '+uvLabels[uvIdx]+'</div><div class="uv-bar"><div class="uv-fill" style="width:'+Math.min(100,uvEst*9)+'%;background:'+uvColors[uvIdx]+'"></div></div></div>';
 
-    html+='<div class="safety-card"><div class="safety-title">\u2600\uFE0F UV Index (est.)</div><div class="safety-body" style="font-size:1.8rem;font-weight:bold;color:'+uvColors[uvIdx]+'">'+uvEst+' — '+uvLabels[uvIdx]+'</div><div class="uv-bar"><div class="uv-fill" style="width:'+Math.min(100,uvEst*9)+'%;background:'+uvColors[uvIdx]+'"></div></div></div>';
-
-    // Heat index
     let heatIdx=temp;
-    if(temp>=80&&humid>=40){
-      heatIdx=Math.round(-42.379+2.04901523*temp+10.14333127*humid-0.22475541*temp*humid-0.00683783*temp*temp-0.05481717*humid*humid+0.00122874*temp*temp*humid+0.00085282*temp*humid*humid-0.00000199*temp*temp*humid*humid);
-    }
-    let heatWarn='Normal';
-    let heatColor='#7dff7d';
-    if(heatIdx>=105){heatWarn='DANGER — Heat Emergency';heatColor='#e53210';}
-    else if(heatIdx>=90){heatWarn='Caution — Take Frequent Breaks';heatColor='#f18b29';}
+    if(temp>=80&&humid>=40){heatIdx=Math.round(-42.379+2.04901523*temp+10.14333127*humid-0.22475541*temp*humid-0.00683783*temp*temp-0.05481717*humid*humid+0.00122874*temp*temp*humid+0.00085282*temp*humid*humid-0.00000199*temp*temp*humid*humid);}
+    let heatWarn='Normal';let heatColor='#7dff7d';
+    if(heatIdx>=105){heatWarn='DANGER';heatColor='#e53210';}
+    else if(heatIdx>=90){heatWarn='Caution \u2014 Breaks';heatColor='#f18b29';}
     else if(heatIdx>=80){heatWarn='Stay Hydrated';heatColor='#f5c518';}
-
-    html+='<div class="safety-card"><div class="safety-title">\u{1F321}\uFE0F Heat Index</div><div class="safety-body" style="font-size:1.8rem;font-weight:bold;color:'+heatColor+'">'+heatIdx+'\u00B0F</div><div style="font-size:.85rem;color:'+heatColor+';margin-top:4px">'+heatWarn+'</div></div>';
+    html+='<div class="safety-card"><div class="safety-title">\u{1F321}\uFE0F Heat Index</div><div class="safety-body" style="font-size:1.5rem;font-weight:bold;color:'+heatColor+'">'+heatIdx+'\u00B0F</div><div style="font-size:.75rem;color:'+heatColor+';margin-top:2px">'+heatWarn+'</div></div>';
   } else {
-    html+='<div class="safety-card"><div class="safety-title">Weather-based safety data loading...</div></div>';
+    html+='<div class="safety-card"><div class="safety-title">Loading...</div></div>';
     html+='<div class="safety-card"></div>';
   }
-  html+='</div>';
+  html+='</div></div>';
 
-  // Equipment status
-  html+='<div class="safety-card" style="margin-top:14px"><div class="safety-title">\u{1F6E0}\uFE0F Equipment Status</div>';
-  if(today.equipDown&&today.equipDown.trim()){
-    const items=today.equipDown.trim().split('\n').filter(x=>x.trim());
-    html+='<div class="equip-list">';
-    items.forEach(item=>{
-      html+='<div class="equip-item"><span class="equip-dot down"></span>'+item+'</div>';
-    });
-    html+='</div>';
-  } else {
-    html+='<div class="safety-body" style="color:#7dff7d">\u2705 All equipment operational</div>';
-  }
-  html+='</div>';
-
-  document.getElementById('safetyContent').innerHTML=html;
+  document.getElementById('safetyCompact').innerHTML=html;
 }
 
 function renderAnnouncements(){
@@ -637,7 +634,6 @@ function openAdmin(){
   document.getElementById('adminCourseStatus').value=today.courseStatus||'open';
   document.getElementById('adminTeeTime').value=today.teeTime||'06:30';
   document.getElementById('adminEvents').value=today.events||'';
-  document.getElementById('adminEquipDown').value=today.equipDown||'';
 
   renderAdminAssignments();
   renderAdminCrew();
@@ -765,11 +761,10 @@ function saveAdmin(){
   const courseStatus=document.getElementById('adminCourseStatus').value;
   const teeTime=document.getElementById('adminTeeTime').value;
   const events=document.getElementById('adminEvents').value;
-  const equipDown=document.getElementById('adminEquipDown').value;
 
   saveCrew(editCrew);
   saveJobs(editJobs);
-  saveToday({announcement:announcement,assignments:assignments,courseStatus:courseStatus,teeTime:teeTime,events:events,equipDown:equipDown});
+  saveToday({announcement:announcement,assignments:assignments,courseStatus:courseStatus,teeTime:teeTime,events:events});
 
   renderCrewBoard();
   renderAnnouncements();
