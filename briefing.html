@@ -138,6 +138,35 @@ body{display:flex;flex-direction:column}
 .gear-btn{position:fixed;right:16px;bottom:50px;width:48px;height:48px;border-radius:50%;background:var(--masters-green);border:2px solid var(--gold);color:var(--gold);font-size:1.4rem;cursor:pointer;z-index:50;transition:all .3s;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
 .gear-btn:hover{transform:scale(1.1);background:#008866}
 
+
+/* STATUS BADGES */
+.status-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.status-badge{padding:8px 18px;border-radius:20px;font-size:.85rem;font-weight:bold;display:flex;align-items:center;gap:6px}
+.status-badge.open{background:#1a6b3c;color:#7dff7d;border:1px solid #2a9d4f}
+.status-badge.delay{background:#6b5a1a;color:var(--gold);border:1px solid var(--gold)}
+.status-badge.cart-path{background:#6b4a1a;color:#ffb347;border:1px solid #ffb347}
+.status-badge.closed{background:#6b1a1a;color:#ff6b6b;border:1px solid #ff6b6b}
+.status-badge.tee-time{background:var(--glass);color:var(--cream);border:1px solid var(--glass3)}
+.status-badge.event{background:var(--glass);color:var(--azalea);border:1px solid var(--azalea)}
+
+/* SAFETY PANEL */
+.safety-card{background:var(--glass);border:1px solid var(--glass2);border-radius:var(--radius);padding:16px 20px}
+.safety-card .safety-title{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.safety-card .safety-body{font-size:1rem;color:var(--cream);line-height:1.5}
+.safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.uv-bar{height:8px;border-radius:4px;background:var(--glass2);overflow:hidden;margin-top:6px}
+.uv-fill{height:100%;border-radius:4px;transition:width .5s}
+.equip-list{margin-top:8px}
+.equip-item{padding:6px 10px;background:var(--glass);border-radius:6px;margin-bottom:4px;font-size:.85rem;color:var(--cream);display:flex;align-items:center;gap:8px}
+.equip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.equip-dot.down{background:var(--azalea)}
+.equip-dot.up{background:#7dff7d}
+
+/* ADMIN OPS SECTION */
+.admin-ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.admin-ops-grid label{display:block;color:var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.admin-ops-grid select,.admin-ops-grid input{width:100%}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .top-bar{padding:10px 16px}
@@ -171,6 +200,7 @@ body{display:flex;flex-direction:column}
 <div class="panel-container" id="panelContainer">
   <div class="panel active" data-panel="0">
     <div class="section-title">&#9733; Daily Briefing</div>
+    <div class="status-bar" id="statusBar"></div>
     <div class="announce-box" id="announceDisplay">Loading...</div>
     <div class="course-info" id="courseInfo"></div>
   </div>
@@ -183,6 +213,12 @@ body{display:flex;flex-direction:column}
     <div class="section-title">&#9729; Weather &amp; Turf Conditions</div>
     <div id="weatherContent">Loading weather data...</div>
   </div>
+  <!-- PANEL 3: SAFETY & OPERATIONS -->
+  <div class="panel" data-panel="3">
+    <div class="section-title">&#9888; Safety &amp; Operations</div>
+    <div id="safetyContent"></div>
+  </div>
+
 </div>
 
 <div class="panel-dots" id="panelDots"></div>
@@ -226,10 +262,34 @@ body{display:flex;flex-direction:column}
     <div class="job-list" id="jobList"></div>
   </div>
 
-  <!-- TAB: ANNOUNCEMENT -->
+  <!-- TAB: ANNOUNCEMENT & OPS -->
   <div class="admin-section" id="sec-announce">
-    <p style="color:var(--cream);opacity:.6;margin-bottom:8px;font-size:.85rem">Type your daily message for the crew. Shows on the first panel.</p>
-    <textarea class="admin-textarea" id="adminAnnounce" placeholder="Type today's message for the crew...&#10;e.g. Cart path only — wet conditions&#10;AJGA tournament setup holes 1-9&#10;Mower clinic at 2pm"></textarea>
+    <p style="color:var(--cream);opacity:.6;margin-bottom:10px;font-size:.85rem">Daily announcement, course status, and operations info.</p>
+    <div class="admin-ops-grid">
+      <div>
+        <label>Course Status</label>
+        <select class="admin-input" id="adminCourseStatus">
+          <option value="open">Open</option>
+          <option value="delay">Frost Delay</option>
+          <option value="cart-path">Cart Path Only</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+      <div>
+        <label>First Tee Time</label>
+        <input class="admin-input" type="time" id="adminTeeTime" value="06:30">
+      </div>
+      <div style="grid-column:span 2">
+        <label>Today's Events (tournaments, outings, etc.)</label>
+        <input class="admin-input" id="adminEvents" placeholder="e.g. AJGA Tournament, Ladies Outing PM">
+      </div>
+      <div style="grid-column:span 2">
+        <label>Equipment Down (one per line)</label>
+        <textarea class="admin-textarea" id="adminEquipDown" style="min-height:60px" placeholder="e.g. Toro 3500 #4 - hydraulic leak&#10;Jacobsen LF510 - blade change"></textarea>
+      </div>
+    </div>
+    <label style="display:block;color:var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Daily Announcement</label>
+    <textarea class="admin-textarea" id="adminAnnounce" placeholder="Type today's message for the crew...&#10;e.g. Wear sunscreen — UV index 9 today&#10;Mower clinic at 2pm in shop"></textarea>
   </div>
 
   <div class="admin-btns">
@@ -282,9 +342,34 @@ const DEFAULT_JOBS = [
   'Shop/Facilities','Project Work','Training','Off'
 ];
 
+
+// ===== SAFETY TIPS (rotate daily) =====
+const SAFETY_TIPS = [
+  {title:'Heat Illness Prevention',body:'Drink water every 15-20 minutes. Watch for signs of heat exhaustion: heavy sweating, weakness, nausea, dizziness. Move to shade and cool down immediately if symptoms appear. OSHA requires shade and water access.'},
+  {title:'Lightning Safety',body:'When thunder roars, go indoors. Stop work and seek shelter when lightning is within 6 miles (30-second flash-to-bang). Wait 30 minutes after the last thunder before resuming work.'},
+  {title:'Chemical Handling & PPE',body:'Always read the SDS before handling chemicals. Wear required PPE: gloves, eye protection, long sleeves for pesticide/herbicide applications. Know the location of the eyewash station and first aid kit.'},
+  {title:'Mower & Equipment Safety',body:'Walk around equipment before starting — check for leaks, loose parts, tire pressure. Keep hands and feet away from moving parts. Always disengage blades before dismounting. Wear ear protection.'},
+  {title:'UV & Sun Protection',body:'Apply SPF 30+ sunscreen every 2 hours. Wear a hat and UV-protective clothing. The sun is strongest between 10am and 4pm. Skin cancer is the most common cancer — protect yourself.'},
+  {title:'Slip, Trip & Fall Prevention',body:'Watch for wet grass, uneven terrain, and irrigation heads. Wear proper footwork with good traction. Keep walkways and shop floors clear of tools and hoses.'},
+  {title:'Hydration Reminder',body:'Start hydrating BEFORE you feel thirsty. Drink at least 1 cup of water every 15-20 minutes in hot weather. Avoid energy drinks and excessive caffeine — they increase dehydration risk.'},
+  {title:'Back Injury Prevention',body:'Lift with your legs, not your back. Keep loads close to your body. Ask for help with heavy items over 50 lbs. Use carts and equipment to move heavy materials — your back will thank you.'},
+  {title:'Hearing Protection',body:'Prolonged exposure to mowers, blowers, and equipment above 85 dB causes permanent hearing loss. Wear earplugs or earmuffs when operating loud equipment. If you have to shout to be heard, it is too loud.'},
+  {title:'Bee & Insect Safety',body:'Watch for ground nests when mowing and edging. Carry an EpiPen if you have known allergies. Report any nest locations to your supervisor so they can be marked and treated.'},
+  {title:'Golf Cart & Utility Vehicle Safety',body:'Keep all body parts inside the vehicle. Reduce speed on slopes and turns. Always set the parking brake. Never exceed passenger capacity. Yield to golfers and pedestrians.'},
+  {title:'Electrical Safety',body:'Never operate electrical equipment in wet conditions. Inspect cords and plugs for damage before use. Know the location of breaker panels in the shop and pump houses.'},
+  {title:'Eye Protection',body:'Wear safety glasses when using string trimmers, blowers, grinders, or any task that creates flying debris. A small rock from a mower can travel over 100 mph.'},
+  {title:'Ergonomics & Stretching',body:'Stretch before your shift — focus on back, shoulders, and legs. Alternate repetitive tasks throughout the day. Take micro-breaks to reduce muscle fatigue and repetitive strain injuries.'}
+];
+
+function getTodaySafetyTip(){
+  const d=new Date();
+  const dayOfYear=Math.floor((d-new Date(d.getFullYear(),0,0))/(1000*60*60*24));
+  return SAFETY_TIPS[dayOfYear%SAFETY_TIPS.length];
+}
+
 // ===== STATE =====
 let currentPanel = 0;
-const PANEL_COUNT = 3;
+const PANEL_COUNT = 4;
 const ROTATE_MS = 20000;
 let rotateTimer = null;
 let weatherData = null;
@@ -315,7 +400,7 @@ function saveJobs(list){ localStorage.setItem('ll_jobs', JSON.stringify(list)); 
 function loadToday(){
   const s = localStorage.getItem('ll_day_'+todayKey());
   if(s){ try{ return JSON.parse(s); }catch(e){} }
-  return { announcement:'', assignments:{} };
+  return { announcement:'', assignments:{}, courseStatus:'open', teeTime:'06:30', events:'', equipDown:'' };
 }
 function saveToday(data){ localStorage.setItem('ll_day_'+todayKey(), JSON.stringify(data)); }
 
@@ -341,7 +426,7 @@ function showPanel(idx){
 function nextPanel(){showPanel((currentPanel+1)%PANEL_COUNT);}
 function buildDots(){
   const c=document.getElementById('panelDots');
-  const labels=['Briefing','Crew','Weather'];
+  const labels=['Briefing','Crew','Weather','Safety'];
   c.innerHTML=labels.map((l,i)=>'<span class="dot'+(i===0?' active':'')+'" data-idx="'+i+'" title="'+l+'"></span>').join('');
   c.querySelectorAll('.dot').forEach(d=>{d.addEventListener('click',()=>{showPanel(parseInt(d.dataset.idx));resetRotate();});});
 }
@@ -363,7 +448,7 @@ async function fetchWeather(){
       +'&timezone=America/Los_Angeles&forecast_days=6';
     const resp=await fetch(url);
     weatherData=await resp.json();
-    renderWeather();
+    renderWeather();renderSafety();
   }catch(e){
     document.getElementById('weatherContent').innerHTML='<div style="text-align:center;padding:40px;color:var(--azalea)">Weather data unavailable</div>';
   }
@@ -432,6 +517,91 @@ function renderCrewBoard(){
   container.innerHTML='<div class="crew-board-wrap"><div>'+buildCol(colL)+'</div><div>'+buildCol(colR)+'</div></div>';
 }
 
+function renderStatusBar(){
+  const today=loadToday();
+  const statusLabels={open:'Course Open',delay:'Frost Delay','cart-path':'Cart Path Only',closed:'Course Closed'};
+  const statusDots={open:'\u2705',delay:'\u2744\uFE0F','cart-path':'\u26A0\uFE0F',closed:'\u274C'};
+  let html='';
+  html+='<div class="status-badge '+(today.courseStatus||'open')+'">'+statusDots[today.courseStatus||'open']+' '+statusLabels[today.courseStatus||'open']+'</div>';
+  if(today.teeTime){
+    const parts=today.teeTime.split(':');
+    const h=parseInt(parts[0]),m=parts[1];
+    const ampm=h>=12?'PM':'AM';
+    const h12=h%12||12;
+    html+='<div class="status-badge tee-time">\u26F3 First Tee: '+h12+':'+m+' '+ampm+'</div>';
+  }
+  if(today.events&&today.events.trim()){
+    html+='<div class="status-badge event">\u{1F3C6} '+today.events+'</div>';
+  }
+  document.getElementById('statusBar').innerHTML=html;
+}
+
+function renderSafety(){
+  const today=loadToday();
+  const tip=getTodaySafetyTip();
+  let html='';
+
+  // Safety tip
+  html+='<div class="safety-card"><div class="safety-title">\u{1F6E1}\uFE0F Daily Safety Moment</div><div class="safety-body"><strong>'+tip.title+'</strong><br>'+tip.body+'</div></div>';
+
+  // UV and heat index from weather
+  html+='<div class="safety-grid">';
+  if(weatherData){
+    const c=weatherData.current;
+    const h=weatherData.hourly;
+    const nowHour=new Date().getHours();
+    const dewPt=h.dew_point_2m&&h.dew_point_2m[nowHour]!=null?h.dew_point_2m[nowHour]:null;
+    const temp=c.temperature_2m;
+    const humid=c.relative_humidity_2m;
+
+    // Estimate UV index from solar radiation (rough: high=8+, moderate=3-5, low=1-2)
+    const hour=new Date().getHours();
+    let uvEst=0;
+    if(hour>=6&&hour<=18){
+      uvEst=hour<=9?3:hour<=15?7:3;
+      if(c.weather_code>3)uvEst=Math.max(1,uvEst-3);
+    }
+    const uvColors=['#3ea72d','#3ea72d','#3ea72d','#f5c518','#f5c518','#f5c518','#f18b29','#f18b29','#e53210','#e53210','#e53210','#b567a4'];
+    const uvLabels=['Low','Low','Low','Moderate','Moderate','Moderate','High','High','Very High','Very High','Very High','Extreme'];
+    const uvIdx=Math.min(uvEst,11);
+
+    html+='<div class="safety-card"><div class="safety-title">\u2600\uFE0F UV Index (est.)</div><div class="safety-body" style="font-size:1.8rem;font-weight:bold;color:'+uvColors[uvIdx]+'">'+uvEst+' — '+uvLabels[uvIdx]+'</div><div class="uv-bar"><div class="uv-fill" style="width:'+Math.min(100,uvEst*9)+'%;background:'+uvColors[uvIdx]+'"></div></div></div>';
+
+    // Heat index
+    let heatIdx=temp;
+    if(temp>=80&&humid>=40){
+      heatIdx=Math.round(-42.379+2.04901523*temp+10.14333127*humid-0.22475541*temp*humid-0.00683783*temp*temp-0.05481717*humid*humid+0.00122874*temp*temp*humid+0.00085282*temp*humid*humid-0.00000199*temp*temp*humid*humid);
+    }
+    let heatWarn='Normal';
+    let heatColor='#7dff7d';
+    if(heatIdx>=105){heatWarn='DANGER — Heat Emergency';heatColor='#e53210';}
+    else if(heatIdx>=90){heatWarn='Caution — Take Frequent Breaks';heatColor='#f18b29';}
+    else if(heatIdx>=80){heatWarn='Stay Hydrated';heatColor='#f5c518';}
+
+    html+='<div class="safety-card"><div class="safety-title">\u{1F321}\uFE0F Heat Index</div><div class="safety-body" style="font-size:1.8rem;font-weight:bold;color:'+heatColor+'">'+heatIdx+'\u00B0F</div><div style="font-size:.85rem;color:'+heatColor+';margin-top:4px">'+heatWarn+'</div></div>';
+  } else {
+    html+='<div class="safety-card"><div class="safety-title">Weather-based safety data loading...</div></div>';
+    html+='<div class="safety-card"></div>';
+  }
+  html+='</div>';
+
+  // Equipment status
+  html+='<div class="safety-card" style="margin-top:14px"><div class="safety-title">\u{1F6E0}\uFE0F Equipment Status</div>';
+  if(today.equipDown&&today.equipDown.trim()){
+    const items=today.equipDown.trim().split('\n').filter(x=>x.trim());
+    html+='<div class="equip-list">';
+    items.forEach(item=>{
+      html+='<div class="equip-item"><span class="equip-dot down"></span>'+item+'</div>';
+    });
+    html+='</div>';
+  } else {
+    html+='<div class="safety-body" style="color:#7dff7d">\u2705 All equipment operational</div>';
+  }
+  html+='</div>';
+
+  document.getElementById('safetyContent').innerHTML=html;
+}
+
 function renderAnnouncements(){
   const today=loadToday();
   const box=document.getElementById('announceDisplay');
@@ -464,6 +634,10 @@ function openAdmin(){
 
   document.getElementById('adminDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   document.getElementById('adminAnnounce').value=editAnnouncement;
+  document.getElementById('adminCourseStatus').value=today.courseStatus||'open';
+  document.getElementById('adminTeeTime').value=today.teeTime||'06:30';
+  document.getElementById('adminEvents').value=today.events||'';
+  document.getElementById('adminEquipDown').value=today.equipDown||'';
 
   renderAdminAssignments();
   renderAdminCrew();
@@ -493,7 +667,11 @@ function renderAdminAssignments(){
 function renderAdminCrew(){
   let html='';
   editCrew.forEach((c,idx)=>{
-    html+='<div class="admin-row" style="grid-template-columns:1fr 1fr 36px">';
+    html+='<div class="admin-row" style="grid-template-columns:44px 1fr 1fr 36px">';
+    html+='<div class="reorder-btns">';
+    html+='<button class="reorder-btn" onclick="moveCrewUp('+idx+')"'+(idx===0?' disabled':'')+' title="Move up">&#9650;</button>';
+    html+='<button class="reorder-btn" onclick="moveCrewDown('+idx+')"'+(idx===editCrew.length-1?' disabled':'')+' title="Move down">&#9660;</button>';
+    html+='</div>';
     html+='<input class="admin-input" value="'+c.name+'" onchange="editCrew['+idx+'].name=this.value">';
     html+='<input class="admin-input" value="'+c.defaultRole+'" onchange="editCrew['+idx+'].defaultRole=this.value">';
     html+='<button class="remove-btn" onclick="removeCrew('+idx+')" title="Remove">✕</button>';
@@ -584,13 +762,19 @@ function saveAdmin(){
     assignments[c.id]={primary:pSel?pSel.value:'',secondary:sSel?sSel.value:''};
   });
   const announcement=document.getElementById('adminAnnounce').value;
+  const courseStatus=document.getElementById('adminCourseStatus').value;
+  const teeTime=document.getElementById('adminTeeTime').value;
+  const events=document.getElementById('adminEvents').value;
+  const equipDown=document.getElementById('adminEquipDown').value;
 
   saveCrew(editCrew);
   saveJobs(editJobs);
-  saveToday({announcement:announcement,assignments:assignments});
+  saveToday({announcement:announcement,assignments:assignments,courseStatus:courseStatus,teeTime:teeTime,events:events,equipDown:equipDown});
 
   renderCrewBoard();
   renderAnnouncements();
+  renderStatusBar();
+  renderSafety();
   closeAdmin();
 }
 
@@ -601,6 +785,8 @@ function init(){
   buildDots();
   renderCrewBoard();
   renderAnnouncements();
+  renderStatusBar();
+  renderSafety();
   fetchWeather();
   setInterval(fetchWeather,600000);
   resetRotate();
